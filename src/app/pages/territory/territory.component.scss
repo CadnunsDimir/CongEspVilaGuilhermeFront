@@ -1,0 +1,27 @@
+
+ul.cards-list {
+  float: left;
+  position: fixed;
+  top: 100px;
+  left: -140px;
+  height: 100vh;
+  overflow-y:auto;
+  background-color: white;
+  z-index: 2000;
+  transition: 1s;
+  &.show{
+      left: 0;
+  }
+  li{
+      width: 100px;
+      padding: 10px;
+      text-align: center;
+  }
+}
+
+.direction-list {
+  li {
+    padding: 10px;
+    border-bottom: 1px solid #cdcdcda1;
+  }
+}

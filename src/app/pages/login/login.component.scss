@@ -1,0 +1,14 @@
+form{
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+:host{
+    display: block;
+}
+
+@media(min-width: 600px){
+    :host{
+        margin-top: 20%;
+    }
+}

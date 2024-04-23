@@ -1,0 +1,40 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+
+.menu-button {
+  box-shadow: none;
+  background-image: url('/assets/menu_icon.png');
+  background-position: 0px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 70px;
+  height: 70px;
+  padding: 0;
+  margin: 0;
+  top:0;
+  left:0;
+  position:absolute;
+}
+
+nav{
+    min-height: 50px;
+    display:block;
+    ul{
+        max-width: 500px;
+        height: 100vh;
+        background-color: #e0e0e0bb;
+        li a {
+            padding: 10px;
+            background-color: #ccc;
+            display: block;
+            color: black;
+            &:hover{
+                background-color: #bbb;
+            }
+        }
+    }
+}

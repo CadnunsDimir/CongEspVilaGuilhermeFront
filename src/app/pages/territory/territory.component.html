@@ -1,0 +1,20 @@
+<h1>Território</h1>
+
+
+<ul [ngClass]="{show: showCardList}" *ngIf="cards$ | async as cards" class="cards-list">
+  <li *ngFor="let item of cards" role="button" (click)="selectCard(item)">
+  {{item}}
+  </li>
+</ul>
+
+<button (click)="showCardList = !showCardList"> selecionar o cartão </button>
+
+<section>
+  <p>Localidade: {{neighborhood}} Cartão n° {{cardId}}</p>
+  <app-map (click)="mapClick($event)"/>
+  <ul class="direction-list"  *ngIf="territoryCard$ | async as card">
+    <li *ngFor="let direction of card.directions">
+      {{direction.streetName}}, {{direction.houseNumber}}, {{direction.complementaryInfo}}
+    </li>
+  </ul>
+</section>
