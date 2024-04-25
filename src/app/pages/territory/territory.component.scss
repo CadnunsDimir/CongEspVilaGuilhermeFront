@@ -23,5 +23,18 @@ ul.cards-list {
   li {
     padding: 10px;
     border-bottom: 1px solid #cdcdcda1;
+
+    &.selected {
+      color: red;
+      background-color: #cacaca;
+    }
+
+    .on-map {
+      background-color: blue;
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      border-radius: 10px;
+    }
   }
 }

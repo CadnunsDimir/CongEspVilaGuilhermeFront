@@ -11,10 +11,14 @@
 
 <section>
   <p>Localidade: {{neighborhood}} Cartão n° {{cardId}}</p>
-  <app-map (click)="mapClick($event)"/>
-  <ul class="direction-list"  *ngIf="territoryCard$ | async as card">
-    <li *ngFor="let direction of card.directions">
+  <app-map [markers]="markers" (click)="mapClick($event)" />
+  <p *ngIf="directionToUpdate">Selecione um local no mapa para atualizar a posição do marcador</p>
+  <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">atualizar usando endereço</button>
+  <ul class="direction-list" *ngIf="territoryCard$ | async as card">
+    <li *ngFor="let direction of card.directions" (click)="selectDirection(direction)"
+        [ngClass]="{selected: directionToUpdate == direction}">
       {{direction.streetName}}, {{direction.houseNumber}}, {{direction.complementaryInfo}}
+      <span *ngIf="direction.lat" class="on-map"></span>
     </li>
   </ul>
 </section>
