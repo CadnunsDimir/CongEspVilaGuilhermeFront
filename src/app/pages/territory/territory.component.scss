@@ -38,3 +38,53 @@ ul.cards-list {
     }
   }
 }
+
+@media screen and (min-width: 1000px) {
+  .direction-list{
+    float: right;
+    position: fixed;
+    top: 233px;
+    right: 17px;
+    max-height: calc(100vh - 250px);
+    overflow: auto;
+    width: 35vw;
+  }
+  app-map{
+    width: 60vw;
+    display: block;
+  }
+}
+
+@media print {
+  h1, button{
+    display: none;
+  }
+  .direction-list{
+    float: right;
+    position: absolute;
+    top: 50px;
+    right: 17px;
+    width: 35vw;
+    li{
+      font-size: 10pt;
+      padding:1.5px;
+      .on-map{
+        display: none;
+      }
+    }
+  }
+  app-map{
+    width: 60vw;
+    display: block;
+  }
+}
+
+@media print and (max-width: 900px){
+  .direction-list{
+    float: none;
+    position: initial;
+  }
+  app-map{
+    width: 100%;
+  }
+}

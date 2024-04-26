@@ -38,3 +38,9 @@ nav{
         }
     }
 }
+
+@media print{
+  :host{
+    display: none;
+  }
+}
