@@ -60,4 +60,8 @@ export class TerritoryService {
     const url = `${this.baseUrl}${cardId}/direction`;
     return this.requestWithToken(url, 'PUT', direction);
   }
+
+  updateCard(card: TerritoryCard){
+    return this.requestWithToken(this.baseUrl, 'PUT', card);
+  }
 }

@@ -1,20 +1,26 @@
-<h1>Território</h1>
+<h1 [ngClass]="{'h1-print-as-card':printAsCard}">Território</h1>
 
-
+<div class="front-page" *ngIf="printAsCard"></div>
+<div class="back-page" *ngIf="printAsCard"></div>
+<p style="text-align: right;" class="print-controls"><input type="checkbox" id="printAsCard" (change)="printAsCard = !printAsCard"> imprimir como cartão {{printAsCard}}</p>
 <ul [ngClass]="{show: showCardList}" *ngIf="cards$ | async as cards" class="cards-list">
   <li *ngFor="let item of cards" role="button" (click)="selectCard(item)">
   {{item}}
   </li>
 </ul>
 
-<button (click)="showCardList = !showCardList"> selecionar o cartão </button>
+<button *ngIf="!printAsCard" (click)="showCardList = !showCardList"> selecionar o cartão </button>
 
-<section>
-  <p>Localidade: {{neighborhood}} Cartão n° {{cardId}}</p>
+<button *ngIf="directionToUpdate" (click)="updateUsingAddress()">atualizar usando endereço</button>
+<p *ngIf="directionToUpdate">Selecione um local no mapa para atualizar a posição do marcador</p>
+
+<section [ngClass]="{'print-as-card':printAsCard}">
+  <p class="card-data">Localidade: {{neighborhood}} Cartão n° {{cardId}}</p>
   <app-map [markers]="markers" (click)="mapClick($event)" />
-  <p *ngIf="directionToUpdate">Selecione um local no mapa para atualizar a posição do marcador</p>
-  <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">atualizar usando endereço</button>
+  
+  
   <ul class="direction-list" *ngIf="territoryCard$ | async as card">
+    <button (click)="edit(card)">editar</button>
     <li *ngFor="let direction of card.directions" (click)="selectDirection(direction)"
         [ngClass]="{selected: directionToUpdate == direction}">
       {{direction.streetName}}, {{direction.houseNumber}}, {{direction.complementaryInfo}}

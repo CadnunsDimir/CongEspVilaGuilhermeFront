@@ -12,6 +12,7 @@ import { TerritoryComponent } from './pages/territory/territory.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MapComponent } from './components/map/map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { TerritoryEditComponent } from './pages/territory-edit/territory-edit.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     CustomInputComponent,
     TerritoryComponent,
     MenuComponent,
-    MapComponent
+    MapComponent,
+    TerritoryEditComponent
   ],
   imports: [
     BrowserModule,

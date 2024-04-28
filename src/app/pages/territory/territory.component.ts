@@ -3,8 +3,9 @@ import { TerritoryService } from '../../services/territory/territory.service';
 import { tap } from 'rxjs';
 import { MapCoordinates, MapMarker } from '../../components/map/map.component';
 import { marker } from 'leaflet';
-import { Direction } from '../../models/territory-card.model';
+import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { GeocodingService } from '../../services/geocoding/geocoding.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-territory',
@@ -12,6 +13,7 @@ import { GeocodingService } from '../../services/geocoding/geocoding.service';
   styleUrl: './territory.component.scss'
 })
 export class TerritoryComponent implements OnInit {
+  printAsCard = false;
   cards$ = this.territory.cards$;
   territoryCard$ = this.territory.territoryCard$.pipe(
     tap(x => {
@@ -38,6 +40,7 @@ export class TerritoryComponent implements OnInit {
   markers: MapMarker[] = [];
   directionToUpdate?: Direction;
   constructor(
+    private router: Router,
     private territory: TerritoryService,
     private geocoding: GeocodingService
   ) { }
@@ -74,5 +77,10 @@ export class TerritoryComponent implements OnInit {
       .subscribe(coordinates => {
         this.mapClick(coordinates);
       });
+  }
+
+  edit(card: TerritoryCard) {
+    sessionStorage.setItem("card", JSON.stringify(card));
+    this.router.navigate(['/territory/edit']);
   }
 }

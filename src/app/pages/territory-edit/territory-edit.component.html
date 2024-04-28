@@ -1,0 +1,30 @@
+<h1> editando território</h1>
+<form [formGroup]="territoryCardForm">
+    <p>
+        Localidade: <input class="inline" type="text" formControlName="neighborhood"/>
+        Cartão Nº {{card.cardId}}
+        Total de Endereços: {{card.directions.length}}
+    </p>
+
+    <button class="save-button" (click)="save()" [disabled]="saving">salvar</button>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Rua</th>    
+            <th>Numero</th>
+            <th>complemento</th>    
+        </tr>
+        <tbody>
+            @for (item of directionsControls.controls; let i = $index; track i) {
+                <tr class="d-flex" [formGroup]="item">
+                    <td>{{i+1}}</td>
+                    <td><input type="text" formControlName="streetName"></td>
+                    <td><input type="text" formControlName="houseNumber"></td>
+                    <td><input type="text" formControlName="complementaryInfo"></td>
+                </tr>
+            }
+        </tbody>
+        
+    </table>
+  </form>

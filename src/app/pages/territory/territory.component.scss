@@ -1,3 +1,27 @@
+.front-page, .back-page{
+  width: 15cm;
+  height: 9.5cm;
+  // background-color: yellow;
+  box-sizing: content-box;
+  border: 1px dashed grey;
+  position: absolute;
+}
+.front-page{
+  top: 0;
+  left: 0;
+}
+
+.back-page{
+  top: 95.2mm;
+  left: 0;
+}
+
+.h1-print-as-card{
+  top: 0;
+  position: absolute;
+  width: 13cm;
+  text-align: center;
+}
 
 ul.cards-list {
   float: left;
@@ -16,6 +40,50 @@ ul.cards-list {
       width: 100px;
       padding: 10px;
       text-align: center;
+  }
+}
+
+app-map{
+  width: 100%;
+  height: 400px;
+  display: block;
+}
+
+.print-as-card{
+  button{
+    display: none;
+  }
+  .card-data{
+    position: absolute;
+    top: 0.6cm;
+    left: 1cm;
+    width: 13cm;
+  }
+  app-map{
+    position: absolute;
+    transform: scale(0.4);
+    left: -379px;
+    top: -95px;
+    width: 1300px;
+    width: 350mm;
+    height: 165mm;
+  }
+  .direction-list{
+    margin-top: 8cm;
+    width: 13.5cm;
+    float: left;
+    position: absolute;
+    top: 50px;
+    left: 22px;
+    column-count: 2;
+    padding-top: 20px;
+    li{
+      font-size: 10pt;
+      padding:1.5px;
+      .on-map{
+        display: none;
+      }
+    }
   }
 }
 
@@ -47,16 +115,17 @@ ul.cards-list {
     right: 17px;
     max-height: calc(100vh - 250px);
     overflow: auto;
-    width: 35vw;
+    width: 35vw;    
   }
   app-map{
     width: 60vw;
-    display: block;
+    display: block;    
+    height: 70vh;
   }
 }
 
 @media print {
-  h1, button{
+  button{
     display: none;
   }
   .direction-list{
@@ -64,7 +133,9 @@ ul.cards-list {
     position: absolute;
     top: 50px;
     right: 17px;
-    width: 35vw;
+    width: 90vw;
+    column-count: 2;
+    padding-top: 20px;
     li{
       font-size: 10pt;
       padding:1.5px;
@@ -76,6 +147,25 @@ ul.cards-list {
   app-map{
     width: 60vw;
     display: block;
+  }
+
+  .print-controls{
+    display: none;
+  }
+
+  .print-as-card{
+    app-map{
+      position: absolute;
+      // transform: scale(0.4);
+      // left: -294px;
+      // top: -119px;
+      // width: 1151px;
+      height: 650px;
+    }
+    .direction-list{
+      margin-top: 8cm;
+      width: 13.5cm;
+    }
   }
 }
 
