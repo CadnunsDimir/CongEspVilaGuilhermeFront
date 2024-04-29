@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TerritoryService } from '../../services/territory/territory.service';
-import { tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { MapCoordinates, MapMarker } from '../../components/map/map.component';
 import { marker } from 'leaflet';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
@@ -14,6 +14,12 @@ import { Router } from '@angular/router';
 })
 export class TerritoryComponent implements OnInit {
   printAsCard = false;
+  showCardList = false;
+  neighborhood: string | undefined;
+  cardId: number | undefined;
+  markers: MapMarker[] = [];
+  directionToUpdate?: Direction;
+
   cards$ = this.territory.cards$;
   territoryCard$ = this.territory.territoryCard$.pipe(
     tap(x => {
@@ -28,17 +34,13 @@ export class TerritoryComponent implements OnInit {
         .map(x => ({
           lat: x.lat!!,
           long: x.long!!,
-          title: `${x.index} - ${x.streetName}, ${x.houseNumber}`
+          title: `${x.index} - ${x.streetName}, ${x.houseNumber}`,
+          iconText: x.index.toString()
         })) || [];
       this.markers = markers;
     })
   );
-
-  showCardList = false;
-  neighborhood: string | undefined;
-  cardId: number | undefined;
-  markers: MapMarker[] = [];
-  directionToUpdate?: Direction;
+  
   constructor(
     private router: Router,
     private territory: TerritoryService,
@@ -79,8 +81,10 @@ export class TerritoryComponent implements OnInit {
       });
   }
 
-  edit(card: TerritoryCard) {
-    sessionStorage.setItem("card", JSON.stringify(card));
-    this.router.navigate(['/territory/edit']);
+  edit() {
+    this.territory.territoryCard$.pipe(take(1)).subscribe(card=> {
+      sessionStorage.setItem("card", JSON.stringify(card));
+      this.router.navigate(['/territory/edit']);
+    });
   }
 }

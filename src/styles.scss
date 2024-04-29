@@ -33,6 +33,8 @@ button, input[type=button], input[type=submit] {
   margin-bottom: 10px;
   color: #6d6d6d;
   cursor: pointer;
+  // background: #e2e2e2;
+  border: 1px solid black;
 
   &:active {
     background-color: #d5d5d5;
@@ -71,4 +73,36 @@ ul {
 }
 table{
   border-collapse: collapse;
+  &.show-border{
+    th,td{
+      border: 1px solid gray;
+    }
+  }
+}
+
+.leaflet-div-icon{
+  background-color: transparent !important;
+  border:none !important;
+}
+
+.leaflet-bar{
+  background-color: #fff;
+}
+.map-marker{
+  text-align: center;
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 16px;
+  line-height: 25px;
+  font-weight: bold;
+  color: #fff;
+  transform: rotate(45deg);
+  margin-top: -4px;
+  ::after{
+    width: 12.5px;
+    height: 12.5px;
+    display: block;
+    background: red;
+  }
 }

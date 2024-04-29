@@ -8,23 +8,29 @@
 
     <button class="save-button" (click)="save()" [disabled]="saving">salvar</button>
 
-    <table>
+    <table class="show-border">
         <tr>
             <th>#</th>
             <th>Rua</th>    
             <th>Numero</th>
-            <th>complemento</th>    
+            <th>complemento</th>
+            <th></th>    
         </tr>
         <tbody>
             @for (item of directionsControls.controls; let i = $index; track i) {
-                <tr class="d-flex" [formGroup]="item">
+                <tr [ngClass]="{'changing-position': i == itemChangingPosition}" [formGroup]="item">
                     <td>{{i+1}}</td>
                     <td><input type="text" formControlName="streetName"></td>
                     <td><input type="text" formControlName="houseNumber"></td>
                     <td><input type="text" formControlName="complementaryInfo"></td>
+                    <td class="actions">
+                        <a (click)="removeDirection(i)">remover</a> 
+                        <a *ngIf="i != 0" class="icon-arrow-up" (click)="moveUp(i)">&uarr;</a>
+                        <a *ngIf="(i +1) < directionsControls.controls.length"class="icon-arrow-up" (click)="moveDown(i)">&darr;</a>                        
+                    </td>
                 </tr>
             }
         </tbody>
-        
     </table>
+    <button (click)="addNewDirecction()">adicionar novo endereço</button>
   </form>

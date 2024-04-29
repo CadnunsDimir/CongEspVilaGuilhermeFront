@@ -14,6 +14,7 @@ export class TerritoryEditComponent implements OnInit {
   card: TerritoryCard = JSON.parse(sessionStorage.getItem("card")!);
   territoryCardForm!: FormGroup;
   saving = false;
+  itemChangingPosition: number | undefined;
 
   constructor(
     private router: Router,
@@ -42,6 +43,47 @@ export class TerritoryEditComponent implements OnInit {
   get directionsControls(): FormArray<FormGroup> {
     return this.territoryCardForm.get('directions') as FormArray;
   }
+
+  addNewDirecction() {
+    this.directionsControls.push(this.buildDirectionFormControls({
+      streetName: '',
+      complementaryInfo: '',
+      houseNumber: ''
+    }));
+  }
+
+  removeDirection(directionControlIndex: number) {
+  this.directionsControls.removeAt(directionControlIndex);
+  }
+
+  moveDirection(from: number, to: number){
+    this.itemChangingPosition = from;
+
+    const values = [...this.directionsControls.value];
+
+    const itemToUp = values[to];
+    const itemToDown = values[from];
+    values[to] = itemToDown;
+    values[from] = itemToUp;    
+
+    setTimeout(()=> {
+      this.directionsControls.setValue(values);
+      this.itemChangingPosition = to;
+    }, 500);
+
+    setTimeout(()=> this.itemChangingPosition = undefined, 1000);
+  }
+
+  moveDown(from: number) {
+    const to = from +1;
+    this.moveDirection(from, to);
+  }
+
+  moveUp(from: number) {
+    const to = from - 1;
+    this.moveDirection(from, to);
+  }
+    
 
   save() {
     if(!this.saving){

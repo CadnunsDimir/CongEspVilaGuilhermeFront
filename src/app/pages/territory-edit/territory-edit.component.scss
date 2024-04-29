@@ -2,7 +2,6 @@
 table{
     font-size: 10px;
     td, th{
-        border: 1px solid gray;
         padding: 5px;
     }
     th:nth-child(3){
@@ -16,6 +15,11 @@ table{
         padding: 0;
         margin: 0;
     }
+    .actions{
+        *{
+            padding-left: 10px;
+        }
+    }
 }
 
 .save-button{
@@ -24,4 +28,11 @@ table{
     top: 0;
     width: 100px;
     margin-right: 10px;
+}
+
+.changing-position{
+    background-color: #ccc;
+    input{
+        background-color: #ccc;
+    }
 }

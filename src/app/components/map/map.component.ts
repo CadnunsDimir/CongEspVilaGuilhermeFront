@@ -7,7 +7,13 @@ export interface MapCoordinates {
   lat: number;
 }
 export interface MapMarker extends MapCoordinates {
+  iconText: string;
   title: string;
+}
+
+enum MarkerColor{
+  Blue = '#0d2fc7',
+  Red = '#c70d0d'
 }
 
 @Component({
@@ -86,12 +92,21 @@ export class MapComponent {
     return this._markers.map(mark => this.newMarker(mark));
   }
 
-  newMarker(marker: MapMarker, iconUrl: string = 'assets/blue-marker.svg') {
+  newMarker(marker: MapMarker, iconColor: MarkerColor = MarkerColor.Blue) {
+    const style = `
+      
+      background: ${iconColor};
+      
+    `;
+    const spanStyle = `
+    transform: rotate(-45deg);
+    display: block;
+    `;
     return new Leaflet.Marker(new Leaflet.LatLng(marker.lat, marker.long), {
-      icon: new Leaflet.Icon({
-        iconSize: [50, 41],
-        iconAnchor: [13, 41],
-        iconUrl,
+      icon: Leaflet.divIcon({
+        // iconUrl,
+        iconSize: [25, 25],
+        html: `<div class="map-marker" style="${style}"><span style="${spanStyle}">${marker.iconText}</span></div>`
       }),
       title: marker.title
     } as Leaflet.MarkerOptions)
@@ -101,8 +116,9 @@ export class MapComponent {
     return this.newMarker({
       lat: this.userLocation!!.lat,
       long: this.userLocation!!.long,
-      title: 'Minha Localização'
-    }, 'assets/red-marker.svg');
+      title: 'Minha Localização',
+      iconText: ''
+    }, MarkerColor.Red);
   }
 
   basicLayer = () => new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

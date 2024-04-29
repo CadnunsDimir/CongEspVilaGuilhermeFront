@@ -2,7 +2,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 300px;
+  z-index: 2000;
+  background: #fff;  
 }
 
 .menu-button {
@@ -18,6 +20,7 @@
   top:0;
   left:0;
   position:absolute;
+  border: none;
 }
 
 nav{
@@ -26,7 +29,9 @@ nav{
     ul{
         max-width: 500px;
         height: 100vh;
-        background-color: #e0e0e0bb;
+        // background-color: #e0e0e0bb;
+        // background: #e0e0e0bb;
+        background: #ccc;
         li a {
             padding: 10px;
             background-color: #ccc;

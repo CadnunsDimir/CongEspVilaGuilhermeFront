@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,8 @@ import { AuthService } from './services/auth/auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'Front';
+  redirectUrl: string = "";
+
   constructor(
     private auth: AuthService,
     private router: Router
@@ -16,6 +19,11 @@ export class AppComponent implements OnInit {
 
   }
   ngOnInit(): void {
+
+    this.router.events
+    .pipe(filter(x=> x instanceof NavigationStart && !x.url.includes('login') ))
+    .subscribe((x: any)=> this.redirectUrl = x.url);
+
     this.auth.$notAuthenticated.subscribe(notAuthenticated => {
       if (notAuthenticated) {
         this.redirectToLogin();
@@ -23,6 +31,8 @@ export class AppComponent implements OnInit {
     });
   }
   redirectToLogin() {
-    this.router.navigate(['/login']);
+    
+    const options = { queryParams: { redirect: this.redirectUrl } }
+    this.router.navigate(['/login'], options);
   }
 }
