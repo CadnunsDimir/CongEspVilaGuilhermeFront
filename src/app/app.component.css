@@ -1,0 +1,10 @@
+router-outlet{
+    padding-top: 50px;
+    display:block;
+}
+
+@media print{
+    router-outlet{
+        padding-top: 0;
+    }
+  }
