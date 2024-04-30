@@ -3,15 +3,16 @@ import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, of, switchMap, take, tap } from 'rxjs';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TerritoryService {
 
-  private baseUrl = 'http://localhost:5264/api/territory/';
+  private baseUrl = `${environment.api}/api/territory/`;
   
-  private _cards$ = new BehaviorSubject<number[] | undefined>(undefined);
+  private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem('cards') || '[]') || undefined);
   private _territoryCard$ = new BehaviorSubject<TerritoryCard | undefined>(undefined);
 
   constructor(private auth: AuthService, private http: HttpClient) { }
@@ -40,9 +41,13 @@ export class TerritoryService {
   }
 
   get cards$() {
-    if (this._cards$.getValue() == undefined) {
+    const cards = this._cards$.getValue();
+    if ( cards == undefined || cards.length == 0) {
       this.requestWithToken(this.baseUrl)
-        .subscribe((list) => this._cards$.next(list as number[]));
+        .subscribe((list) => {
+          localStorage.setItem("cards", JSON.stringify(list))
+          this._cards$.next(list as number[]);
+        });
     }
     return this._cards$.asObservable();
   }
