@@ -5,6 +5,7 @@
     @for (item of menuItens; track item.label) {
       <li><a [routerLink]="[item.route]" >{{ item.label }}</a></li>
     }
+    <li><a role="button" (click)="logout()">Logout</a></li>
     <li><a role="button" aria-label="fechar menu">X</a></li>
   </ul>
 </nav>

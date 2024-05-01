@@ -9,6 +9,7 @@
 
 .menu-button {
   box-shadow: none;
+  background-color: transparent;
   background-image: url('/assets/menu_icon.png');
   background-position: 0px;
   background-repeat: no-repeat;
@@ -24,7 +25,7 @@
 }
 
 nav{
-    min-height: 50px;
+    // min-height: 50px;
     display:block;
     ul{
         max-width: 500px;

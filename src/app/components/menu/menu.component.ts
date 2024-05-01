@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
+
   $isLogged = this.auth.$notAuthenticated.pipe(map(x => !x));
   showMenu = false;
   menuItens = [
@@ -16,5 +17,10 @@ export class MenuComponent {
   ];
   constructor(private auth: AuthService) {
 
+  }
+
+  logout() {
+    this.showMenu = false;
+    this.auth.requestUserLogin();
   }
 }

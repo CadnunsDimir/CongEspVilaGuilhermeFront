@@ -13,18 +13,20 @@ export interface LoginModel {
 })
 export class AuthService {
   private storage: Storage = localStorage;
+  private tokenSessionKey = "token";
   private apiHost  = environment.api;
-  private _$token = new BehaviorSubject<string | undefined>(this.storage['token'] || '');
+  private _$token = new BehaviorSubject<string | undefined>(this.storage[this.tokenSessionKey] || '');
   private _$notAuthenticated = new BehaviorSubject<boolean>(false);
   public get $token() { return this._$token.asObservable(); };
   public get $notAuthenticated() { return this._$notAuthenticated.asObservable(); };
 
  
   constructor(private http: HttpClient) {
-    this._$token.subscribe(token => this.storage["token"] = token);
+    this._$token.subscribe(token => this.storage[this.tokenSessionKey] = token);
   }
 
   requestUserLogin() {
+    this.storage.removeItem(this.tokenSessionKey);
     this._$notAuthenticated.next(true);
   }
 

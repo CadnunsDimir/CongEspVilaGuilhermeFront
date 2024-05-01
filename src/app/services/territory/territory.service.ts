@@ -8,11 +8,12 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class TerritoryService {
+export class TerritoryService {  
 
   private baseUrl = `${environment.api}/api/territory/`;
+  private cardsSessionKey = "cards";
   
-  private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem('cards') || '[]') || undefined);
+  private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem(this.cardsSessionKey) || '[]') || undefined);
   private _territoryCard$ = new BehaviorSubject<TerritoryCard | undefined>(undefined);
 
   constructor(private auth: AuthService, private http: HttpClient) { }
@@ -45,7 +46,7 @@ export class TerritoryService {
     if ( cards == undefined || cards.length == 0) {
       this.requestWithToken(this.baseUrl)
         .subscribe((list) => {
-          localStorage.setItem("cards", JSON.stringify(list))
+          localStorage.setItem(this.cardsSessionKey, JSON.stringify(list))
           this._cards$.next(list as number[]);
         });
     }
@@ -68,5 +69,9 @@ export class TerritoryService {
 
   updateCard(card: TerritoryCard){
     return this.requestWithToken(this.baseUrl, 'PUT', card);
+  }
+
+  clear() {
+    sessionStorage.removeItem(this.cardsSessionKey);
   }
 }

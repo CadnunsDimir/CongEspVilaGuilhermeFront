@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import L, * as Leaflet from 'leaflet';
 
 
@@ -21,7 +21,7 @@ enum MarkerColor{
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
-export class MapComponent {
+export class MapComponent implements OnInit{
 
   private _markers: MapMarker[] = [];
   private layerGroup?: L.LayerGroup<any>;
@@ -37,7 +37,9 @@ export class MapComponent {
       this._markers.push(marker);
     });
     this.layerGroup?.addLayer(this.basicLayer());
-    this.layerGroup?.addLayer(this.myLocationMarker());
+
+    if(this.userLocation)
+      this.layerGroup?.addLayer(this.myLocationMarker());
 
     const { lat, long } = this.getCenter();
     this.map?.panTo({
@@ -49,22 +51,19 @@ export class MapComponent {
   @Output()
   click = new EventEmitter<MapCoordinates>();
   private map?: Leaflet.Map;
-  private userLocation?: MapCoordinates;
+  private userLocation?: MapCoordinates = {
+    lat: -23.5002894,
+    long: -46.5997502
+  };
 
   constructor() {
-    navigator.geolocation.getCurrentPosition(x => {
-      this.userLocation = {
-        lat: x.coords.latitude || 0,
-        long: x.coords.longitude || 0,
-      };
-
-      console.log(this.userLocation);
-
-      var center = this.getCenter();
+    
+  }
+  ngOnInit(): void {
+    var center = this.getCenter();
 
       var layers = [
         this.basicLayer(),
-        this.myLocationMarker(),
         ...this.userMarks(),
       ];
 
@@ -86,8 +85,19 @@ export class MapComponent {
         }
       });
 
-    }, error => console.error(error));
+      navigator.geolocation.getCurrentPosition(x => {
+        this.userLocation = {
+          lat: x.coords.latitude || 0,
+          long: x.coords.longitude || 0,
+        };
+  
+        console.log(this.userLocation);
+  
+        this.layerGroup?.addLayer(this.myLocationMarker());
+  
+      }, error => console.error(error));
   }
+
   userMarks() {
     return this._markers.map(mark => this.newMarker(mark));
   }

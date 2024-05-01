@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { filter } from 'rxjs';
+import { TerritoryService } from './services/territory/territory.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private territory: TerritoryService
   ) {
 
   }
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit {
 
     this.auth.$notAuthenticated.subscribe(notAuthenticated => {
       if (notAuthenticated) {
+        this.territory.clear();
         this.redirectToLogin();
       }
     });
