@@ -88,12 +88,8 @@ export class TerritoryEditComponent implements OnInit {
   save() {
     if(!this.saving){
       this.saving = true;
-      console.log(this.territoryCardForm.value);
-      // setTimeout(() => this.saving = false, 1000);
-      this.territory.updateCard(this.territoryCardForm.value).subscribe(()=>{
-        this.territory.selectCard(this.card.cardId);
-        this.router.navigate(['territory']);
-      });
+      this.territory.updateCard(this.territoryCardForm.value);
+      this.router.navigate(['territory']);
     }
   }
 }

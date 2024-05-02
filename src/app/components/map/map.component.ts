@@ -127,7 +127,7 @@ export class MapComponent implements OnInit{
       lat: this.userLocation!!.lat,
       long: this.userLocation!!.long,
       title: 'Minha Localização',
-      iconText: ''
+      iconText: '.'
     }, MarkerColor.Red);
   }
 

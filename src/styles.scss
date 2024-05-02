@@ -94,15 +94,20 @@ table{
   width: 30px;
   height: 30px;
   border-radius: 16px;
-  line-height: 25px;
+  line-height: 30px;
   font-weight: bold;
   color: #fff;
   transform: rotate(45deg);
   margin-top: -4px;
-  ::after{
+  background-color: #c70d0d;
+  &::after{
     width: 12.5px;
     height: 12.5px;
     display: block;
-    background: red;
+    background: inherit;
+    content: "";
+    margin-left: 17px;
+    margin-top: -13px;
+    background: inherit;
   }
 }

@@ -1,7 +1,14 @@
-.notificacion-item{
+.toast{
+    position: fixed;
     padding: 10px;
+    text-align: center;
+    width: 200px;
+    left: calc(50vw - 100px);
+    background: #ccc;
+    border-radius: 10px;
     border: 2px solid #aaaaaa;
-    margin: 5px;
+    z-index: 2000;
+    font-size: 1rem;
     &.error{
         background-color: #fd9494;
         border-color: red;

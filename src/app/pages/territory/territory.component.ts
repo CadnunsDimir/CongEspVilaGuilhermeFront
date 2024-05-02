@@ -6,6 +6,7 @@ import { marker } from 'leaflet';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { GeocodingService } from '../../services/geocoding/geocoding.service';
 import { Router } from '@angular/router';
+import { NotificationsService } from '../../services/notifications/notifications.service';
 
 @Component({
   selector: 'app-territory',
@@ -44,7 +45,8 @@ export class TerritoryComponent implements OnInit {
   constructor(
     private router: Router,
     private territory: TerritoryService,
-    private geocoding: GeocodingService
+    private geocoding: GeocodingService,
+    private notify: NotificationsService
   ) { }
 
   ngOnInit() { }
@@ -55,21 +57,26 @@ export class TerritoryComponent implements OnInit {
   }
 
   selectDirection(direction: Direction) {
-    if (direction != this.directionToUpdate)
+    if (direction != this.directionToUpdate){
       this.directionToUpdate = direction;
+      this.notify.send({
+        message: "Seleccione un local en el mapa para actualizar la posicion del marcador ou clique novamente en la direccion para cancelar",
+        type: 'warning',
+        timeout: 10000
+      })
+    }
     else
       this.directionToUpdate = undefined;
   }
 
-  mapClick(coordinates: MapCoordinates) {
+  
+
+  updateCoordinates(coordinates: MapCoordinates) {
     if (this.directionToUpdate) {
       this.directionToUpdate.lat = coordinates.lat;
       this.directionToUpdate.long = coordinates.long;
 
-      this.territory.updateDirection(this.cardId!, this.directionToUpdate)
-        .subscribe(() => {
-          this.territory.selectCard(this.cardId!)
-        });
+      this.territory.updateCoordinatesOnCardInMemory(this.directionToUpdate);
       this.directionToUpdate = undefined;
     }
   }
@@ -77,7 +84,7 @@ export class TerritoryComponent implements OnInit {
   updateUsingAddress() {
     this.geocoding.getCoordinates(this.directionToUpdate!!, this.neighborhood!!)
       .subscribe(coordinates => {
-        this.mapClick(coordinates);
+        this.updateCoordinates(coordinates);
       });
   }
 

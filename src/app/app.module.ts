@@ -13,6 +13,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { MapComponent } from './components/map/map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { TerritoryEditComponent } from './pages/territory-edit/territory-edit.component';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TerritoryEditComponent } from './pages/territory-edit/territory-edit.co
     TerritoryComponent,
     MenuComponent,
     MapComponent,
-    TerritoryEditComponent
+    TerritoryEditComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,

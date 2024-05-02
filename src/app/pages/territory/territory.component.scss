@@ -25,7 +25,7 @@
 .buttons{
   position: fixed;
   right: 16px;
-  width: 289px;
+  width: 150px;
   top:0;
 }
 
@@ -34,17 +34,6 @@
   justify-content: space-between;
   width: 100vw;
   max-width: 13cm;
-}
-
-.info-message{
-  position: fixed;
-    top: 0;
-    max-width: 400px;
-    left: calc(50vw - 200px);
-    border: 1px solid #000000;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff9b4;
 }
 
 ul.cards-list {
@@ -137,7 +126,7 @@ app-map{
   }
 }
 
-@media screen and (max-width: 450px){
+@media screen and (max-width: 700px){
   .buttons{
     width: 100%;
     position: static;
@@ -150,6 +139,9 @@ app-map{
   }
   .printAsCardLabel{
     display: none;
+  }
+  .direction-list{
+    margin-top: 20px;
   }
 }
 

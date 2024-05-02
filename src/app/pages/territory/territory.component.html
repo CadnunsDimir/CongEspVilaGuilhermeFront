@@ -10,17 +10,15 @@
 </ul>
 
 <div class="buttons">
-  <button *ngIf="!printAsCard" (click)="showCardList = !showCardList"> selecionar o cartão </button>
+  <button *ngIf="!printAsCard" (click)="showCardList = !showCardList">selecionar</button>
   <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">atualizar usando endereço</button>
   <button *ngIf="cardId" (click)="edit()">editar</button>
   <label *ngIf="cardId" class="printAsCardLabel"><input type="checkbox"  (change)="printAsCard = !printAsCard"> imprimir como cartão</label>
 </div>
 
-<p class="info-message" *ngIf="directionToUpdate">Selecione um local no mapa para atualizar a posição do marcador</p>
-
 <section [ngClass]="{'print-as-card':printAsCard}">
   <p class="card-data"><span>Localidade: {{neighborhood}} </span> <span>Cartão n° {{cardId}}</span> </p>
-  <app-map [markers]="markers" (click)="mapClick($event)" />  
+  <app-map [markers]="markers" (click)="updateCoordinates($event)" />  
   <table class="direction-list show-border" *ngIf="territoryCard$ | async as card">
     <tr *ngFor="let direction of card.directions; let i = index;" 
     [ngClass]="{selected: directionToUpdate == direction}"

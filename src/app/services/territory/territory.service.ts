@@ -1,27 +1,46 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, filter, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, interval, map, of, switchMap, take, tap } from 'rxjs';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { environment } from '../../../environments/environment';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TerritoryService {  
-
-  private baseUrl = `${environment.api}/api/territory/`;
-  private cardsSessionKey = "cards";
+export class TerritoryService {
   
+  
+  private baseUrl = `${environment.api}/api/territory/`;
+  private cardsSessionKey = "cards";  
   private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem(this.cardsSessionKey) || '[]') || undefined);
   private _territoryCard$ = new BehaviorSubject<TerritoryCard | undefined>(undefined);
 
-  constructor(private auth: AuthService, private http: HttpClient) { }
+  // check data every 10 secs and save on Db
+  private updateInterval = interval(30000).pipe(
+    tap(() => console.log('needUpdateOnDb: ', this.needUpdateOnDb)),
+    filter(()=> !!this._cards$.getValue() && this.needUpdateOnDb),
+    map(()=> this._territoryCard$.getValue() as TerritoryCard)
+  ).subscribe(card=> {
+    this.updateCardOnDb(card)
+      .subscribe(()=> this.notifyCardUpdateOK(card.cardId));
+    this.needUpdateOnDb = false;
+    this.notify.send({
+      type: 'info',
+      message: `atualizando cartão ${card.cardId}...`
+    });
+  });
+
+  needUpdateOnDb = false;
+
+  constructor(private auth: AuthService, private http: HttpClient, private notify: NotificationsService) {
+
+  }
 
   private requestWithToken<T>(url: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET', body: any = null) {
     return this.auth.$token.pipe(
       take(1),
-      tap(x => console.log(x)),
       switchMap(token => this.http.request<T>(method, url, {
         body,
         headers: {
@@ -58,8 +77,21 @@ export class TerritoryService {
   }
 
   selectCard(cardId: number) {
-    this.requestWithToken<TerritoryCard>(`${this.baseUrl}${cardId}`)
-      .subscribe((card) => this._territoryCard$.next(card))
+    var previousLoadedCard = this._territoryCard$.getValue()!;
+    var $request = this.requestWithToken<TerritoryCard>(`${this.baseUrl}${cardId}`)
+                    .pipe(
+                      tap((card) => {                        
+                        this._territoryCard$.next(card)
+                      }));
+    if(this.needUpdateOnDb && previousLoadedCard){
+      this.updateCardOnDb(previousLoadedCard).subscribe(() => {
+        this.notifyCardUpdateOK(previousLoadedCard.cardId); 
+        $request.subscribe();
+      });
+    }else{
+      $request.subscribe() 
+    }
+    this.needUpdateOnDb = false;    
   }
 
   updateDirection(cardId: number, direction: Direction) {
@@ -67,8 +99,34 @@ export class TerritoryService {
     return this.requestWithToken(url, 'PUT', direction);
   }
 
-  updateCard(card: TerritoryCard){
+  updateCoordinatesOnCardInMemory(direction: Direction) {
+    var card = this._territoryCard$.getValue()!;
+    card.directions
+      .filter(x=>
+        x.houseNumber == direction.houseNumber && 
+        x.streetName == direction.streetName && 
+        x.complementaryInfo == direction.complementaryInfo)
+      .forEach(x=> {
+        x.lat = direction.lat;
+        x.long = direction.long;
+      });
+    this.updateCard(card);
+  }
+
+  private updateCardOnDb(card: TerritoryCard){
     return this.requestWithToken(this.baseUrl, 'PUT', card);
+  }
+
+  notifyCardUpdateOK(cardId: number): void {
+    this.notify.send({
+      type: 'success',
+      message: `cartão ${cardId} salvo`
+    });
+  }
+
+  updateCard(card: TerritoryCard){
+    this.needUpdateOnDb = true;
+    this._territoryCard$.next(card);
   }
 
   clear() {
