@@ -8,18 +8,26 @@ import { GeocodingService } from '../../services/geocoding/geocoding.service';
 import { Router } from '@angular/router';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 
+interface DirectionMapMarker extends MapMarker{
+  directionIndex: number
+}
+
 @Component({
   selector: 'app-territory',
   templateUrl: './territory.component.html',
   styleUrl: './territory.component.scss'
 })
 export class TerritoryComponent implements OnInit {
+getMarkColor(directionIndex: number): MarkerColor {
+  var mark = this.markers.filter(x=> x.directionIndex == directionIndex+1)[0];
+  return mark?.color || '#ccc'
+}
   
   printAsCard = false;
   showCardList = false;
   neighborhood: string | undefined;
   cardId: number | undefined;
-  markers: MapMarker[] = [];
+  markers: DirectionMapMarker[] = [];
   directionToUpdate?: Direction;
 
   cards$ = this.territory.cards$;
@@ -34,6 +42,7 @@ export class TerritoryComponent implements OnInit {
         }))
         .filter(x => x.lat && x.long)
         .map(x => ({
+          directionIndex: x.index,
           lat: x.lat!!,
           long: x.long!!,
           title: `${x.index} - ${x.streetName}, ${x.houseNumber}`,

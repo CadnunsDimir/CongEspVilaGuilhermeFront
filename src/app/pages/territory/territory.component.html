@@ -23,7 +23,7 @@
     <tr *ngFor="let direction of card.directions; let i = index;" 
     [ngClass]="{selected: directionToUpdate == direction}"
     (click)="selectDirection(direction)">
-      <td [ngStyle]="{'background-color': markers[i].color}">
+      <td [ngStyle]="{'background-color': getMarkColor(i)}">
         {{i+1}}
       </td>
       <td>
