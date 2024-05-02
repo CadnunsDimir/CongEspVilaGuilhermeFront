@@ -9,11 +9,14 @@ export interface MapCoordinates {
 export interface MapMarker extends MapCoordinates {
   iconText: string;
   title: string;
+  color: MarkerColor
 }
 
-enum MarkerColor{
+export enum MarkerColor{
   Blue = '#0d2fc7',
-  Red = '#c70d0d'
+  Red = '#c70d0d',
+  Green ='green',
+  Yellow = 'yellow'
 }
 
 @Component({
@@ -102,10 +105,10 @@ export class MapComponent implements OnInit{
     return this._markers.map(mark => this.newMarker(mark));
   }
 
-  newMarker(marker: MapMarker, iconColor: MarkerColor = MarkerColor.Blue) {
+  newMarker(marker: MapMarker,) {
     const style = `
       
-      background: ${iconColor};
+      background: ${marker.color};
       
     `;
     const spanStyle = `
@@ -127,8 +130,9 @@ export class MapComponent implements OnInit{
       lat: this.userLocation!!.lat,
       long: this.userLocation!!.long,
       title: 'Minha Localização',
-      iconText: '.'
-    }, MarkerColor.Red);
+      iconText: '.',
+      color: MarkerColor.Red
+    });
   }
 
   basicLayer = () => new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

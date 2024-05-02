@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TerritoryService } from '../../services/territory/territory.service';
 import { take, tap } from 'rxjs';
-import { MapCoordinates, MapMarker } from '../../components/map/map.component';
+import { MapCoordinates, MapMarker, MarkerColor } from '../../components/map/map.component';
 import { marker } from 'leaflet';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { GeocodingService } from '../../services/geocoding/geocoding.service';
@@ -14,6 +14,7 @@ import { NotificationsService } from '../../services/notifications/notifications
   styleUrl: './territory.component.scss'
 })
 export class TerritoryComponent implements OnInit {
+  
   printAsCard = false;
   showCardList = false;
   neighborhood: string | undefined;
@@ -36,7 +37,8 @@ export class TerritoryComponent implements OnInit {
           lat: x.lat!!,
           long: x.long!!,
           title: `${x.index} - ${x.streetName}, ${x.houseNumber}`,
-          iconText: x.index.toString()
+          iconText: x.index.toString(),
+          color: this.colorByIndex(x.index)
         })) || [];
       this.markers = markers;
     })
@@ -93,5 +95,18 @@ export class TerritoryComponent implements OnInit {
       sessionStorage.setItem("card", JSON.stringify(card));
       this.router.navigate(['/territory/edit']);
     });
+  }
+
+  colorByIndex(index: number): MarkerColor {
+    const colors = [
+      MarkerColor.Blue,
+      MarkerColor.Green,
+      MarkerColor.Red,
+      MarkerColor.Yellow
+    ];
+
+   const colorIndex = colors.length + index - 1;
+
+    return colors[colorIndex % colors.length];
   }
 }
