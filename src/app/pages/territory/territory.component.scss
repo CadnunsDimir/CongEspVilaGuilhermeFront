@@ -25,15 +25,45 @@
 .buttons{
   position: fixed;
   right: 16px;
-  width: 150px;
   top:0;
+}
+.edit-button{
+  background-image: url(/assets/edit_icon.png);
+  box-shadow: none;
+  background-color: transparent;
+  background-position: 0px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
+}
+.share-button{
+  background-image: url(/assets/share_icon.png);
+  box-shadow: none;
+  background-color: transparent;
+  background-position: 0px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
+}
+.selec-icon{
+  background-image: url(/assets/select_icon.png);
+  background-color: transparent;
+  background-position: 0px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  width: 40px;
+  height: 32px;
+  position: relative;
+  margin-bottom: -5px;
+  margin-top: -5px;
+  margin-left: 7px;
 }
 
 .card-data{
   display: flex;
   justify-content: space-between;
-  width: 100vw;
-  max-width: 13cm;
+  width: 100%;
 }
 
 ul.cards-list {
@@ -127,17 +157,17 @@ app-map{
 }
 
 @media screen and (max-width: 700px){
-  .buttons{
-    width: 100%;
-    position: static;
-  }
+  // .buttons{
+  //   width: 100%;
+  //   position: static;
+  // }
   button{
     position: static;
   }
   .card-data{
     width: 100%;
   }
-  .printAsCardLabel{
+  .print-as-card--label{
     display: none;
   }
   .direction-list{
@@ -150,8 +180,9 @@ app-map{
     float: left;
     position: absolute;
     top: 160px;
-    left: 62vw;
-    max-height: calc(100vh - 278px);
+    left: 65vw;
+    right: 15px;
+    max-height: calc(100vh - 180px);
     overflow: auto;
     display: flow;
   }
@@ -163,7 +194,7 @@ app-map{
 }
 
 @media print {
-  button{
+  button, .print-as-card--label{
     display: none;
   }
   .direction-list{
@@ -191,10 +222,6 @@ app-map{
   app-map{
     width: 60vw;
     display: block;
-  }
-
-  .print-controls{
-    display: none;
   }
 
   .print-as-card{

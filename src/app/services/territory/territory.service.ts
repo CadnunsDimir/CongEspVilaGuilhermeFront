@@ -13,9 +13,14 @@ export class TerritoryService {
   
   
   private baseUrl = `${environment.api}/api/territory/`;
-  private cardsSessionKey = "cards";  
+  private cardsSessionKey = "cards";
+  private tableName = 'CardTable';
   private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem(this.cardsSessionKey) || '[]') || undefined);
-  private _territoryCard$ = new BehaviorSubject<TerritoryCard | undefined>(undefined);
+  private _territoryCard$ = new BehaviorSubject<TerritoryCard | undefined>((() => {
+    const cardId = localStorage["lastCardSelected"] || -1;
+    const dbTable = JSON.parse(localStorage[this.tableName] || "{}");
+    return dbTable[cardId];
+  })());
 
   // check data every 10 secs and save on Db
   private updateInterval = interval(30000).pipe(
@@ -34,8 +39,10 @@ export class TerritoryService {
 
   needUpdateOnDb = false;
 
-  constructor(private auth: AuthService, private http: HttpClient, private notify: NotificationsService) {
-
+  constructor(
+    private auth: AuthService, 
+    private http: HttpClient, 
+    private notify: NotificationsService) {
   }
 
   private requestWithToken<T>(url: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET', body: any = null) {
@@ -80,8 +87,9 @@ export class TerritoryService {
     var previousLoadedCard = this._territoryCard$.getValue()!;
     var $request = this.requestWithToken<TerritoryCard>(`${this.baseUrl}${cardId}`)
                     .pipe(
-                      tap((card) => {                        
-                        this._territoryCard$.next(card)
+                      tap((card) => {
+                        this.saveOnLocalStorage(card);                        
+                        this._territoryCard$.next(card);
                       }));
     if(this.needUpdateOnDb && previousLoadedCard){
       this.updateCardOnDb(previousLoadedCard).subscribe(() => {
@@ -126,7 +134,28 @@ export class TerritoryService {
 
   updateCard(card: TerritoryCard){
     this.needUpdateOnDb = true;
+    this.saveOnLocalStorage(card);
     this._territoryCard$.next(card);
+  }
+
+  saveOnLocalStorage(card: TerritoryCard) {    
+    const dbTable = JSON.parse(localStorage[this.tableName] || "{}");
+    dbTable[card.cardId] = card;
+    localStorage.setItem(this.tableName, JSON.stringify(dbTable));
+    localStorage.setItem("lastCardSelected", card.cardId.toString());
+  }
+
+  getShareableCardId(cardId: number) {
+    return this.requestWithToken(`${this.baseUrl}${cardId}/share`)
+      .pipe(map(x=> x.temporaryId));
+  }
+
+  getCardPublicEndPoint(temporaryId: string){
+    console.log(`${this.baseUrl}${temporaryId}/public`);
+    this.http.get<TerritoryCard>(`${this.baseUrl}${temporaryId}/public`).subscribe(card=> {
+      this.saveOnLocalStorage(card);                        
+      this._territoryCard$.next(card);
+    });
   }
 
   clear() {

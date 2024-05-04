@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent, canActivate: [authenticationGuard()] },
   { path: 'territory', component: TerritoryComponent, canActivate: [authenticationGuard()] },
+  { path: 'territory/public/:sharedCardId', component: TerritoryComponent },
   { path: 'territory/edit', component: TerritoryEditComponent, canActivate: [authenticationGuard()] },
   { path: 'login', component: LoginComponent },
 ];
