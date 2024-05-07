@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Notification, NotificationsService } from '../services/notifications/notifications.service';
+import { Notification, NotificationsService } from '../notifications/notifications.service';
 
 interface ShareLinkData {
   title: string, url: string
@@ -37,10 +37,29 @@ export class ShareService {
   }
   
   private sendToClipboard({title, url}: ShareLinkData) {
-    navigator.clipboard.writeText(url);
-    this.notify.send({
-      message: `o link para  o '${title}' foi copiado para área de transferencia`,
-      type: 'success'
+    var button = document.createElement('button');
+    var text = document.createElement('input');
+    document.body.appendChild(text);
+    document.body.appendChild(button);
+    text.value = url; 
+
+    button.addEventListener('click', ()=> {
+      if (window.getSelection) {
+        var range = document.createRange();
+        range.selectNode(text);
+        window.getSelection()?.removeAllRanges();
+        window.getSelection()?.addRange(range);
+        document.execCommand("copy");
+        this.notify.send({
+          message: `o link para  o '${title}' foi copiado para área de transferencia`,
+          type: 'success'
+        });
+        setTimeout(()=>{
+          document.body.removeChild(text);
+          document.body.removeChild(button);
+        }, 100);
+      }
     });
+    button.click();
   }
 }

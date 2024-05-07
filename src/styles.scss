@@ -12,6 +12,7 @@ input[type=text], input[type=password]{
     margin: 10px 0 10px 0;
     display: block;
     outline: none;
+    background-color: transparent;
 }
 
 body {
@@ -110,4 +111,16 @@ table{
     margin-top: -13px;
     background: inherit;
   }
+}
+
+.clipboard-old{
+  position: fixed;
+    top: 10px;
+    padding: 10px;
+    background: #c8c8c8;
+    /* width: 500px; */
+    max-width: 100%;
+    left: calc(50vw - 250px);
+    z-index: 1500;
+    border-radius: 10px;
 }

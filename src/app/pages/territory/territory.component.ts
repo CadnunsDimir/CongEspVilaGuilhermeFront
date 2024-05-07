@@ -7,7 +7,7 @@ import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { GeocodingService } from '../../services/geocoding/geocoding.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationsService } from '../../services/notifications/notifications.service';
-import { ShareService } from '../../share/share.service';
+import { ShareService } from '../../services/share/share.service';
 
 interface DirectionMapMarker extends MapMarker {
   directionIndex: number
@@ -119,6 +119,7 @@ export class TerritoryComponent implements OnInit {
   updateUsingAddress() {
     this.neighborhood$
       .pipe(
+        take(1),
         switchMap(neighborhood => this.geocoding.getCoordinates(this.directionToUpdate!!, neighborhood!)))
       .subscribe(coordinates => {
         this.updateCoordinates(coordinates);

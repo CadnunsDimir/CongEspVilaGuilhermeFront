@@ -135,7 +135,7 @@ app-map{
     }
     tr{
       td:nth-child(1){
-        width: 30px;
+        width: 30px;     
       }
     }
   }
@@ -147,9 +147,11 @@ app-map{
     background-color: #cacaca;
   }
 
-  li {
-    padding: 10px;
-    border-bottom: 1px solid #cdcdcda1;
+  
+  tr{
+    td:nth-child(1){
+      color:white;
+    }
   }
   
   .on-map {
