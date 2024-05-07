@@ -33,8 +33,7 @@ button, input[type=button], input[type=submit] {
   margin-bottom: 10px;
   color: #6d6d6d;
   cursor: pointer;
-  // background: #e2e2e2;
-  // border: 1px solid black;
+  z-index: 2000 !important;
 
   &:active {
     background-color: #d5d5d5;
@@ -63,8 +62,9 @@ ul {
   padding: 0;
 }
 
+
 [role=button]{
-    cursor:pointer
+    cursor:pointer;
 }
 
 .inline{

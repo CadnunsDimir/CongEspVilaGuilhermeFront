@@ -26,6 +26,11 @@
   position: fixed;
   right: 16px;
   top:0;
+  z-index: 1100;background-color: white;
+  padding: 10px;
+  > *{
+    margin-left: 10px;
+  }
 }
 .edit-button{
   background-image: url(/assets/edit_icon.png);

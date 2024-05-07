@@ -9,25 +9,26 @@
 </ul>
 
 <div class="buttons">
-  <label *ngIf="cardId" class="print-as-card--label">
-    <input type="checkbox"  (change)="printAsCard = !printAsCard"> preview
+  <label *ngIf="cardId$" class="print-as-card--label">
+    <input type="checkbox"  (change)="printAsCard = !printAsCard"> 
+    ver como impressão
   </label>
   <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">atualizar usando endereço</button>
-  <button *ngIf="cardId" class="edit-button" (click)="edit()"></button>
-  <button *ngIf="cardId" class="share-button" (click)="share()"></button>
+  <button *ngIf="!disableEdit && cardId$" class="edit-button" (click)="edit()"></button>
+  <button *ngIf="cardId$" class="share-button" (click)="share()"></button>
 </div>
 
 <section [ngClass]="{'print-as-card':printAsCard}">
-  <p class="card-data">
-    <span>Localidade: {{neighborhood}} </span> 
-    <span role="button" (click)="showCardListClick()">Cartão n° {{cardId}} <i class="selec-icon"></i></span> 
+  <p class="card-data" *ngIf="cardId$ | async as cardId">
+    <span>Localidade: {{neighborhood$ | async}} </span> 
+    <span [attr.role]="disableEdit ? 'text': 'button'" (click)="showCardListClick()">Cartão n° {{cardId}} <i class="selec-icon" *ngIf="!disableEdit"></i></span> 
   </p>
-  <app-map [markers]="markers" (click)="updateCoordinates($event)" />  
+  <app-map [markers]="(territoryCard$ | async)?.markers || []" (click)="updateCoordinates($event)" />  
   <table class="direction-list show-border" *ngIf="territoryCard$ | async as card">
     <tr *ngFor="let direction of card.directions; let i = index;" 
     [ngClass]="{selected: directionToUpdate == direction}"
     (click)="selectDirection(direction)">
-      <td [ngStyle]="{'background-color': getMarkColor(i)}">
+      <td [ngStyle]="{'background-color': direction.color}">
         {{i+1}}
       </td>
       <td>

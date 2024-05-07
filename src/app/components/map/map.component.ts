@@ -16,7 +16,9 @@ export enum MarkerColor{
   Blue = '#0d2fc7',
   Red = '#c70d0d',
   Green ='green',
-  Yellow = 'yellow'
+  Yellow = 'yellow',
+  Grey = "#ccc",
+  Purple = "#8825ec"
 }
 
 @Component({
