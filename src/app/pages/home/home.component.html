@@ -7,3 +7,10 @@
     class="notificacion-item"
     [ngClass]="item.type">{{item.message}}</li>
 </ul>
+
+<div *ngIf="$notFoundCards | async as cards">
+    <p>Atenção: cartões não encontrados</p>
+    <ul>
+        <li *ngFor="let item of cards">{{item}}</li>
+    </ul>
+</div>

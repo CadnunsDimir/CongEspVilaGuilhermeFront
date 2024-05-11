@@ -10,8 +10,6 @@ import { NotificationsService } from '../notifications/notifications.service';
   providedIn: 'root'
 })
 export class TerritoryService {
-  
-  
   private baseUrl = `${environment.api}/api/territory/`;
   private cardsSessionKey = "cards";
   private tableName = 'CardTable';
@@ -160,5 +158,10 @@ export class TerritoryService {
 
   clear() {
     sessionStorage.removeItem(this.cardsSessionKey);
+  }
+
+  lastCardId() {
+    const cards = this._cards$.getValue() || [];
+    return cards[cards.length-1];
   }
 }
