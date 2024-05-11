@@ -31,6 +31,8 @@ export class MapComponent implements OnInit{
   private _markers: MapMarker[] = [];
   private layerGroup?: L.LayerGroup<any>;
 
+  @Input() scale = 1;
+
   @Input()
   set markers(markers: MapMarker[]) {
     this._markers = [];
@@ -111,7 +113,7 @@ export class MapComponent implements OnInit{
     const style = `
       
       background: ${marker.color};
-      
+      transform: rotate(45deg) scale(${this.scale});
     `;
     const spanStyle = `
     transform: rotate(-45deg);

@@ -19,11 +19,12 @@ export class GeocodingService {
 
   getCoordinates(direction: Direction, neighborhood: string): Observable<GeoCode> {
     const params = {
-      q: `${direction.houseNumber} ${direction.streetName}, ${neighborhood}`,
+      q: `${direction.houseNumber} ${direction.streetName}, São Paulo`,
       format: 'json'
     };
 
     return this.http.get(this.url, { params }).pipe(
+      map((x: any)=>  x.filter((entry:any)=> entry.display_name.includes(neighborhood) || entry.display_name.includes('São Paulo'))),
       tap((x: any) => {
         if (x.length == 0) {
           throw new Error("Nenhum resultado encontrado: verifique o nome da rua ou do bairro");

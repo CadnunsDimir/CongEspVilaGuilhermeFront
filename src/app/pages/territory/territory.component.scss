@@ -76,7 +76,7 @@ ul.cards-list {
   position: fixed;
   top: 100px;
   left: -140px;
-  height: 100vh;
+  height: calc(100vh - 100px);
   overflow-y:auto;
   background-color: white;
   z-index: 2000;
@@ -105,7 +105,7 @@ app-map{
     position: absolute;
     top: 0.6cm;
     left: 5mm;
-    width: 13cm;
+    width: 139mm;
   }
   app-map{
     position: absolute;
@@ -118,7 +118,7 @@ app-map{
   }
   .direction-list{
     margin-top: 8cm;
-    width: 13.5cm;
+    width: 14cm;
     float: left;
     position: absolute;
     top: 50px;
@@ -138,6 +138,9 @@ app-map{
         width: 30px;     
       }
     }
+  }
+  .selec-icon{
+    display: none;
   }
 }
 
@@ -201,7 +204,7 @@ app-map{
 }
 
 @media print {
-  button, .print-as-card--label{
+  button, .print-as-card--label, .selec-icon{
     display: none;
   }
   .direction-list{

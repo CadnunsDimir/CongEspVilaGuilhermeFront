@@ -15,9 +15,11 @@ export class MenuComponent {
   menuItens = [
     { label: 'Página inicial', route: '/home' },
     { label: 'Territórios', route: '/territory' },
+    { label: 'Território da Congregação', route: '/territory/all' },
   ];
+  
   constructor(
-    private auth: AuthService, 
+    private auth: AuthService,
     private router: Router
   ) {
     this.router.events

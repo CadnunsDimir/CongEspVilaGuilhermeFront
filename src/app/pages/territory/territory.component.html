@@ -23,7 +23,7 @@
     <span>Localidade: {{neighborhood$ | async}} </span> 
     <span [attr.role]="disableEdit ? 'text': 'button'" (click)="showCardListClick()">Cartão n° {{cardId}} <i class="selec-icon" *ngIf="!disableEdit"></i></span> 
   </p>
-  <app-map [markers]="(territoryCard$ | async)?.markers || []" (click)="updateCoordinates($event)" />  
+  <app-map [markers]="(territoryCard$ | async)?.markers || []" (click)="updateCoordinates($event)" />
   <table class="direction-list show-border" *ngIf="territoryCard$ | async as card">
     <tr *ngFor="let direction of card.directions; let i = index;" 
     [ngClass]="{selected: directionToUpdate == direction}"

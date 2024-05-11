@@ -14,6 +14,7 @@ import { MapComponent } from './components/map/map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { TerritoryEditComponent } from './pages/territory-edit/territory-edit.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { TerritoryAllComponent } from './pages/territory-all/territory-all.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ToastComponent } from './components/toast/toast.component';
     MenuComponent,
     MapComponent,
     TerritoryEditComponent,
-    ToastComponent
+    ToastComponent,
+    TerritoryAllComponent
   ],
   imports: [
     BrowserModule,
