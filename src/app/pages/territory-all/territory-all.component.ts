@@ -48,8 +48,8 @@ export class TerritoryAllComponent {
         .map(x => ({
           lat: x.lat!!,
           long: x.long!!,
-          title: `${x.index}`,
-          iconText: `${cardId}`,
+          title: `Direccion ${x.index}`,
+          iconText: `Tarjeta ${cardId}`,
           color: this.colors[colorIndex]
         }));
 

@@ -36,11 +36,9 @@ export class MapComponent implements OnInit{
   @Input()
   set markers(markers: MapMarker[]) {
     this._markers = [];
-    console.log('map', this.map);
-
     this.layerGroup?.clearLayers();
     markers.forEach(marker => {
-      this.layerGroup?.addLayer(this.newMarker(marker));
+      this.layerGroup?.addLayer(this.newMarker(marker, this.drawOnCanvas(markers)));
       this._markers.push(marker);
     });
     this.layerGroup?.addLayer(this.basicLayer());
@@ -75,6 +73,7 @@ export class MapComponent implements OnInit{
       ];
 
       this.map = Leaflet.map("map", {
+        preferCanvas: true,
         center: { lat: center.lat, lng: center.long },
         zoom: 16,
       });
@@ -105,28 +104,44 @@ export class MapComponent implements OnInit{
       }, error => console.error(error));
   }
 
-  userMarks() {
-    return this._markers.map(mark => this.newMarker(mark));
+  drawOnCanvas(markers: MapMarker[]){
+    return markers.length > 200;
   }
 
-  newMarker(marker: MapMarker,) {
-    const style = `
+  userMarks() {
+    return this._markers.map(mark => this.newMarker(mark, this.drawOnCanvas(this._markers)));
+  }
+
+  newMarker(marker: MapMarker, drawOnCanvas:boolean = false) {
+    console.log('drawOnCanvas',drawOnCanvas)
+    if (drawOnCanvas) {
+      return Leaflet.circleMarker(new Leaflet.LatLng(marker.lat, marker.long), {
+        radius: 8 * this.scale,
+        color: marker.color,
+        opacity: 1,
+        fillOpacity:0.8,
+      }).bindTooltip(L.tooltip({
+        content: `${marker.iconText}:${marker.title}`,
+      }));
+    }else{
+      const style = `
       
-      background: ${marker.color};
-      transform: rotate(45deg) scale(${this.scale});
-    `;
-    const spanStyle = `
-    transform: rotate(-45deg);
-    display: block;
-    `;
-    return new Leaflet.Marker(new Leaflet.LatLng(marker.lat, marker.long), {
-      icon: Leaflet.divIcon({
-        // iconUrl,
-        iconSize: [25, 25],
-        html: `<div class="map-marker" style="${style}"><span style="${spanStyle}">${marker.iconText}</span></div>`
-      }),
-      title: marker.title
-    } as Leaflet.MarkerOptions)
+        background: ${marker.color};
+        transform: rotate(45deg) scale(${this.scale});
+      `;
+      const spanStyle = `
+      transform: rotate(-45deg);
+      display: block;
+      `;
+      return new Leaflet.Marker(new Leaflet.LatLng(marker.lat, marker.long), {
+        icon: Leaflet.divIcon({
+          // iconUrl,
+          iconSize: [25, 25],
+          html: `<div class="map-marker" style="${style}"><span style="${spanStyle}">${marker.iconText}</span></div>`
+        }),
+        title: marker.title
+      } as Leaflet.MarkerOptions)
+    }
   }
 
   myLocationMarker(): Leaflet.Layer {
