@@ -5,12 +5,13 @@ import { BehaviorSubject, catchError, filter, interval, map, of, switchMap, take
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { environment } from '../../../environments/environment';
 import { NotificationsService } from '../notifications/notifications.service';
+import { BaseService } from '../base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TerritoryService {
-  private baseUrl = `${environment.api}/api/territory/`;
+export class TerritoryService extends BaseService{
+  private basePath = `territory/`;
   private cardsSessionKey = "cards";
   private tableName = 'CardTable';
   private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem(this.cardsSessionKey) || '[]') || undefined);
@@ -38,37 +39,18 @@ export class TerritoryService {
   needUpdateOnDb = false;
 
   constructor(
-    private auth: AuthService, 
-    private http: HttpClient, 
+    auth: AuthService, 
+    http: HttpClient, 
     private notify: NotificationsService) {
+      super(auth, http)
   }
 
-  private requestWithToken<T>(url: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET', body: any = null) {
-    return this.auth.$token.pipe(
-      take(1),
-      switchMap(token => this.http.request<T>(method, url, {
-        body,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })),
-      take(1),
-      catchError(error => {
-        console.error(error);        
-        if (error.status == 401) {
-          this.auth.requestUserLogin();
-        }
-        return of('error');
-      }),
-      tap(console.log),
-      filter(x=> x != 'error')
-    );
-  }
+  
 
   get cards$() {
     const cards = this._cards$.getValue();
     if ( cards == undefined || cards.length == 0) {
-      this.requestWithToken(this.baseUrl)
+      this.get(this.basePath, true)
         .subscribe((list) => {
           localStorage.setItem(this.cardsSessionKey, JSON.stringify(list))
           this._cards$.next(list as number[]);
@@ -83,7 +65,7 @@ export class TerritoryService {
 
   selectCard(cardId: number) {
     var previousLoadedCard = this._territoryCard$.getValue()!;
-    var $request = this.requestWithToken<TerritoryCard>(`${this.baseUrl}${cardId}`)
+    var $request = this.get<TerritoryCard>(`${this.basePath}${cardId}`, true)
                     .pipe(
                       tap((card) => {
                         this.saveOnLocalStorage(card);                        
@@ -101,8 +83,8 @@ export class TerritoryService {
   }
 
   updateDirection(cardId: number, direction: Direction) {
-    const url = `${this.baseUrl}${cardId}/direction`;
-    return this.requestWithToken(url, 'PUT', direction);
+    const url = `${this.basePath}${cardId}/direction`;
+    return this.put(url, direction);
   }
 
   updateCoordinatesOnCardInMemory(direction: Direction) {
@@ -120,7 +102,7 @@ export class TerritoryService {
   }
 
   private updateCardOnDb(card: TerritoryCard){
-    return this.requestWithToken(this.baseUrl, 'PUT', card);
+    return this.put(this.basePath, card);
   }
 
   notifyCardUpdateOK(cardId: number): void {
@@ -144,13 +126,13 @@ export class TerritoryService {
   }
 
   getShareableCardId(cardId: number) {
-    return this.requestWithToken(`${this.baseUrl}${cardId}/share`)
+    return this.get(`${this.basePath}${cardId}/share`, true)
       .pipe(map(x=> x.temporaryId));
   }
 
   getCardPublicEndPoint(temporaryId: string){
-    console.log(`${this.baseUrl}${temporaryId}/public`);
-    this.http.get<TerritoryCard>(`${this.baseUrl}${temporaryId}/public`).subscribe(card=> {
+    console.log(`${this.basePath}${temporaryId}/public`);
+    this.get<TerritoryCard>(`${this.basePath}${temporaryId}/public`).subscribe(card=> {
       this.saveOnLocalStorage(card);                        
       this._territoryCard$.next(card);
     });

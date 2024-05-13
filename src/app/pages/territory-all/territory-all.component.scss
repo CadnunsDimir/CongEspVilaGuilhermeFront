@@ -1,5 +1,19 @@
 app-map{
-    width: 95vw;
-    height: 91vh;
+    width: 100%;
+    padding: 30px;
+    padding-top: 60px;
+    height: 100vh;
+    position: fixed;
     display: block;
+    top:0;
+    left: 0;
+    box-sizing: border-box;
+}
+
+h1{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    left: 0;
 }

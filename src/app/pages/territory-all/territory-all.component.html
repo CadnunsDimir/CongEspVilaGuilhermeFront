@@ -1,1 +1,2 @@
-<app-map [markers]="markers" [scale]="0.75"/>
+<h1>Mapa del Território - Española Vila Guilherme</h1>
+<app-map [markers]="(markers$ | async) || []" [scale]="0.5"/>

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MapMarker, MarkerColor } from '../../components/map/map.component';
-import { TerritoryCard } from '../../models/territory-card.model';
-import { TerritoryService } from '../../services/territory/territory.service';
-import { take } from 'rxjs';
+import { Observable, map, take } from 'rxjs';
+import { FullMapService } from '../../services/full-map/full-map.service';
+import { TerritoryMapMarker } from '../../models/territory-mark.model';
 
 @Component({
   selector: 'app-territory-all',
@@ -10,53 +10,24 @@ import { take } from 'rxjs';
   styleUrl: './territory-all.component.scss'
 })
 export class TerritoryAllComponent {
-  table = JSON.parse(localStorage.getItem('CardTable') || '{}');
   colors = this.randomColors();
-  markers: MapMarker[] = [];
+  markers$: Observable<MapMarker[]> = this.fullMap.data$.pipe(map(markers=> this.loadMarks(markers)));
 
-  constructor(private territory: TerritoryService){
-    this.loadMarksFromLocalStorage();
-    this.loadMarksFromApi();
+  constructor(private fullMap: FullMapService){}
+
+  loadMarks(markers: TerritoryMapMarker[]) {
+    return markers.map(x=> ({
+            lat: x.lat,
+            long: x.long,
+            title: `Direccion ${x.orderPosition}`,
+            iconText: `Tarjeta ${x.cardId}`,
+            color: this.getColor(x.cardId)
+    } as MapMarker));
   }
 
-  loadMarksFromApi() {
-    this.territory.cards$.pipe(take(1)).subscribe(cards=> {
-      cards?.
-      filter(x=> !this.table[x])
-      .forEach((cardId, index)=> {
-        if(!this.table[cardId]){
-          setTimeout(()=> this.territory.selectCard(cardId), index * 2000);
-        }
-      })
-    })
-  }
-
-  loadMarksFromLocalStorage() {
-    const allMackers = [];
-    
-    for (const cardId in this.table) {
-      if (Object.prototype.hasOwnProperty.call(this.table, cardId)) {
-        const card = this.table[cardId] as TerritoryCard;
-        const colorIndex = (+cardId) % (this.colors.length+1);
-
-        console.log('cardId', cardId);
-        console.log('colorIndex', colorIndex);
-
-        const markers = card.directions
-        .map((x, i)=> ({index: i+1, ...x}))
-        .filter(x => x.lat && x.long)
-        .map(x => ({
-          lat: x.lat!!,
-          long: x.long!!,
-          title: `Direccion ${x.index}`,
-          iconText: `Tarjeta ${cardId}`,
-          color: this.colors[colorIndex]
-        }));
-
-        allMackers.push(...markers);
-      }
-    }
-    this.markers = allMackers;
+  getColor(cardId: number): any {
+    const colorIndex = cardId % (this.colors.length+1);
+    return this.colors[colorIndex];
   }
 
   randomColors() {
