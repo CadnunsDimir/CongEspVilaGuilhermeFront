@@ -10,7 +10,7 @@ import { Route, Router } from '@angular/router';
   styleUrl: './territory-edit.component.scss'
 })
 export class TerritoryEditComponent implements OnInit {
-
+  draggingCard?: number;
   card: TerritoryCard = JSON.parse(sessionStorage.getItem("card")!);
   territoryCardForm!: FormGroup;
   saving = false;
@@ -18,18 +18,18 @@ export class TerritoryEditComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private fb: FormBuilder, 
-    private territory: TerritoryService){}
+    private fb: FormBuilder,
+    private territory: TerritoryService) { }
 
   ngOnInit(): void {
     console.log(this.card);
     this.territoryCardForm = this.fb.group({
       cardId: [this.card.cardId],
       neighborhood: [this.card.neighborhood],
-      directions: this.fb.array(this.card.directions.map(x=> this.buildDirectionFormControls(x)))
+      directions: this.fb.array(this.card.directions.map(x => this.buildDirectionFormControls(x)))
     });
   }
-  
+
   buildDirectionFormControls(direction: Direction) {
     return this.fb.group({
       streetName: [direction.streetName],
@@ -53,10 +53,10 @@ export class TerritoryEditComponent implements OnInit {
   }
 
   removeDirection(directionControlIndex: number) {
-  this.directionsControls.removeAt(directionControlIndex);
+    this.directionsControls.removeAt(directionControlIndex);
   }
 
-  moveDirection(from: number, to: number){
+  moveDirection(from: number, to: number) {
     this.itemChangingPosition = from;
 
     const values = [...this.directionsControls.value];
@@ -64,18 +64,18 @@ export class TerritoryEditComponent implements OnInit {
     const itemToUp = values[to];
     const itemToDown = values[from];
     values[to] = itemToDown;
-    values[from] = itemToUp;    
+    values[from] = itemToUp;
 
-    setTimeout(()=> {
+    setTimeout(() => {
       this.directionsControls.setValue(values);
       this.itemChangingPosition = to;
-    }, 500);
+    }, 200);
 
-    setTimeout(()=> this.itemChangingPosition = undefined, 1000);
+    setTimeout(() => this.itemChangingPosition = undefined, 300);
   }
 
   moveDown(from: number) {
-    const to = from +1;
+    const to = from + 1;
     this.moveDirection(from, to);
   }
 
@@ -83,13 +83,31 @@ export class TerritoryEditComponent implements OnInit {
     const to = from - 1;
     this.moveDirection(from, to);
   }
-    
+
+  drag(draggingCard: number) {
+    this.draggingCard = draggingCard;
+  }
+  drop(newPositionCard: number) {
+    this.moveDirection(this.draggingCard!, newPositionCard);
+    this.draggingCard = undefined;
+  }
+
+  cancel() {
+    this.backToTerritory();
+  }
+  backToTerritory() {
+    this.router.navigate(['territory']);
+  }
+  dragover($event: DragEvent) {
+    $event.preventDefault();
+  }
+
 
   save() {
-    if(!this.saving){
+    if (!this.saving) {
       this.saving = true;
       this.territory.updateCard(this.territoryCardForm.value);
-      this.router.navigate(['territory']);
+      this.backToTerritory();
     }
   }
 }

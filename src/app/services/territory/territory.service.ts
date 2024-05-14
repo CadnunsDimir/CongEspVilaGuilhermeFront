@@ -139,7 +139,8 @@ export class TerritoryService extends BaseService{
   }
 
   clear() {
-    sessionStorage.removeItem(this.cardsSessionKey);
+    localStorage.removeItem(this.cardsSessionKey);
+    localStorage.removeItem(this.tableName);
   }
 
   lastCardId() {

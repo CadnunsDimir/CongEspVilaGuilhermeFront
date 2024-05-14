@@ -1,5 +1,9 @@
 
 table{
+    .dragging {
+        background-color: rgb(138, 203, 186);
+    }
+
     font-size: 10px;
     td, th{
         padding: 5px;
@@ -22,12 +26,16 @@ table{
     }
 }
 
-.save-button{
+.save-button, .cancel-button{
     position: fixed;
     right: 0;
     top: 0;
     width: 100px;
     margin-right: 10px;
+}
+
+.cancel-button{
+    top: 50px;
 }
 
 .changing-position{
