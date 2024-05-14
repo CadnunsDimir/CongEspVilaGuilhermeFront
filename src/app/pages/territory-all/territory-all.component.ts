@@ -3,6 +3,7 @@ import { MapMarker, MarkerColor } from '../../components/map/map.component';
 import { Observable, map, take } from 'rxjs';
 import { FullMapService } from '../../services/full-map/full-map.service';
 import { TerritoryMapMarker } from '../../models/territory-mark.model';
+import { mapBounds } from '../territory-edit/map-bounds';
 
 @Component({
   selector: 'app-territory-all',
@@ -12,6 +13,7 @@ import { TerritoryMapMarker } from '../../models/territory-mark.model';
 export class TerritoryAllComponent {
   colors = this.randomColors();
   markers$: Observable<MapMarker[]> = this.fullMap.data$.pipe(map(markers=> this.loadMarks(markers)));
+  poligon = mapBounds;
 
   constructor(private fullMap: FullMapService){}
 
@@ -39,3 +41,5 @@ export class TerritoryAllComponent {
     ].sort(() => Math.random() - 0.5)
   }
 }
+
+

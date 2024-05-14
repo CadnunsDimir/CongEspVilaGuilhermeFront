@@ -13,7 +13,7 @@
     <input type="checkbox"  (change)="printAsCard = !printAsCard"> 
     ver como impressão
   </label>
-  <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">atualizar usando endereço</button>
+  <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">buscar</button>
   <button *ngIf="!disableEdit && cardId$" class="edit-button" (click)="edit()"></button>
   <button *ngIf="cardId$" class="share-button" (click)="share()"></button>
 </div>

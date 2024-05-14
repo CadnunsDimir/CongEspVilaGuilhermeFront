@@ -101,6 +101,9 @@ export class TerritoryComponent implements OnInit {
         type: 'warning',
         timeout: 10000
       });
+      if (!direction.lat) {
+        this.updateUsingAddress();
+      }
     }
     else
       this.directionToUpdate = undefined;

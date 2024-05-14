@@ -113,6 +113,12 @@ export class TerritoryService extends BaseService{
   }
 
   updateCard(card: TerritoryCard){
+    card.neighborhood = card.neighborhood.trim();
+    card.directions.forEach(d=> {
+      d.streetName = d.streetName.trim();
+      d.houseNumber = d.houseNumber.trim();
+      d.complementaryInfo = d.complementaryInfo.trim();
+    })
     this.needUpdateOnDb = true;
     this.saveOnLocalStorage(card);
     this._territoryCard$.next(card);

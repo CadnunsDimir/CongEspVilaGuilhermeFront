@@ -1,8 +1,20 @@
 
+.edit-hint{
+    font-size: 12px;
+}
 table{
-    .dragging {
-        background-color: rgb(138, 203, 186);
+    tr{
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+        &.dragging {
+            background-color: rgb(138, 203, 186);
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+        }
     }
+    
 
     font-size: 10px;
     td, th{
@@ -20,6 +32,16 @@ table{
         margin: 0;
     }
     .actions{
+        .remove{
+            padding: 8px;
+            background: grey;
+            display: block;
+            width: 10px;
+            height: 10px;
+            line-height: 12px;
+            border-radius: 4px;
+            color: #ccc;
+        }
         *{
             padding-left: 10px;
         }

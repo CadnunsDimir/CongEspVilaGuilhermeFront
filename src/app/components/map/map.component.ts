@@ -18,7 +18,8 @@ export enum MarkerColor{
   Green ='green',
   Yellow = 'yellow',
   Grey = "#ccc",
-  Purple = "#8825ec"
+  Purple = "#8825ec",
+  Orange = '#ff6d12'
 }
 
 @Component({
@@ -32,6 +33,7 @@ export class MapComponent implements OnInit{
   private layerGroup?: L.LayerGroup<any>;
 
   @Input() scale = 1;
+  private _polygon?: L.LatLngTuple[][];
 
   @Input()
   set markers(markers: MapMarker[]) {
@@ -51,6 +53,13 @@ export class MapComponent implements OnInit{
       lat,
       lng: long
     })
+  }
+
+  @Input()
+  set poligon(coordinates: number[][] | undefined){
+    if (coordinates) {
+      this._polygon = coordinates as unknown as Leaflet.LatLngTuple[][];
+    }
   }
 
   @Output()
@@ -78,9 +87,14 @@ export class MapComponent implements OnInit{
         zoom: 16,
       });
 
+      if (this._polygon) {
+        var polygon = L.polygon(this._polygon, {color: MarkerColor.Orange}).addTo(this.map);
+        this.map.fitBounds(polygon.getBounds());
+      }
+
       this.layerGroup = L.layerGroup().addTo(this.map!!);
 
-      layers.forEach(marks => this.layerGroup?.addLayer(marks));
+      layers.forEach(marks => this.layerGroup?.addLayer(marks));      
 
       this.map.on("click", ({ latlng }) => {
         if (latlng.lat && latlng.lng) {
