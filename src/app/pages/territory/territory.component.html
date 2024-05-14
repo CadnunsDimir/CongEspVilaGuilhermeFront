@@ -19,9 +19,9 @@
 </div>
 
 <section [ngClass]="{'print-as-card':printAsCard}">
-  <p class="card-data" *ngIf="cardId$ | async as cardId">
+  <p class="card-data">
     <span>Localidade: {{neighborhood$ | async}} </span> 
-    <span [attr.role]="disableEdit ? 'text': 'button'" (click)="showCardListClick()">Cartão n° {{cardId}} <i class="selec-icon" *ngIf="!disableEdit"></i></span> 
+    <span [attr.role]="disableEdit ? 'text': 'button'" (click)="showCardListClick()">Cartão n° {{cardId$ | async}} <i class="selec-icon" *ngIf="!disableEdit"></i></span> 
   </p>
   <app-map [markers]="(territoryCard$ | async)?.markers || []" (click)="updateCoordinates($event)" />
   <table class="direction-list show-border" *ngIf="territoryCard$ | async as card">
