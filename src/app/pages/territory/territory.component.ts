@@ -154,7 +154,13 @@ export class TerritoryComponent implements OnInit {
   showCardListClick() {
     if (!this.disableEdit) {
       this.showCardList = !this.showCardList;
+      this.scrollToOption();
     }
+  }
+  
+  scrollToOption() {
+    var item = document.querySelector('.cards-list li.selected');
+    item?.scrollIntoView();
   }
 
   edit() {

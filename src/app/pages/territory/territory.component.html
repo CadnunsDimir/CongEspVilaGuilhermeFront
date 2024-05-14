@@ -3,7 +3,7 @@
 <div class="front-page" *ngIf="printAsCard"></div>
 <div class="back-page" *ngIf="printAsCard"></div>
 <ul [ngClass]="{show: showCardList}" *ngIf="cards$ | async as cards" class="cards-list">
-  <li *ngFor="let item of cards" role="button" (click)="selectCard(item)">
+  <li *ngFor="let item of cards" [ngClass]="{selected: (cardId$ |async) == item}" role="button" (click)="selectCard(item)">
   {{item}}
   </li>
 </ul>
