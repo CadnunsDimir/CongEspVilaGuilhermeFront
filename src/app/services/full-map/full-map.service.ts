@@ -3,14 +3,14 @@ import { BaseService } from '../base.service';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, pipe, tap } from 'rxjs';
-import { TerritoryMapMarker } from '../../models/territory-mark.model';
+import { FullMap, TerritoryMapMarker } from '../../models/full-map.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FullMapService extends BaseService {
-  _$ = new BehaviorSubject<TerritoryMapMarker[]>(
-    JSON.parse(sessionStorage.getItem('FullMapService') || '[]'));
+  _$ = new BehaviorSubject<FullMap>(
+    JSON.parse(sessionStorage.getItem('FullMapService') || '{}'));
   constructor(
     auth: AuthService, 
     http: HttpClient) {
@@ -18,7 +18,8 @@ export class FullMapService extends BaseService {
   }
 
   get data$() {
-    if (this._$.getValue().length == 0) {
+    const currentValue = this._$.getValue() as any;
+    if (!currentValue || currentValue.length || !currentValue.mapMarkers) {
       console.log('api')
       this.get('territory/full_map', true)
         .pipe(tap(x=> sessionStorage.setItem('FullMapService', JSON.stringify(x))))

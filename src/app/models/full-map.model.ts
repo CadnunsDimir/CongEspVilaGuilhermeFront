@@ -4,3 +4,9 @@ export interface TerritoryMapMarker{
     lat: number,
     long: number
 }
+
+
+export interface FullMap{
+    mapMarkers: TerritoryMapMarker[],
+    totalAdresses: number
+}

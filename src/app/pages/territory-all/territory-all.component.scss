@@ -17,3 +17,17 @@ h1{
     text-align: center;
     left: 0;
 }
+
+.stats{
+    position: absolute;
+    z-index: 1;
+    background: white;
+    right: 40px;
+    top: 74px;
+    padding: 10px;
+    border-radius: 10px;
+    h2,p{
+        margin: 0;
+        font-size: 1rem;
+    }
+}
