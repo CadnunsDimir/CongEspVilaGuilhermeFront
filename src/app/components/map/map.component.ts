@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import L, * as Leaflet from 'leaflet';
-
+import { Subject } from 'rxjs';
+import {SimpleMapScreenshoter} from 'leaflet-simple-map-screenshoter';
 
 export interface MapCoordinates {
   long: number;
@@ -28,12 +29,23 @@ export enum MarkerColor{
   styleUrl: './map.component.scss'
 })
 export class MapComponent implements OnInit{
-
+  fitBounds() {
+    console.log(this.layerGroup?.getLayers());
+    const layersCount = this.layerGroup?.getLayers().length || 0;
+    if (this.map &&  layersCount > 0) {
+      const bounds = this.layerGroup?.getBounds();
+      console.log(bounds);
+      this.map.fitBounds(bounds!);
+    }
+  }
+  
   private _markers: MapMarker[] = [];
-  private layerGroup?: L.LayerGroup<any>;
+  private layerGroup?: L.FeatureGroup<any>;
 
   @Input() scale = 1;
   private _polygon?: L.LatLngTuple[][];
+  _staticImage: boolean = false;
+  screenshoter?: SimpleMapScreenshoter;
 
   @Input()
   set markers(markers: MapMarker[]) {
@@ -43,16 +55,8 @@ export class MapComponent implements OnInit{
       this.layerGroup?.addLayer(this.newMarker(marker, this.drawOnCanvas(markers)));
       this._markers.push(marker);
     });
-    this.layerGroup?.addLayer(this.basicLayer());
 
-    if(this.userLocation)
-      this.layerGroup?.addLayer(this.myLocationMarker());
-
-    const { lat, long } = this.getCenter();
-    this.map?.panTo({
-      lat,
-      lng: long
-    })
+    this.fitBounds();
   }
 
   @Input()
@@ -60,6 +64,17 @@ export class MapComponent implements OnInit{
     if (coordinates) {
       this._polygon = coordinates as unknown as Leaflet.LatLngTuple[][];
     }
+  }
+
+  @Input()
+  set staticImage(value: boolean){
+    if (value) {
+      this.fitBounds();
+      this.exportStaticMap()
+        .subscribe(() => this._staticImage = true);
+    }else{
+      this._staticImage = false;
+    }    
   }
 
   @Output()
@@ -76,15 +91,14 @@ export class MapComponent implements OnInit{
   ngOnInit(): void {
     var center = this.getCenter();
 
-      var layers = [
-        this.basicLayer(),
+      var layers = [        
         ...this.userMarks(),
       ];
 
       this.map = Leaflet.map("map", {
         preferCanvas: true,
-        center: { lat: center.lat, lng: center.long },
-        zoom: 16,
+        // center: { lat: center.lat, lng: center.long },
+        // zoom: 16,
       });
 
       if (this._polygon) {
@@ -92,9 +106,10 @@ export class MapComponent implements OnInit{
         this.map.fitBounds(polygon.getBounds());
       }
 
-      this.layerGroup = L.layerGroup().addTo(this.map!!);
-
-      layers.forEach(marks => this.layerGroup?.addLayer(marks));      
+      const mapLayer = L.layerGroup().addTo(this.map);
+      mapLayer.addLayer(this.basicLayer());
+      this.layerGroup = L.featureGroup().addTo(this.map!!);
+      layers.forEach(marks => this.layerGroup?.addLayer(marks));     
 
       this.map.on("click", ({ latlng }) => {
         if (latlng.lat && latlng.lng) {
@@ -105,17 +120,9 @@ export class MapComponent implements OnInit{
         }
       });
 
-      navigator.geolocation.getCurrentPosition(x => {
-        this.userLocation = {
-          lat: x.coords.latitude || 0,
-          long: x.coords.longitude || 0,
-        };
-  
-        console.log(this.userLocation);
-  
-        this.layerGroup?.addLayer(this.myLocationMarker());
-  
-      }, error => console.error(error));
+      this.screenshoter = new SimpleMapScreenshoter().addTo(this.map);
+
+      this.fitBounds();
   }
 
   drawOnCanvas(markers: MapMarker[]){
@@ -127,7 +134,6 @@ export class MapComponent implements OnInit{
   }
 
   newMarker(marker: MapMarker, drawOnCanvas:boolean = false) {
-    console.log('drawOnCanvas',drawOnCanvas)
     if (drawOnCanvas) {
       return Leaflet.circleMarker(new Leaflet.LatLng(marker.lat, marker.long), {
         radius: 8 * this.scale,
@@ -185,4 +191,28 @@ export class MapComponent implements OnInit{
       long: this.userLocation?.long || 0,
     }
   }
+
+  exportStaticMap() {
+    const event = new Subject();
+    if (this.map) {
+
+      let overridedPluginOptions = {
+        mimeType: 'image/jpeg'
+      }
+
+      this.screenshoter?.takeScreen('canvas', overridedPluginOptions).then((canvas: any) => {
+          event.next("OK");
+          var img = document.getElementById("static-map") as any;
+          var dimensions = this.map?.getSize()!;
+          img.width = dimensions.x;
+          img.height = dimensions.y;
+          img.src = canvas.toDataURL();
+          
+      }).catch(e => {
+          console.error(e)
+      })
+    }
+    return event;
+  }
+  
 }

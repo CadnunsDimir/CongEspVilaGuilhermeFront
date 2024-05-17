@@ -9,8 +9,18 @@ import { FullMap, TerritoryMapMarker } from '../../models/full-map.model';
   providedIn: 'root'
 })
 export class FullMapService extends BaseService {
-  _$ = new BehaviorSubject<FullMap>(
-    JSON.parse(sessionStorage.getItem('FullMapService') || '{}'));
+
+  private tableName = 'FullMapService';
+
+  private get tableData() {
+    return JSON.parse(sessionStorage.getItem(this.tableName) || '{}');
+  }
+
+  private set tableData(data: any){
+    sessionStorage.setItem(this.tableName, JSON.stringify(data))
+  }
+
+  _$ = new BehaviorSubject<FullMap>(this.tableData);
   constructor(
     auth: AuthService, 
     http: HttpClient) {
@@ -20,9 +30,8 @@ export class FullMapService extends BaseService {
   get data$() {
     const currentValue = this._$.getValue() as any;
     if (!currentValue || currentValue.length || !currentValue.mapMarkers) {
-      console.log('api')
       this.get('territory/full_map', true)
-        .pipe(tap(x=> sessionStorage.setItem('FullMapService', JSON.stringify(x))))
+        .pipe(tap(x=> this.tableData = x))
         .subscribe(data=> this._$.next(data));
     }
     return this._$.asObservable();

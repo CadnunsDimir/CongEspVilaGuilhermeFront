@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TerritoryService } from '../../services/territory/territory.service';
-import { Observable, map, switchMap, take, tap } from 'rxjs';
+import { Observable, delay, map, switchMap, take, tap } from 'rxjs';
 import { MapCoordinates, MapMarker, MarkerColor } from '../../components/map/map.component';
 import { marker } from 'leaflet';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
@@ -19,7 +19,6 @@ interface DirectionMapMarker extends MapMarker {
   styleUrl: './territory.component.scss'
 })
 export class TerritoryComponent implements OnInit {
-    
   markersColors = this.randomColors();
   printAsCard = false;
   showCardList = false;
@@ -31,6 +30,8 @@ export class TerritoryComponent implements OnInit {
   neighborhood$ = this.territoryCard$.pipe(map(x => x.neighborhood));
   sharedCardId?: string;
   disableEdit: boolean = false;
+  showShareOptions = false;
+  shareSelector = '#share-area';
 
   constructor(
     private router: Router,
@@ -141,7 +142,7 @@ export class TerritoryComponent implements OnInit {
       }
     });
   }
-
+  
   shareContent(cardId: number, publicId: any) {
     const url = `${window.location.href}/public/${publicId}`;
     console.log("sharing url", url);
@@ -149,6 +150,23 @@ export class TerritoryComponent implements OnInit {
       title: `Cartão nº ${cardId}`,
       url
     });
+  }
+
+  generatePdf() {
+    this.printAsCard = true;
+    this.cardId$.pipe(
+      take(1),
+      switchMap(cardId=> this.shareService.saveAsPdf(this.shareSelector, `tarjeta_${cardId}`)))
+    .subscribe(() => this.printAsCard = false);
+  }
+
+  generateImage() {
+    this.printAsCard = true;
+    this.cardId$.pipe(
+      take(1),
+      delay(1000),
+      switchMap(cardId=> this.shareService.saveAsJpg(this.shareSelector, `tarjeta_${cardId}`)))
+    .subscribe(() => this.printAsCard = false);
   }
 
   showCardListClick() {
