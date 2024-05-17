@@ -12,7 +12,7 @@ import { mapBounds } from '../territory-edit/map-bounds';
 })
 export class TerritoryAllComponent {
   colors = this.randomColors();
-  markers$: Observable<MapMarker[]> = this.fullMap.data$.pipe(map(markers=> this.loadMarks(markers.mapMarkers)));
+  markers$ = this.fullMap.data$.pipe(map(markers=> this.loadMarks(markers.mapMarkers)));
   totalDirections$ = this.fullMap.data$.pipe(map(x=>x.totalAdresses));
   poligon = mapBounds;
 

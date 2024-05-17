@@ -101,10 +101,7 @@ export class MapComponent implements OnInit{
         // zoom: 16,
       });
 
-      if (this._polygon) {
-        var polygon = L.polygon(this._polygon, {color: MarkerColor.Orange}).addTo(this.map);
-        this.map.fitBounds(polygon.getBounds());
-      }
+      
 
       const mapLayer = L.layerGroup().addTo(this.map);
       mapLayer.addLayer(this.basicLayer());
@@ -121,8 +118,12 @@ export class MapComponent implements OnInit{
       });
 
       this.screenshoter = new SimpleMapScreenshoter().addTo(this.map);
-
+      
       this.fitBounds();
+      if (this._polygon) {
+        var polygon = L.polygon(this._polygon, {color: MarkerColor.Orange}).addTo(this.map);
+        this.map.fitBounds(polygon.getBounds());
+      }
   }
 
   drawOnCanvas(markers: MapMarker[]){

@@ -3,4 +3,8 @@
     <h2>Datos Generales</h2>
     <p>Total Direcciones: {{totalDirections$ | async}}</p>
 </aside>
-<app-map [markers]="(markers$ | async) || []" [scale]="0.5" [poligon]="poligon"/>
+
+<div *ngIf="markers$ | async as markers">
+    <app-map [markers]="markers" [scale]="0.5" [poligon]="poligon"/>
+</div>
+
