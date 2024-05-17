@@ -1,5 +1,6 @@
 $card-width: 15cm;
 $card-height: 9.5cm;
+$share-area-h: calc($card-height + $card-height + 2cm);
 
 app-map{
   width: 15cm;
@@ -13,6 +14,11 @@ app-map{
   box-sizing: content-box;
   border: 1px dashed grey;
   padding: 0.5cm;
+  
+  &:last-child{
+    margin-bottom: 20px;
+  }
+
   h1{
     margin: 0;
     text-align: center;
@@ -55,7 +61,7 @@ app-map{
 #share-area{
   &.print{
     width: calc($card-width + 40px);
-    height: calc(($card-height * 2) + 40px);
+    height: $share-area-h;
     padding: 20px;
   }
 }

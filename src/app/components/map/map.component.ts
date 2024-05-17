@@ -29,18 +29,9 @@ export enum MarkerColor{
   styleUrl: './map.component.scss'
 })
 export class MapComponent implements OnInit{
-  fitBounds() {
-    console.log(this.layerGroup?.getLayers());
-    const layersCount = this.layerGroup?.getLayers().length || 0;
-    if (this.map &&  layersCount > 0) {
-      const bounds = this.layerGroup?.getBounds();
-      console.log(bounds);
-      this.map.fitBounds(bounds!);
-    }
-  }
-  
   private _markers: MapMarker[] = [];
   private layerGroup?: L.FeatureGroup<any>;
+  private polygonLayer?: L.Polygon<any>;
 
   @Input() scale = 1;
   private _polygon?: L.LatLngTuple[][];
@@ -89,23 +80,21 @@ export class MapComponent implements OnInit{
     
   }
   ngOnInit(): void {
-    var center = this.getCenter();
 
       var layers = [        
-        ...this.userMarks(),
+        ...this.userMarks()
       ];
 
       this.map = Leaflet.map("map", {
         preferCanvas: true,
-        // center: { lat: center.lat, lng: center.long },
-        // zoom: 16,
       });
 
-      
+      if (this._polygon) {
+        this.polygonLayer = L.polygon(this._polygon, {color: MarkerColor.Orange}).addTo(this.map);
+      }
 
-      const mapLayer = L.layerGroup().addTo(this.map);
-      mapLayer.addLayer(this.basicLayer());
       this.layerGroup = L.featureGroup().addTo(this.map!!);
+      this.basicLayer().addTo(this.map);
       layers.forEach(marks => this.layerGroup?.addLayer(marks));     
 
       this.map.on("click", ({ latlng }) => {
@@ -117,13 +106,23 @@ export class MapComponent implements OnInit{
         }
       });
 
-      this.screenshoter = new SimpleMapScreenshoter().addTo(this.map);
+      this.screenshoter = new SimpleMapScreenshoter({
+        hidden: false,        
+      }).addTo(this.map);
       
       this.fitBounds();
-      if (this._polygon) {
-        var polygon = L.polygon(this._polygon, {color: MarkerColor.Orange}).addTo(this.map);
-        this.map.fitBounds(polygon.getBounds());
+  }
+
+  fitBounds() {
+    if (this.polygonLayer) {
+      this.map?.fitBounds(this.polygonLayer.getBounds());
+    } else {      
+      const layersCount = this.layerGroup?.getLayers().length || 0;
+      if (this.map &&  layersCount > 0) {
+        const bounds = this.layerGroup?.getBounds();        
+        this.map.fitBounds(bounds!);
       }
+    }
   }
 
   drawOnCanvas(markers: MapMarker[]){
@@ -145,8 +144,7 @@ export class MapComponent implements OnInit{
         content: `${marker.iconText}:${marker.title}`,
       }));
     }else{
-      const style = `
-      
+      const style = `      
         background: ${marker.color};
         transform: rotate(45deg) scale(${this.scale});
       `;
@@ -179,36 +177,18 @@ export class MapComponent implements OnInit{
     attribution: '&copy; OpenStreetMap contributors'
   } as Leaflet.TileLayerOptions);
 
-  getCenter() {
-    if (this._markers.length > 0) {
-      var centerPositionIndex = Math.ceil(this._markers.length) - 1;
-      var mark = this._markers[centerPositionIndex];
-
-      console.log("center: ", mark);
-      return mark;
-    }
-    return {
-      lat: this.userLocation?.lat || 0,
-      long: this.userLocation?.long || 0,
-    }
-  }
-
   exportStaticMap() {
     const event = new Subject();
     if (this.map) {
-
-      let overridedPluginOptions = {
+      this.screenshoter?.takeScreen('canvas', {
         mimeType: 'image/jpeg'
-      }
-
-      this.screenshoter?.takeScreen('canvas', overridedPluginOptions).then((canvas: any) => {
+      }).then((canvas: any) => {
           event.next("OK");
           var img = document.getElementById("static-map") as any;
           var dimensions = this.map?.getSize()!;
           img.width = dimensions.x;
           img.height = dimensions.y;
-          img.src = canvas.toDataURL();
-          
+          img.src = canvas.toDataURL();          
       }).catch(e => {
           console.error(e)
       })

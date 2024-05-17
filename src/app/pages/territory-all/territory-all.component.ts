@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MapMarker, MarkerColor } from '../../components/map/map.component';
-import { Observable, map, take } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { FullMapService } from '../../services/full-map/full-map.service';
 import { TerritoryMapMarker } from '../../models/full-map.model';
 import { mapBounds } from '../territory-edit/map-bounds';
@@ -12,7 +12,7 @@ import { mapBounds } from '../territory-edit/map-bounds';
 })
 export class TerritoryAllComponent {
   colors = this.randomColors();
-  markers$ = this.fullMap.data$.pipe(map(markers=> this.loadMarks(markers.mapMarkers)));
+  markers$ = this.fullMap.data$.pipe(filter(x=>!!x.mapMarkers),map(markers=> this.loadMarks(markers.mapMarkers)));
   totalDirections$ = this.fullMap.data$.pipe(map(x=>x.totalAdresses));
   poligon = mapBounds;
 
