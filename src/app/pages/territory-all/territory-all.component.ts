@@ -13,10 +13,12 @@ import { Router } from '@angular/router';
   styleUrl: './territory-all.component.scss'
 })
 export class TerritoryAllComponent {
-
   colors = this.randomColors();
-  markers$ = this.fullMap.data$.pipe(filter(x=>!!x.mapMarkers),map(markers=> this.loadMarks(markers.mapMarkers)));
+  markers$ = this.fullMap.data$.pipe(
+    filter(x=>!!x.mapMarkers), 
+    map(markers=> this.loadMarks(markers.mapMarkers)));
   totalDirections$ = this.fullMap.data$.pipe(map(x=>x.totalAdresses));
+  totalCards$ = this.territory.cards$.pipe(map(x=>x?.length));
   checkCards$ = this.fullMap.data$.pipe(map(x=>x.checkCoordinatesOnCards));
   poligon = mapBounds;
 
