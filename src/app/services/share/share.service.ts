@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Notification, NotificationsService } from '../notifications/notifications.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { Observable, Subject, delay, from, of, switchMap, tap } from 'rxjs';
+import { Observable, Subject, delay, from, map, of, switchMap, tap } from 'rxjs';
 
 interface ShareLinkData {
   title: string, url: string
@@ -69,14 +69,14 @@ export class ShareService {
 
   saveAsPdf(cssSelector: string, fileName: string) {
     
-    const width = 1800;
+    // const width = 1800;
 
-    const pdfOptions = {
-      x: 1,
-      y: 1,
-      width: width * 0.225,
-      windowWidth: width
-    };
+    // const pdfOptions = {
+    //   x: 1,
+    //   y: 1,
+    //   width: width * 0.225,
+    //   windowWidth: width
+    // };
 
     // var html = document.querySelector(cssSelector) as HTMLElement;
     // const doc = new jsPDF();
@@ -89,24 +89,51 @@ export class ShareService {
     // });
 
     // return subject.asObservable().pipe(delay(3000));
+''
+
     return this.printScreen(cssSelector).pipe(
-      switchMap(canvas=> {
+      switchMap(data=> {
         var subject = new Subject();
-        const doc = new jsPDF();
-        doc.html(canvas, {
-          callback: (doc) => {
-            doc.save(fileName);        
-            subject.next(this.OperationsOk);
-          },
-          ...pdfOptions
-        });
+        const doc = new jsPDF('p', 'cm');
+
+        const imgSize = this.convertPixToCm(data.height, data.width);
+
+        var imgData = data.canvas.toDataURL('image/png');
+        doc.addImage(imgData, 'PNG',0,0, imgSize.w, imgSize.h);
+        // doc.html(canvas, {
+        //   callback: (doc) => {
+        //     doc.save(fileName);        
+        //     subject.next(this.OperationsOk);
+        //   },
+        //   ...pdfOptions
+        // });
+        doc.save(fileName+'.pdf');
         return subject;
       }),
       delay(3000));
   }
+  convertPixToCm(height: number, width: number): { h: number; w: number; } {
+    console.log(`px: h = ${height}, w = ${width}`);
+    const imageWidthInCm = 16;
+    const ratio = height / width;
+    const dimensions = {
+      h: Math.round(ratio * imageWidthInCm),
+      w: imageWidthInCm
+    };
 
-  private printScreen(selector: string) {   
-    return from(html2canvas(document.querySelector(selector)!!));
+    console.log(`convertPixToCm: h = ${dimensions.h}cm, w = ${dimensions.w}cm`);
+    return dimensions;
+  }
+
+  private printScreen(selector: string) {
+    const html = document.querySelector(selector) as HTMLElement;
+    const width = html.offsetWidth;
+    const height = html.offsetHeight;
+    return from(html2canvas(document.querySelector(selector)!!)).pipe(map(canvas=> ({
+      canvas,
+      width,
+      height
+    })));
   }
 
   saveAsJpg(selector: string, fileName: string): Observable<any> {
@@ -121,9 +148,9 @@ export class ShareService {
     // return subject.asObservable().pipe(delay(500));
 
     return this.printScreen(selector).pipe(
-      tap(canvas=> {
+      tap(data=> {
         var a = document.createElement('a');
-        a.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        a.href = data.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         a.download = `${fileName}.jpg`;
         a.click();
       }),

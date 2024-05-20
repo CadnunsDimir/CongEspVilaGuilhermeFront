@@ -6,6 +6,7 @@ import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { environment } from '../../../environments/environment';
 import { NotificationsService } from '../notifications/notifications.service';
 import { BaseService } from '../base.service';
+import { FullMapService } from '../full-map/full-map.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class TerritoryService extends BaseService{
   ).subscribe(card=> {
     this.updateCardOnDb(card)
       .subscribe(()=> this.notifyCardUpdateOK(card.cardId));
+    this.fullMap.clear();
     this.needUpdateOnDb = false;
     this.notify.send({
       type: 'info',
@@ -40,7 +42,8 @@ export class TerritoryService extends BaseService{
 
   constructor(
     auth: AuthService, 
-    http: HttpClient, 
+    http: HttpClient,
+    private fullMap: FullMapService,
     private notify: NotificationsService) {
       super(auth, http)
   }

@@ -156,6 +156,7 @@ export class TerritoryComponent implements OnInit {
     this.printAsCard = true;
     this.cardId$.pipe(
       take(1),
+      delay(1000),
       switchMap(cardId=> this.shareService.saveAsPdf(this.shareSelector, `tarjeta_${cardId}`)))
     .subscribe(() => this.printAsCard = false);
   }
