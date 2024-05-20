@@ -107,7 +107,7 @@ export class MapComponent implements OnInit{
       });
 
       this.screenshoter = new SimpleMapScreenshoter({
-        hidden: false,        
+        hidden: true,        
       }).addTo(this.map);
       
       this.fitBounds();

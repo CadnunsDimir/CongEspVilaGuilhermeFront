@@ -8,5 +8,6 @@ export interface TerritoryMapMarker{
 
 export interface FullMap{
     mapMarkers: TerritoryMapMarker[],
-    totalAdresses: number
+    totalAdresses: number,
+    checkCoordinatesOnCards: number[]
 }

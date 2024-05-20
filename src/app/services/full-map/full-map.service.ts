@@ -9,6 +9,7 @@ import { FullMap, TerritoryMapMarker } from '../../models/full-map.model';
   providedIn: 'root'
 })
 export class FullMapService extends BaseService {
+  
 
   private tableName = 'FullMapService';
 
@@ -35,5 +36,9 @@ export class FullMapService extends BaseService {
         .subscribe(data=> this._$.next(data));
     }
     return this._$.asObservable();
+  }
+  
+  clear() {
+    sessionStorage.removeItem(this.tableName);
   }
 }
