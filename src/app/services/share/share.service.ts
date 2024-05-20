@@ -68,50 +68,19 @@ export class ShareService {
   }
 
   saveAsPdf(cssSelector: string, fileName: string) {
-    
-    // const width = 1800;
-
-    // const pdfOptions = {
-    //   x: 1,
-    //   y: 1,
-    //   width: width * 0.225,
-    //   windowWidth: width
-    // };
-
-    // var html = document.querySelector(cssSelector) as HTMLElement;
-    // const doc = new jsPDF();
-    // doc.html(html, {
-    //   callback: (doc) => {
-    //     doc.save(fileName);        
-    //     subject.next(this.OperationsOk);
-    //   },
-    //   ...pdfOptions
-    // });
-
-    // return subject.asObservable().pipe(delay(3000));
-''
-
     return this.printScreen(cssSelector).pipe(
       switchMap(data=> {
         var subject = new Subject();
         const doc = new jsPDF('p', 'cm');
-
         const imgSize = this.convertPixToCm(data.height, data.width);
-
         var imgData = data.canvas.toDataURL('image/png');
         doc.addImage(imgData, 'PNG',0,0, imgSize.w, imgSize.h);
-        // doc.html(canvas, {
-        //   callback: (doc) => {
-        //     doc.save(fileName);        
-        //     subject.next(this.OperationsOk);
-        //   },
-        //   ...pdfOptions
-        // });
         doc.save(fileName+'.pdf');
         return subject;
       }),
       delay(3000));
   }
+
   convertPixToCm(height: number, width: number): { h: number; w: number; } {
     console.log(`px: h = ${height}, w = ${width}`);
     const imageWidthInCm = 16;
@@ -137,16 +106,6 @@ export class ShareService {
   }
 
   saveAsJpg(selector: string, fileName: string): Observable<any> {
-    // var subject = new Subject();
-    // html2canvas(document.querySelector(selector)!!).then(canvas=> {
-    //   var a = document.createElement('a');
-    //   a.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-    //   a.download = `${fileName}.jpg`;
-    //   a.click();
-    //   of().pipe(delay(2000)).subscribe(()=> subject.next(this.OperationsOk));      
-    // });
-    // return subject.asObservable().pipe(delay(500));
-
     return this.printScreen(selector).pipe(
       tap(data=> {
         var a = document.createElement('a');

@@ -152,22 +152,22 @@ export class TerritoryComponent implements OnInit {
     });
   }
 
-  generatePdf() {
+  generate(action: string){
     this.printAsCard = true;
+    this.showShareOptions = false;
     this.cardId$.pipe(
       take(1),
       delay(1000),
-      switchMap(cardId=> this.shareService.saveAsPdf(this.shareSelector, `tarjeta_${cardId}`)))
+      switchMap(cardId=> (this.shareService as any)[action](this.shareSelector, `tarjeta_${cardId}`)))
     .subscribe(() => this.printAsCard = false);
   }
 
+  generatePdf() {
+    this.generate('saveAsPdf');
+  }
+
   generateImage() {
-    this.printAsCard = true;
-    this.cardId$.pipe(
-      take(1),
-      delay(1000),
-      switchMap(cardId=> this.shareService.saveAsJpg(this.shareSelector, `tarjeta_${cardId}`)))
-    .subscribe(() => this.printAsCard = false);
+    this.generate('saveAsJpg');
   }
 
   showCardListClick() {

@@ -23,6 +23,14 @@ export enum MarkerColor{
   Orange = '#ff6d12'
 }
 
+const initMark = {
+  color: MarkerColor.Red,
+  iconText: '',
+  title: '',
+  lat: -23.5019288, 
+  long: -46.597885
+} ;
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -32,6 +40,14 @@ export class MapComponent implements OnInit{
   private _markers: MapMarker[] = [];
   private layerGroup?: L.FeatureGroup<any>;
   private polygonLayer?: L.Polygon<any>;
+  private tileLayers = {
+    Normal : new L.TileLayer ('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }),
+    Alternative : new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    })
+  };
 
   @Input() scale = 1;
   private _polygon?: L.LatLngTuple[][];
@@ -85,6 +101,10 @@ export class MapComponent implements OnInit{
         ...this.userMarks()
       ];
 
+      if (layers.length == 0) {
+        layers.push(this.newMarker(initMark,true));
+      }
+
       this.map = Leaflet.map("map", {
         preferCanvas: true,
       });
@@ -94,7 +114,8 @@ export class MapComponent implements OnInit{
       }
 
       this.layerGroup = L.featureGroup().addTo(this.map!!);
-      this.basicLayer().addTo(this.map);
+      this.tileLayers.Normal.addTo(this.map);
+
       layers.forEach(marks => this.layerGroup?.addLayer(marks));     
 
       this.map.on("click", ({ latlng }) => {
@@ -172,10 +193,6 @@ export class MapComponent implements OnInit{
       color: MarkerColor.Red
     });
   }
-
-  basicLayer = () => new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  } as Leaflet.TileLayerOptions);
 
   exportStaticMap() {
     const event = new Subject();
