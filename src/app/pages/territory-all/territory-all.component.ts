@@ -19,7 +19,9 @@ export class TerritoryAllComponent {
     map(markers=> this.loadMarks(markers.mapMarkers)));
   totalDirections$ = this.fullMap.data$.pipe(map(x=>x.totalAdresses));
   totalCards$ = this.territory.cards$.pipe(map(x=>x?.length));
-  checkCards$ = this.fullMap.data$.pipe(map(x=>x.checkCoordinatesOnCards));
+  checkCards$ = this.fullMap.data$.pipe(
+    map(x=>x.checkCoordinatesOnCards),
+    filter(x=> x.length >0));
   poligon = mapBounds;
 
   constructor(private fullMap: FullMapService,
