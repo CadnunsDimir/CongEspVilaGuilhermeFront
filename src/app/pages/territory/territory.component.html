@@ -1,7 +1,7 @@
 <div class="buttons">
   <label *ngIf="cardId$" class="print-as-card--label">
     <input type="checkbox" [(ngModel)]="printAsCard" [ngModelOptions]="{standalone: true}">
-    ver como impressão {{printAsCard}}
+    ver como impressão
   </label>
   <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">buscar</button>
   <button *ngIf="!disableEdit && cardId$" class="edit-button" (click)="edit()"></button>

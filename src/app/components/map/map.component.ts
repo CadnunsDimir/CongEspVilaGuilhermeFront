@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import L, * as Leaflet from 'leaflet';
-import { Subject } from 'rxjs';
+import { Subject, delay, timeout } from 'rxjs';
 import {SimpleMapScreenshoter} from 'leaflet-simple-map-screenshoter';
 
 export interface MapCoordinates {
@@ -64,6 +64,11 @@ export class MapComponent implements OnInit{
     });
 
     this.fitBounds();
+    if (this._staticImage) {
+      this._staticImage = false;
+      setTimeout(() => this.exportStaticMap()
+        .subscribe(() => this._staticImage = true), 500);      
+    }
   }
 
   @Input()
