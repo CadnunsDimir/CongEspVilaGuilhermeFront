@@ -1,13 +1,39 @@
-<table class="direction-list show-border" 
+  <table class="direction-list show-border" 
     [ngClass]="{'print-mode': printAsCard}"
     *ngIf="territoryCard$ | async as card">
-    <tr *ngFor="let direction of card.directions; let i = index;"
-      [ngClass]="{selected: directionToUpdate == direction}" (click)="selected.emit(direction)">
-      <td [ngStyle]="{'background-color': direction.color}">
-        {{i+1}}
-      </td>
-      <td>
-        {{direction.streetName}}, {{direction.houseNumber}}{{direction.complementaryInfo ? ', '+direction.complementaryInfo: ''}}
-      </td>
-    </tr>
+    <ng-container *ngFor="let direction of card.directions; let i = index;">
+        <tr *ngIf="printAsCard ? i <= (maxItensPerTable -1) : true"
+            [ngClass]="{selected: directionToUpdate == direction}" (click)="onClickRow(direction)">
+            <td [ngStyle]="{'background-color': direction.color}">
+                {{i+1}}
+            </td>
+            <td>
+                {{direction.streetName}}, {{direction.houseNumber}}{{direction.complementaryInfo ? ', '+direction.complementaryInfo: ''}}
+            </td>
+        </tr>
+        <tr *ngIf="showOptions == direction" >
+            <td colspan="2">
+                <div class="show-options">
+                    <button (click)="selected.emit(direction); showOptions = undefined">atualizar ubicacion tarjeta {{i+1}}</button>
+                    <button (click)="showOptions = undefined">fechar</button>
+                </div>                
+            </td>
+        </tr>
+    </ng-container>   
+  </table>
+
+  <table class="direction-list show-border" 
+    [ngClass]="{'print-mode': printAsCard}"
+    *ngIf="territoryCard$ | async as card">
+    <ng-container *ngFor="let direction of card.directions; let i = index;">
+        <tr *ngIf="printAsCard ? i > (maxItensPerTable -1) : false"
+            [ngClass]="{selected: directionToUpdate == direction}" (click)="selected.emit(direction)">
+            <td [ngStyle]="{'background-color': direction.color}">
+                {{i+1}}
+            </td>
+            <td>
+                {{direction.streetName}}, {{direction.houseNumber}}{{direction.complementaryInfo ? ', '+direction.complementaryInfo: ''}}
+            </td>
+        </tr>
+    </ng-container>   
   </table>

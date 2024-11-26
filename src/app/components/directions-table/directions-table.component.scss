@@ -1,5 +1,6 @@
 :host{
-    display: block;
+    display: flex;
+    gap: 10px;
 }
 
 .direction-list {
@@ -12,6 +13,14 @@
       td:nth-child(1){
         color:white;
       }
+    }
+
+    .show-options{
+        padding: 0px 5px;
+        font-size: 14px;
+        display: flex;
+        gap: 10px;
+        white-space: nowrap;
     }
     
     .on-map {
@@ -26,11 +35,11 @@
         width: 15cm;
         float: left;
         top: 50px;
-        left: 22px;
-        column-count: 2;
+        left: 22px;        
         display: block;
         margin: 0;
         position: static;
+        overflow: visible;
         li,tr{
           font-size: 0.73rem !important;
           padding:1.5px;
@@ -39,21 +48,24 @@
           }
         }
         tr{
-          td:nth-child(1){
-            width: 30px;     
-          }
+            td{
+                width: 681px;
+            }
+            td:nth-child(1){
+                width: 30px;     
+            }
         }
       }
   }
 
   
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1170px) {
     .direction-list{
       float: left;
       position: absolute;
       top: 160px;
-      left: 65vw;
-      right: 15px;
+      left: 780px;
+      right: 30px;
       max-height: calc(100vh - 180px);
       overflow: auto;
       display: flow;
@@ -61,14 +73,19 @@
   }
 
   @media print {
+    
     .direction-list{
       top: 50px;
       right: 17px;
       width: 90vw;
-    //   column-count: 2;
       display: block;
       &:not(.print-mode){
         padding-top: 20px;
+        column-count: 2;
+        position: absolute;
+        width: 90%;
+        top: 410px;
+        left: 30px;
       }
 
       li, tr{

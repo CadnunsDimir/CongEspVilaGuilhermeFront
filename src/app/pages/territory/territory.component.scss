@@ -130,33 +130,8 @@ ul.cards-list {
 }
 
 app-map{
-  // width: 100%;
-  // height: 400px;
   display: block;
 }
-
-// .print-as-card{
-//   button{
-//     display: none;
-//   }
-//   .card-data{
-//     position: absolute;
-//     top: 0.6cm;
-//     left: 5mm;
-//     width: 139mm;
-//   }
-//   app-map{
-//     position: absolute;
-//     transform: scale(0.4);
-//     left: -379px;
-//     top: -95px;
-//     width: 1300px;
-//     width: 350mm;
-//     height: 165mm;
-//   }
-  
-// }
-
 
 
 @media screen and (max-width: 700px){
@@ -171,7 +146,7 @@ app-map{
   }
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1170px) {
   app-map{
     display: block; 
   }
