@@ -1,0 +1,22 @@
+<div class="page">
+    <header class="header">
+        <h1 class="congregation-name">Española Vila Guilherme</h1>
+        <h2>Programa para la reunión de entre semana</h2>
+    </header>
+
+    <section class="form">
+        <label for="initialDate">Data inicial</label>
+        <input type="date" name="initialDate" id="initialDate" [(ngModel)]="initialDate">
+
+        <label for="totalOfWeeks">Total de semanas</label>
+        <input type="number" name="totalOfWeeks" id="totalOfWeeks" [(ngModel)]="totalOfWeeks">
+
+        <button (click)="loadWeeks()">carregar semanas</button>
+    </section>
+
+    <app-life-and-minitry-week *ngFor="let week of weeks; index as i" 
+        [week]="week" 
+        [pageBreak]="!(i % 2 == 0)"
+        (saving)="onSave($event)"
+        [ngClass]="{block: savingEntity == week}" class="week-itens"/>
+</div>

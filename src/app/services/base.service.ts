@@ -26,6 +26,9 @@ export class BaseService {
             if (error.status == 401) {
               this.auth.requestUserLogin();
             }
+            if(error.status === 400) {
+              return of(error);
+            }
             return of('error');
           }),
           tap(console.log),

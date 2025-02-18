@@ -16,6 +16,9 @@ import { TerritoryEditComponent } from './pages/territory-edit/territory-edit.co
 import { ToastComponent } from './components/toast/toast.component';
 import { TerritoryAllComponent } from './pages/territory-all/territory-all.component';
 import { DirectionsTableComponent } from './components/directions-table/directions-table.component';
+import { LifeAndMinitryComponent } from './pages/life-and-minitry/life-and-minitry.component';
+import { LifeAndMinitryWeekComponent } from './components/life-and-minitry-week/life-and-minitry-week.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,9 @@ import { DirectionsTableComponent } from './components/directions-table/directio
     TerritoryEditComponent,
     ToastComponent,
     TerritoryAllComponent,
-    DirectionsTableComponent
+    DirectionsTableComponent,
+    LifeAndMinitryComponent,
+    LifeAndMinitryWeekComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +44,7 @@ import { DirectionsTableComponent } from './components/directions-table/directio
     LeafletModule,
     FormsModule
   ],
-  providers: [],
+  providers:[DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

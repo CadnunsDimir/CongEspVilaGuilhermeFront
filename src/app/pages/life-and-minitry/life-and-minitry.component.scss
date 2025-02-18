@@ -1,0 +1,45 @@
+
+.page{
+    max-width: 800px;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    font-size: 15pt;
+    align-items: center;
+    border-bottom: 2px solid black;
+    margin-bottom: 20px;
+    .congregation-name{
+        font-size: 10pt;
+    }
+}
+
+.form{
+    position: fixed;
+    width: 230px;
+    top: 10px;
+    right: 10px;
+    background: grey;
+    padding: 20px;
+    box-sizing: border-box;
+    input{
+        width: 100%;
+    }
+}
+
+.block{
+    background-color: gray;
+}
+
+.week-itens{
+    margin-bottom: 50px;
+    display: block;
+}
+
+
+@media print {
+    .form{
+        display: none;
+    }
+}
