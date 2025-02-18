@@ -41,11 +41,11 @@ export class TerritoryService extends BaseService{
   needUpdateOnDb = false;
 
   constructor(
-    auth: AuthService, 
-    http: HttpClient,
-    private fullMap: FullMapService,
-    private notify: NotificationsService) {
-      super(auth, http)
+    private readonly _auth: AuthService, 
+    private readonly _http: HttpClient,
+    private readonly fullMap: FullMapService,
+    private readonly notify: NotificationsService) {
+      super(_auth, _http)
   }
 
   
