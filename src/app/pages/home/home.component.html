@@ -1,1 +1,16 @@
-<p>home works!</p>
+<h1>Bem-vindo a la 'Aplicación Cong. Española Vila Guilherme'</h1>
+
+<h2>Ultimas notificações</h2>
+
+<ul *ngIf="$notifications | async as notifications">
+    <li *ngFor="let item of notifications" 
+    class="notificacion-item"
+    [ngClass]="item.type">{{item.message}}</li>
+</ul>
+
+<div *ngIf="$notFoundCards | async as cards">
+    <p>Atenção: cartões não encontrados</p>
+    <ul>
+        <li *ngFor="let item of cards">{{item}}</li>
+    </ul>
+</div>

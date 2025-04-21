@@ -1,5 +1,21 @@
 
+.edit-hint{
+    font-size: 12px;
+}
 table{
+    tr{
+        cursor: grab;
+        cursor: -moz-grab;
+        cursor: -webkit-grab;
+        &.dragging {
+            background-color: rgb(138, 203, 186);
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+        }
+    }
+    
+
     font-size: 10px;
     td, th{
         padding: 5px;
@@ -16,18 +32,32 @@ table{
         margin: 0;
     }
     .actions{
+        .remove{
+            padding: 8px;
+            background: grey;
+            display: block;
+            width: 10px;
+            height: 10px;
+            line-height: 12px;
+            border-radius: 4px;
+            color: #ccc;
+        }
         *{
             padding-left: 10px;
         }
     }
 }
 
-.save-button{
+.save-button, .cancel-button{
     position: fixed;
     right: 0;
     top: 0;
     width: 100px;
     margin-right: 10px;
+}
+
+.cancel-button{
+    top: 50px;
 }
 
 .changing-position{

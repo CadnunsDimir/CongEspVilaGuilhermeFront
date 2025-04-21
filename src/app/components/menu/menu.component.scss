@@ -9,6 +9,7 @@
 
 .menu-button {
   box-shadow: none;
+  background-color: transparent;
   background-image: url('/assets/menu_icon.png');
   background-position: 0px;
   background-repeat: no-repeat;
@@ -24,17 +25,16 @@
 }
 
 nav{
-    min-height: 50px;
     display:block;
     ul{
         max-width: 500px;
         height: 100vh;
-        // background-color: #e0e0e0bb;
-        // background: #e0e0e0bb;
         background: #ccc;
+        li.selected{
+          background-color: #aaa8a8;
+        }
         li a {
             padding: 10px;
-            background-color: #ccc;
             display: block;
             color: black;
             &:hover{
@@ -43,6 +43,8 @@ nav{
         }
     }
 }
+
+
 
 @media print{
   :host{

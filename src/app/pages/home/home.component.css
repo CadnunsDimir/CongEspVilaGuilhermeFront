@@ -1,0 +1,17 @@
+.notificacion-item{
+    padding: 10px;
+    border: 2px solid #aaaaaa;
+    margin: 5px;
+    &.error{
+        background-color: #fd9494;
+        border-color: red;
+    }
+    &.success{
+        background-color: #65ff54;
+        border-color: green;
+    }
+    &.warning{
+        background-color: #f9ff54;
+        border-color: yellow;
+    }
+}

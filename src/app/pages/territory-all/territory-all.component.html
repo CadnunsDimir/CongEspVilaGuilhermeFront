@@ -1,0 +1,17 @@
+<h1>Mapa del Território - Española Vila Guilherme</h1>
+<aside class="stats">
+    <h2>Datos Generales</h2>
+    <p>Total Direcciones: {{totalDirections$ | async}}</p>
+    <p>Tarjetas: {{totalCards$ | async}}</p>
+    <div *ngIf="checkCards$ | async as checkCards">
+        <h2 class="error">verifique la ubicacion en las siguintes tarjetas:</h2>
+        <ul>
+            <li *ngFor="let item of checkCards" role="button" (click)="editCard(item)">{{item}}</li>
+        </ul>
+    </div>
+</aside>
+
+<div *ngIf="markers$ | async as markers">
+    <app-map [markers]="markers" [scale]="0.5" [poligon]="poligon"/>
+</div>
+

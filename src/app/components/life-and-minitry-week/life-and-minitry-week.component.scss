@@ -1,0 +1,102 @@
+button{
+    width: 150px;
+}
+
+.week-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.side-info{
+    max-width: 200px;
+}
+
+.font-10pt{
+    font-size: 10pt;
+}
+
+.font-8pt{
+    font-size: 8pt;
+}
+
+.font-9pt{
+    font-size: 9pt;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+input, h4{
+    margin: 0px;
+    font-weight: normal;
+}
+
+input{
+    max-width: 200px;
+}
+
+label{
+    display: flex;
+    flex-direction: row;
+}
+
+.prayer-line{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+
+.meeting-title{
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.tesoros{
+    background-color: #575a5b;
+}
+
+.maestros{
+    background-color: #d68f00;
+}
+
+.vida-cristiana{
+    background-color: #942926;
+}
+
+.line{
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    :first-child{
+        width: 50%;
+    }
+
+    :not(:first-child){
+        text-align: right;
+    }
+}
+
+.study-brother-info{
+    display: inline-flex;
+    input{
+        width: 96px !important;
+    }
+}
+
+@media print {
+    input{
+        border:none;
+    }
+    button{
+        display: none;
+    }
+    .page-break {
+        break-after: page;
+    }
+}

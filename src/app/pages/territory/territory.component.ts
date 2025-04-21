@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { TerritoryService } from '../../services/territory/territory.service';
-import { take, tap } from 'rxjs';
-import { MapCoordinates, MapMarker } from '../../components/map/map.component';
+import { Observable, delay, map, switchMap, take, tap } from 'rxjs';
+import { MapCoordinates, MapMarker, MarkerColor } from '../../components/map/map.component';
 import { marker } from 'leaflet';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { GeocodingService } from '../../services/geocoding/geocoding.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationsService } from '../../services/notifications/notifications.service';
+import { ShareService } from '../../services/share/share.service';
+
+interface DirectionMapMarker extends MapMarker {
+  directionIndex: number
+}
 
 @Component({
   selector: 'app-territory',
@@ -13,41 +19,75 @@ import { Router } from '@angular/router';
   styleUrl: './territory.component.scss'
 })
 export class TerritoryComponent implements OnInit {
+  markersColors = this.randomColors();
   printAsCard = false;
   showCardList = false;
-  neighborhood: string | undefined;
-  cardId: number | undefined;
-  markers: MapMarker[] = [];
   directionToUpdate?: Direction;
-
-  cards$ = this.territory.cards$;
+  cards$?: Observable<number[] | undefined>;
   territoryCard$ = this.territory.territoryCard$.pipe(
-    tap(x => {
-      this.neighborhood = x?.neighborhood;
-      this.cardId = x?.cardId;
-      var markers = x?.directions
-        .map((x, i) => ({
-          index: i + 1,
-          ...x
-        }))
+    map(x => this.mapCardWithMarks(x)));
+  cardId$ = this.territoryCard$.pipe(map(x => x.cardId));
+  neighborhood$ = this.territoryCard$.pipe(map(x => x.neighborhood));
+  sharedCardId?: string;
+  disableEdit: boolean = false;
+  showShareOptions = false;
+  shareSelector = '#share-area';
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private territory: TerritoryService,
+    private geocoding: GeocodingService,
+    private notify: NotificationsService,
+    private shareService: ShareService
+  ) { }
+
+  ngOnInit() {
+    this.route.params.pipe(take(1)).subscribe(params => {
+      this.sharedCardId = params['sharedCardId'];
+      if (this.sharedCardId) {
+        this.disableEdit = true;
+        this.territory.getCardPublicEndPoint(this.sharedCardId);
+      } else {
+        this.cards$ = this.territory.cards$;
+      }
+    });
+  }
+
+  randomColors() {
+    return [
+      MarkerColor.Blue,
+      MarkerColor.Green,
+      MarkerColor.Green,
+      MarkerColor.Red,
+      MarkerColor.Purple
+    ].sort(() => Math.random() - 0.5)
+  }
+
+  mapCardWithMarks(x: TerritoryCard | undefined) {
+    const directions = x?.directions
+      .map((x, i) => ({
+        index: i + 1,
+        color: this.colorByCoordinates(i + 1, x),
+        ...x
+      })) || [];
+
+    return {
+      neighborhood: x?.neighborhood,
+      cardId: x?.cardId,
+      directions: directions,
+      markers: directions
         .filter(x => x.lat && x.long)
         .map(x => ({
+          directionIndex: x.index,
           lat: x.lat!!,
           long: x.long!!,
           title: `${x.index} - ${x.streetName}, ${x.houseNumber}`,
-          iconText: x.index.toString()
-        })) || [];
-      this.markers = markers;
-    })
-  );
-  
-  constructor(
-    private router: Router,
-    private territory: TerritoryService,
-    private geocoding: GeocodingService
-  ) { }
-
-  ngOnInit() { }
+          iconText: x.index.toString(),
+          color: x.color
+        })) || []
+    }
+  }
 
   selectCard(cardId: number) {
     this.showCardList = false;
@@ -55,36 +95,107 @@ export class TerritoryComponent implements OnInit {
   }
 
   selectDirection(direction: Direction) {
-    if (direction != this.directionToUpdate)
+    if (!this.disableEdit && direction != this.directionToUpdate) {
       this.directionToUpdate = direction;
+      this.notify.send({
+        message: "Seleccione un local en el mapa para actualizar la posicion del marcador ou clique novamente en la direccion para cancelar",
+        type: 'warning',
+        timeout: 10000
+      });
+      if (!direction.lat) {
+        this.updateUsingAddress();
+      }
+    }
     else
       this.directionToUpdate = undefined;
   }
 
-  mapClick(coordinates: MapCoordinates) {
+  updateCoordinates(coordinates: MapCoordinates) {
     if (this.directionToUpdate) {
       this.directionToUpdate.lat = coordinates.lat;
       this.directionToUpdate.long = coordinates.long;
 
-      this.territory.updateDirection(this.cardId!, this.directionToUpdate)
-        .subscribe(() => {
-          this.territory.selectCard(this.cardId!)
-        });
+      this.territory.updateCoordinatesOnCardInMemory(this.directionToUpdate);
       this.directionToUpdate = undefined;
     }
   }
 
   updateUsingAddress() {
-    this.geocoding.getCoordinates(this.directionToUpdate!!, this.neighborhood!!)
+    this.neighborhood$
+      .pipe(
+        take(1),
+        switchMap(neighborhood => this.geocoding.getCoordinates(this.directionToUpdate!!, neighborhood!)))
       .subscribe(coordinates => {
-        this.mapClick(coordinates);
+        this.updateCoordinates(coordinates);
       });
   }
 
-  edit() {
-    this.territory.territoryCard$.pipe(take(1)).subscribe(card=> {
-      sessionStorage.setItem("card", JSON.stringify(card));
-      this.router.navigate(['/territory/edit']);
+  share() {
+    this.cardId$.pipe(take(1)).subscribe(cardId => {
+      if (this.sharedCardId) {
+        this.shareContent(cardId!, this.sharedCardId);
+      } else {
+        this.territory.getShareableCardId(cardId!).subscribe(publicCardId => {
+          this.sharedCardId = publicCardId;
+          this.shareContent(cardId!, publicCardId);
+        });
+      }
     });
+  }
+  
+  shareContent(cardId: number, publicId: any) {
+    const url = `${window.location.href}/public/${publicId}`;
+    console.log("sharing url", url);
+    this.shareService.shareLink({
+      title: `Cartão nº ${cardId}`,
+      url
+    });
+  }
+
+  generate(action: string){
+    this.printAsCard = true;
+    this.showShareOptions = false;
+    this.cardId$.pipe(
+      take(1),
+      delay(1000),
+      switchMap(cardId=> (this.shareService as any)[action](this.shareSelector, `tarjeta_${cardId}`)))
+    .subscribe(() => this.printAsCard = false);
+  }
+
+  generatePdf() {
+    this.generate('saveAsPdf');
+  }
+
+  generateImage() {
+    this.generate('saveAsJpg');
+  }
+
+  showCardListClick() {
+    if (!this.disableEdit) {
+      this.showCardList = !this.showCardList;
+      this.scrollToOption();
+    }
+  }
+  
+  scrollToOption() {
+    var item = document.querySelector('.cards-list li.selected');
+    item?.scrollIntoView();
+  }
+
+  edit() {
+    if (!this.disableEdit) {
+      this.territory.territoryCard$.pipe(take(1)).subscribe(card => {
+        sessionStorage.setItem("card", JSON.stringify(card));
+        this.router.navigate(['/territory/edit']);
+      });
+    }
+  }
+
+  colorByCoordinates(index: number, direction: Direction): MarkerColor {
+    if (!direction.lat) {
+      return MarkerColor.Grey;
+    }
+    const colorIndex = this.markersColors.length + index - 1;
+    return this.markersColors[colorIndex % this.markersColors.length];
   }
 }

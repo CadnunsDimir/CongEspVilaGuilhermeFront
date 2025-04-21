@@ -1,37 +1,45 @@
-<h1 [ngClass]="{'h1-print-as-card':printAsCard}">Território</h1>
+<div class="buttons">
+  <label *ngIf="cardId$" class="print-as-card--label">
+    <input type="checkbox" [(ngModel)]="printAsCard" [ngModelOptions]="{standalone: true}">
+    ver como impressão
+  </label>
+  <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">buscar</button>
+  <button *ngIf="!disableEdit && cardId$" class="edit-button" (click)="edit()"></button>
+  <button *ngIf="cardId$" class="share-button" (click)="showShareOptions = !showShareOptions"></button>
+  <ul *ngIf="showShareOptions" class="share-options">
+    <li role="button" (click)="share()">gerar link</li>
+    <li role="button" (click)="generateImage()">gerar imagem</li>
+    <li role="button" (click)="generatePdf()">gerar pdf</li>
+  </ul>
+</div>
 
-<div class="front-page" *ngIf="printAsCard"></div>
-<div class="back-page" *ngIf="printAsCard"></div>
-<p style="text-align: right;" class="print-controls"></p>
 <ul [ngClass]="{show: showCardList}" *ngIf="cards$ | async as cards" class="cards-list">
-  <li *ngFor="let item of cards" role="button" (click)="selectCard(item)">
-  {{item}}
+  <li *ngFor="let item of cards" [ngClass]="{selected: (cardId$ |async) == item}" role="button"
+    (click)="selectCard(item)">
+    {{item}}
   </li>
 </ul>
 
-<div class="buttons">
-  <button *ngIf="!printAsCard" (click)="showCardList = !showCardList"> selecionar o cartão </button>
-  <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">atualizar usando endereço</button>
-  <button *ngIf="cardId" (click)="edit()">editar</button>
-  <label *ngIf="cardId" class="printAsCardLabel"><input type="checkbox"  (change)="printAsCard = !printAsCard"> imprimir como cartão</label>
+
+<div id="share-area" [ngClass]="{print: printAsCard}">
+  <div [ngClass]="{'print-page': printAsCard}">
+    <h1>Mapa de Território</h1>
+    <p class="card-data">
+      <span>Localidad: {{neighborhood$ | async}} </span>
+      <span [attr.role]="disableEdit ? 'text': 'button'" (click)="showCardListClick()">Tarjeta n° {{cardId$ | async}} <i
+          class="selec-icon" *ngIf="!disableEdit"></i></span>
+    </p>
+    <app-map 
+      [markers]="(territoryCard$ | async)?.markers || []" 
+      [scale]="0.7"
+      [staticImage]="printAsCard"
+      (click)="updateCoordinates($event)" />
+
+    </div>  
+    <app-directions-table 
+      [ngClass]="{'print-page': printAsCard}"
+      [printAsCard]="printAsCard"
+      [territoryCard$]="territoryCard$"
+      [directionToUpdate]="directionToUpdate"
+      (selected)="selectDirection($event)" />
 </div>
-
-<p class="info-message" *ngIf="directionToUpdate">Selecione um local no mapa para atualizar a posição do marcador</p>
-
-<section [ngClass]="{'print-as-card':printAsCard}">
-  <p class="card-data"><span>Localidade: {{neighborhood}} </span> <span>Cartão n° {{cardId}}</span> </p>
-  <app-map [markers]="markers" (click)="mapClick($event)" />  
-  <table class="direction-list show-border" *ngIf="territoryCard$ | async as card">
-    <tr *ngFor="let direction of card.directions; let i = index;" 
-    [ngClass]="{selected: directionToUpdate == direction}"
-    (click)="selectDirection(direction)">
-      <td>
-        {{i+1}}
-      </td>
-      <td>
-        {{direction.streetName}}, {{direction.houseNumber}} {{direction.complementaryInfo ? ', '+direction.complementaryInfo: ''}}
-        <span *ngIf="direction.lat" class="on-map"></span>
-      </td>
-    </tr>
-  </table>
-</section>

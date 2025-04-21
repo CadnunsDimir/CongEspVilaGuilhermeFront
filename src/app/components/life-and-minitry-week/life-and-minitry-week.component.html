@@ -1,0 +1,88 @@
+
+
+<button (click)="save()">salvar</button>
+<div class="week-header">
+    <h3 class="font-10pt">{{week.weekLabel}} | {{week.bibleWeekReading}}</h3>
+    <div class="side-info">
+        <label class="font-8pt">
+            Presidente: <input class="font-9pt" type="text" [(ngModel)]="week.president">
+        </label>
+        <label class="font-8pt">
+            Consejo de la sala auxiliar: <input class="font-9pt" type="text" [(ngModel)]="week.auxiliarRoomConductor">
+        </label>
+    </div>
+</div>
+
+<p class="prayer-line">
+    <span class="font-9pt bold">Canción {{week.openingSong}} y oración | Palabras de introducción (1 min.)</span>
+    <label class="font-8pt side-info">
+        Oracion: <input type="text" class="font-9pt" [(ngModel)]="week.openingPrayerBrother">
+    </label>
+</p>
+
+<div class="line">
+    <h4 class="meeting-title tesoros font-9pt">TESOROS DE LA BIBLIA</h4>
+    <p class="font-8pt">Sala auxiliar</p>
+    <p class="font-8pt">Auditório Principal</p>
+</div>
+
+<div class="line">
+    <h4 class="font-9pt">{{week.bibleTreasures.title}} (10 mins.)</h4>
+    <input type="text" class="font-9pt" [(ngModel)]="week.bibleTreasures.brotherName">
+</div>
+
+<div class="line">
+    <h4 class="font-9pt">2. Perlas escondidas (10 mins.)</h4>
+    <input type="text" class="font-9pt" [(ngModel)]="week.hiddenPearlsConductor">
+</div>
+
+<div class="line">
+    <h4 class="font-9pt">3. Lectura de biblia (4 mins.)</h4>
+    <input type="text" class="font-9pt" 
+        [(ngModel)]="week.bibleReading.auxiliarRoomBrotherName">
+    <input type="text" class="font-9pt" 
+        [(ngModel)]="week.bibleReading.brotherName">
+</div>
+
+<div class="line">
+    <h4 class="meeting-title maestros font-9pt">SEAMOS MEJORES MAESTROS</h4>
+    <p class="font-8pt">Sala auxiliar</p>
+    <p class="font-8pt">Auditório Principal</p>
+</div>
+
+<div class="line" *ngFor="let item of week.becameBetterTeachers">
+    <h4 class="font-9pt">{{item.title}} ({{item.minutes}} mins.)</h4>
+    <input type="text" class="font-9pt" [(ngModel)]="item.auxiliarRoomBrotherName">
+    <input type="text" class="font-9pt" [(ngModel)]="item.brotherName">
+</div>
+
+<div class="line">
+    <h4 class="meeting-title vida-cristiana font-9pt">NUESTRA VIDA CRISTIANA</h4>
+    <p class="font-8pt">Auditório Principal</p>
+</div>
+
+<p class="prayer-line">
+    <span class="font-9pt bold">Canción {{week.middleSong}}</span>
+</p>
+
+<div class="line" *ngFor="let item of week.ourChristianLife">
+    <h4 class="font-9pt">{{item.title}} ({{item.minutes}} mins.)</h4>
+    <input type="text" class="font-9pt" [(ngModel)]="item.brotherName">
+</div>
+
+<div class="line">
+    <h4 class="font-9pt">{{week.congregationBibleStudy.title}} (30 mins.)</h4>
+    <div class="study-brother-info">
+        <input type="text" class="font-9pt" [(ngModel)]="week.congregationBibleStudy.brotherName" placeholder="condutor"> /
+        <input type="text" class="font-9pt" [(ngModel)]="week.congregationBibleStudy.reader"  placeholder="lector">
+    </div>
+</div>
+
+<p class="prayer-line">
+    <span class="font-9pt bold">Palabras de conclusión (3 mins.) | Canción {{week.endingSong || '(verificar guia)'}}</span>
+    <label class="font-8pt side-info">
+        Oracion: <input type="text" class="font-9pt" [(ngModel)]="week.endingPrayerBrother">
+    </label>
+</p>
+
+<div *ngIf="pageBreak" class="page-break"></div>
