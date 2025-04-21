@@ -1,10 +1,9 @@
 const fs = require('fs');
-const targetPath = './src/environments/environment.prod.ts';
+const targetPath = './src/environments/environment.ts';
 
 const envConfigFile = `
 export const environment = {
-  production: true,
-  apiUrl: '${process.env.API_URL}'
+  api: '${process.env.API_URL}'
 };
 `;
 
