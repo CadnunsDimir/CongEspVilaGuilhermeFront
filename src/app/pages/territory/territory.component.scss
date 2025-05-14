@@ -20,6 +20,7 @@ app-map{
   }
 
   h1{
+    font-size: 1.05em;
     margin: 0;
     text-align: center;
   }
@@ -37,6 +38,7 @@ app-map{
 }
 
 #share-area{
+  
   &.print{
     width: calc($card-width + 40px);
     height: $share-area-h;

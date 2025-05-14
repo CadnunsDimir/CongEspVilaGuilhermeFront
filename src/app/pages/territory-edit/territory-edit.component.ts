@@ -3,6 +3,7 @@ import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { Form, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TerritoryService } from '../../services/territory/territory.service';
 import { Route, Router } from '@angular/router';
+import { scrollBottom } from '../../html-funcions.utils';
 
 @Component({
   selector: 'app-territory-edit',
@@ -50,6 +51,8 @@ export class TerritoryEditComponent implements OnInit {
       complementaryInfo: '',
       houseNumber: ''
     }));
+
+    scrollBottom();
   }
 
   removeDirection(directionControlIndex: number) {
@@ -58,19 +61,11 @@ export class TerritoryEditComponent implements OnInit {
 
   moveDirection(from: number, to: number) {
     this.itemChangingPosition = from;
-
-    const values = [...this.directionsControls.value];
-
-    const itemToUp = values[to];
-    const itemToDown = values[from];
-    values[to] = itemToDown;
-    values[from] = itemToUp;
-
-    setTimeout(() => {
-      this.directionsControls.setValue(values);
-      this.itemChangingPosition = to;
-    }, 200);
-
+    
+    const fromControl = this.directionsControls.controls[from];
+    this.directionsControls.removeAt(from);
+    this.directionsControls.insert(to, fromControl);
+    
     setTimeout(() => this.itemChangingPosition = undefined, 300);
   }
 
@@ -101,8 +96,7 @@ export class TerritoryEditComponent implements OnInit {
   dragover($event: DragEvent) {
     $event.preventDefault();
   }
-
-
+  
   save() {
     if (!this.saving) {
       this.saving = true;

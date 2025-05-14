@@ -1,16 +1,17 @@
-<h1> editando território</h1>
+<h1>📋 Editar Território</h1>
 <form [formGroup]="territoryCardForm">
     <p>
-        Localidade: <input class="inline" type="text" formControlName="neighborhood"/>
-        Cartão Nº {{card.cardId}}
-        Total de Endereços: {{card.directions.length}}
+        Localidad: <input class="inline" type="text" formControlName="neighborhood"/>
+        Tarjeta Nº {{card.cardId}}<br>
+        Total de Direcciones: {{card.directions.length}}
     </p>
 
     <p class="edit-hint">Você pode clicar e segurar para mudar a ordem</p>
 
+    <button class="cancel-button" (click)="cancel()" [disabled]="saving">X</button>
     <button class="save-button" (click)="save()" [disabled]="saving">salvar</button>
-    <button class="cancel-button" (click)="cancel()" [disabled]="saving">cancelar</button>
 
+    <button class="new-button" (click)="addNewDirecction()">➕ adicionar novo</button>
     <table class="show-border">
         <tr>
             <th>#</th>
@@ -28,9 +29,9 @@
                     (dragover)="dragover($event)"
                     draggable="true">
                     <td>{{i+1}}</td>
-                    <td><input type="text" formControlName="streetName"></td>
-                    <td><input type="text" formControlName="houseNumber"></td>
-                    <td><input type="text" formControlName="complementaryInfo"></td>
+                    <td ediateble><input type="text" formControlName="streetName"></td>
+                    <td ediateble><input type="text" formControlName="houseNumber"></td>
+                    <td ediateble><input type="text" formControlName="complementaryInfo"></td>
                     <td class="actions">
                         <a class="remove" (click)="removeDirection(i)" title="remover" aria-label="remover">X</a>              
                     </td>
@@ -38,5 +39,4 @@
             }
         </tbody>
     </table>
-    <button (click)="addNewDirecction()">adicionar novo endereço</button>
   </form>

@@ -2,13 +2,20 @@
 .edit-hint{
     font-size: 12px;
 }
+
 table{
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    font-size: 0.7rem;
+
     tr{
         cursor: grab;
         cursor: -moz-grab;
         cursor: -webkit-grab;
         &.dragging {
-            background-color: rgb(138, 203, 186);
+            background-color: rgb(198, 198, 198);
             cursor: grabbing;
             cursor: -moz-grabbing;
             cursor: -webkit-grabbing;
@@ -16,9 +23,21 @@ table{
     }
     
 
-    font-size: 10px;
     td, th{
-        padding: 5px;
+        // padding: 5px;
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        text-align: left;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    tr:hover {
+      background: #f9f9f9;
+    }
+    td[editable]{
+        background-color: #fefefe;
+        cursor: text;
     }
     th:nth-child(3){
         width: 55px;
@@ -47,18 +66,26 @@ table{
         }
     }
 }
-
-.save-button, .cancel-button{
-    position: fixed;
+.new-button{
+    width: 200px;
+    float: right;
+}
+.cancel-button{
+    position: absolute;
     right: 0;
     top: 0;
-    width: 100px;
-    margin-right: 10px;
+    box-shadow: none;
+    background-color: transparent;
+    font-size: 2rem;
+    width: min-content;
+    padding: 1.5rem;
+    margin: 0;
 }
 
-.cancel-button{
-    top: 50px;
+.save-button{
+    width: 100px;
 }
+
 
 .changing-position{
     background-color: #ccc;

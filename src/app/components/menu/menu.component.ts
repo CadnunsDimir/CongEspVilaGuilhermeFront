@@ -16,7 +16,8 @@ export class MenuComponent {
     { label: 'Página inicial', route: '/home' },
     { label: 'Territórios', route: '/territory' },
     { label: 'Território da Congregação', route: '/territory/all' },
-    { label: 'Vida y Ministerio Cristiano', route: '/life-and-ministry'}
+    { label: 'Vida y Ministerio Cristiano', route: '/life-and-ministry'},
+    { label: 'Predicacion - Programacion Mensual', route: '/preaching-schedule'}
   ];
   
   constructor(

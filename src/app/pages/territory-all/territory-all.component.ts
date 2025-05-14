@@ -3,7 +3,7 @@ import { MapMarker, MarkerColor } from '../../components/map/map.component';
 import { filter, map } from 'rxjs';
 import { FullMapService } from '../../services/full-map/full-map.service';
 import { TerritoryMapMarker } from '../../models/full-map.model';
-import { mapBounds } from '../territory-edit/map-bounds';
+import { mapBounds } from './map-bounds';
 import { TerritoryService } from '../../services/territory/territory.service';
 import { Router } from '@angular/router';
 

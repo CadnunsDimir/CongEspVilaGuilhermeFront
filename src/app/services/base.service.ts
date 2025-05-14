@@ -40,8 +40,9 @@ export class BaseService {
         if (!tokenRequired) {
             return this.http.get<T>(`${this.baseUrl}${path}`);   
         }
-        return this.requestWithToken(path);        
+        return this.requestWithToken<T>(path);        
     }
 
     put(path: string, body: any) { return this.requestWithToken(path, 'PUT', body); }
+    post(path: string, body: any) { return this.requestWithToken(path, 'POST', body); }
 }
