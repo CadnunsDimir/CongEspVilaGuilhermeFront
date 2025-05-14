@@ -1,9 +1,9 @@
-<nav *ngIf="$isLogged | async">
+<nav *ngIf="isLogged$ | async">
   <button *ngIf="!showMenu" class="menu-button" (click)="showMenu = !showMenu">
   </button>
   <ul *ngIf="showMenu" (click)="showMenu = false">
     @for (item of menuItens; track item.label) {
-      <li [ngClass]="{selected: url.includes(item.route)}">
+      <li [ngClass]="{selected: isSelected(item)}">
         <a [routerLink]="[item.route]" >{{ item.label }}</a>
       </li>
     }

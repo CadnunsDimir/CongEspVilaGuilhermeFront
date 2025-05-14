@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { filter, map } from 'rxjs';
+import { filter, map, tap } from 'rxjs';
 import { AuthService } from '../../services/auth/auth.service';
 import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
+import { MenuOption } from '../../models/menu.models';
 
 @Component({
   selector: 'app-menu',
@@ -9,10 +10,11 @@ import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-  $isLogged = this.auth.$notAuthenticated.pipe(map(x => !x));
+
+  isLogged$ = this.auth.$notAuthenticated.pipe(map(x => !x));
   url: string = '';
   showMenu = false;
-  menuItens = [
+  menuItens: MenuOption[] = [
     { label: 'Página inicial', route: '/home' },
     { label: 'Territórios', route: '/territory' },
     { label: 'Território da Congregação', route: '/territory/all' },
@@ -27,8 +29,9 @@ export class MenuComponent {
     this.router.events
       .pipe(
         filter((x: any)=> x instanceof NavigationEnd),
-        map((x: NavigationEnd) =>x.url)
-      ).subscribe(x=> this.url = x);
+        map((x: NavigationEnd) =>x.url),
+        tap(x=> this.url = x))
+      .subscribe();
   }
 
   logout() {
@@ -36,8 +39,7 @@ export class MenuComponent {
     this.auth.requestUserLogin();
   }
 
-  isSelected(route: string): any {
-    console.log(route, this.router.url.includes(route));
-    this.router.url.includes(route);
+  isSelected(item: MenuOption): boolean {
+    return this.url == item.route;
   }
 }
