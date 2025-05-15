@@ -1,5 +1,5 @@
 export interface TerritoryCard {
-  cardId: number,
+  cardId?: number,
   neighborhood: string,
   directions: Direction[]
 }

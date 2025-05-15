@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LifeAndMinistryWeek } from '../../models/life-and-ministry.model';
+import { Asignment, LifeAndMinistryWeek } from '../../models/life-and-ministry.model';
 import { LifeAndMinistryService } from '../../services/life-and-ministry/life-and-ministry.service';
 import { catchError, finalize, of, tap } from 'rxjs';
 import { DatePipe } from '@angular/common';
@@ -42,7 +42,7 @@ export class LifeAndMinitryComponent {
         .pipe(
           tap(week=> { 
             if(!week.bibleReading){
-              week.bibleReading = {};
+              week.bibleReading = {} as unknown as Asignment;
             }
             this.weeks.push(week);
           }

@@ -16,6 +16,7 @@ export class TerritoryEditComponent implements OnInit {
   territoryCardForm!: FormGroup;
   saving = false;
   itemChangingPosition: number | undefined;
+  isNewCard = false;
 
   constructor(
     private router: Router,
@@ -23,7 +24,14 @@ export class TerritoryEditComponent implements OnInit {
     private territory: TerritoryService) { }
 
   ngOnInit(): void {
-    console.log(this.card);
+    if(!this.card) {
+      this.isNewCard = true;
+      this.card = {
+        cardId: this.territory.newCardId(),
+        directions: [],
+        neighborhood: ''
+      };
+    }    
     this.territoryCardForm = this.fb.group({
       cardId: [this.card.cardId],
       neighborhood: [this.card.neighborhood],
@@ -100,8 +108,13 @@ export class TerritoryEditComponent implements OnInit {
   save() {
     if (!this.saving) {
       this.saving = true;
-      this.territory.updateCard(this.territoryCardForm.value);
-      this.backToTerritory();
+      if (this.isNewCard) {
+        this.territory.createCard(this.territoryCardForm.value)
+          .subscribe(() => this.backToTerritory());
+      } else {
+        this.territory.updateCard(this.territoryCardForm.value);
+        ;
+      }
     }
   }
 }

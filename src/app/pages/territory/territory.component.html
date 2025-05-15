@@ -15,6 +15,9 @@
   <button *ngIf="cardId$" class="option-button" (click)="showShareOptions = !showShareOptions">
     <fa-icon [icon]="faShareIcon"></fa-icon>
   </button>
+  <button class="option-button" (click)="createNewCard()">
+    <fa-icon [icon]="faNewCard"></fa-icon>
+  </button>
   <ul *ngIf="showShareOptions">
     <li role="button" (click)="share()">gerar link</li>
     <li role="button" (click)="generateImage()">gerar imagem</li>

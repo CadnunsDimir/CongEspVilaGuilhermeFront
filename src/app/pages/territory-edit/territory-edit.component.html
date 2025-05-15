@@ -1,7 +1,7 @@
-<h1>📋 Editar Território</h1>
+<h1>📋 {{isNewCard ? 'Criar' : 'Editar'}} Território</h1>
 <form [formGroup]="territoryCardForm">
     <p>
-        Localidad: <input class="inline" type="text" formControlName="neighborhood"/>
+        Localidad: <input class="inline" type="text" formControlName="neighborhood" />
         Tarjeta Nº {{card.cardId}}<br>
         Total de Direcciones: {{card.directions.length}}
     </p>
@@ -15,28 +15,25 @@
     <table class="show-border">
         <tr>
             <th>#</th>
-            <th>Rua</th>    
+            <th>Rua</th>
             <th>Numero</th>
             <th>complemento</th>
-            <th></th>    
+            <th></th>
         </tr>
         <tbody>
             @for (item of directionsControls.controls; let i = $index; track i) {
-                <tr [ngClass]="{'changing-position': i == itemChangingPosition, 'dragging': i == draggingCard}" 
-                    [formGroup]="item" 
-                    (dragstart)="drag(i)"
-                    (drop)="drop(i)"
-                    (dragover)="dragover($event)"
-                    draggable="true">
-                    <td>{{i+1}}</td>
-                    <td ediateble><input type="text" formControlName="streetName"></td>
-                    <td ediateble><input type="text" formControlName="houseNumber"></td>
-                    <td ediateble><input type="text" formControlName="complementaryInfo"></td>
-                    <td class="actions">
-                        <a class="remove" (click)="removeDirection(i)" title="remover" aria-label="remover">X</a>              
-                    </td>
-                </tr>
+            <tr [ngClass]="{'changing-position': i == itemChangingPosition, 'dragging': i == draggingCard}"
+                [formGroup]="item" (dragstart)="drag(i)" (drop)="drop(i)" (dragover)="dragover($event)"
+                draggable="true">
+                <td>{{i+1}}</td>
+                <td ediateble><input type="text" formControlName="streetName"></td>
+                <td ediateble><input type="text" formControlName="houseNumber"></td>
+                <td ediateble><input type="text" formControlName="complementaryInfo"></td>
+                <td class="actions">
+                    <a class="remove" (click)="removeDirection(i)" title="remover" aria-label="remover">X</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
-  </form>
+</form>

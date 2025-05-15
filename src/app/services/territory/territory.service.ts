@@ -29,7 +29,7 @@ export class TerritoryService extends BaseService{
     map(()=> this._territoryCard$.getValue() as TerritoryCard)
   ).subscribe(card=> {
     this.updateCardOnDb(card)
-      .subscribe(()=> this.notifyCardUpdateOK(card.cardId));
+      .subscribe(()=> this.notifyCardUpdateOK(card.cardId!));
     this.fullMap.clear();
     this.needUpdateOnDb = false;
     this.notify.send({
@@ -46,9 +46,7 @@ export class TerritoryService extends BaseService{
     private readonly fullMap: FullMapService,
     private readonly notify: NotificationsService) {
       super(_auth, _http)
-  }
-
-  
+  }  
 
   get cards$() {
     const cards = this._cards$.getValue();
@@ -66,6 +64,20 @@ export class TerritoryService extends BaseService{
     return this._territoryCard$.asObservable();
   }
 
+  newCardId(): number | undefined {
+    const cards = [...(this._cards$.value ?? [])];
+    return cards[cards.length - 1] +1;
+  }
+
+  resetSelectedCard() {
+    sessionStorage.removeItem("card");
+  }
+
+  setCardToEdition(){
+    const card = this._territoryCard$.value;
+    sessionStorage.setItem("card", JSON.stringify(card));
+  }
+
   selectCard(cardId: number) {
     var previousLoadedCard = this._territoryCard$.getValue()!;
     var $request = this.get<TerritoryCard>(`${this.basePath}${cardId}`, true)
@@ -76,7 +88,7 @@ export class TerritoryService extends BaseService{
                       }));
     if(this.needUpdateOnDb && previousLoadedCard){
       this.updateCardOnDb(previousLoadedCard).subscribe(() => {
-        this.notifyCardUpdateOK(previousLoadedCard.cardId); 
+        this.notifyCardUpdateOK(previousLoadedCard.cardId!); 
         $request.subscribe();
       });
     }else{
@@ -88,7 +100,7 @@ export class TerritoryService extends BaseService{
   updateDirection(cardId: number, direction: Direction) {
     const url = `${this.basePath}${cardId}/direction`;
     return this.put(url, direction);
-  }
+  }  
 
   updateCoordinatesOnCardInMemory(direction: Direction) {
     var card = this._territoryCard$.getValue()!;
@@ -115,27 +127,48 @@ export class TerritoryService extends BaseService{
     });
   }
 
-  updateCard(card: TerritoryCard){
+  private checkCardData(card: TerritoryCard) {
     card.neighborhood = card.neighborhood.trim();
     card.directions.forEach(d=> {
       d.streetName = d.streetName.trim();
       d.houseNumber = d.houseNumber.trim();
       d.complementaryInfo = d.complementaryInfo.trim();
-    })
+    });
+  }
+
+  createCard(card: TerritoryCard) {
+    this.checkCardData(card);
+    let newCardId = 0;
+    return this.post<TerritoryCard>(this.basePath, card).pipe(
+      tap(() => {
+        this._cards$.next([...(this._cards$.value as any), card.cardId]);
+        this.selectCard(card.cardId!);
+        this.notifyCardUpdateOK(newCardId);
+      }),
+    );
+  }
+
+  reloadCardList() {
+    this._cards$.next([]);
+    return this.cards$;
+  }
+
+  updateCard(card: TerritoryCard){
+    this.checkCardData(card);
     this.needUpdateOnDb = true;
     this.saveOnLocalStorage(card);
     this._territoryCard$.next(card);
   }
 
   saveOnLocalStorage(card: TerritoryCard) {    
-    const dbTable = JSON.parse(localStorage[this.tableName] || "{}");
-    dbTable[card.cardId] = card;
+    const dbTable = JSON.parse(localStorage[this.tableName] ?? "{}");
+    dbTable[card.cardId!] = card;
     localStorage.setItem(this.tableName, JSON.stringify(dbTable));
-    localStorage.setItem("lastCardSelected", card.cardId.toString());
+    localStorage.setItem("lastCardSelected", card.cardId!.toString());
   }
 
   getShareableCardId(cardId: number) {
-    return this.get(`${this.basePath}${cardId}/share`, true)
+    return this.get<any>(`${this.basePath}${cardId}/share`, true)
       .pipe(map(x=> x.temporaryId));
   }
 

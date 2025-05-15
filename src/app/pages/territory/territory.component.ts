@@ -8,7 +8,7 @@ import { GeocodingService } from '../../services/geocoding/geocoding.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 import { ShareService, ShareServiceOptions } from '../../services/share/share.service';
-import { faEyeSlash, faPen, faPrint, faShare } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash, faPen, faPlus, faPrint, faShare } from '@fortawesome/free-solid-svg-icons';
 
 interface DirectionMapMarker extends MapMarker {
   directionIndex: number
@@ -19,7 +19,7 @@ interface DirectionMapMarker extends MapMarker {
   templateUrl: './territory.component.html',
   styleUrl: './territory.component.scss'
 })
-export class TerritoryComponent implements OnInit {
+export class TerritoryComponent implements OnInit {  
   markersColors = this.randomColors();
   printAsCard = false;
   showCardList = false;
@@ -38,6 +38,7 @@ export class TerritoryComponent implements OnInit {
   faShareIcon = faShare;
   faPrintIcon = faPrint;
   faPrintSlashIcon = faEyeSlash;
+  faNewCard = faPlus;
 
   constructor(
     private router: Router,
@@ -184,14 +185,17 @@ export class TerritoryComponent implements OnInit {
     }
   }
   
-  
+  createNewCard() {
+    if(!this.disableEdit){
+      this.territory.resetSelectedCard();
+      this.router.navigate(['/territory/edit']);
+    }
+  }  
 
   edit() {
     if (!this.disableEdit) {
-      this.territory.territoryCard$.pipe(take(1)).subscribe(card => {
-        sessionStorage.setItem("card", JSON.stringify(card));
-        this.router.navigate(['/territory/edit']);
-      });
+      this.territory.setCardToEdition();
+      this.router.navigate(['/territory/edit']);
     }
   }
 

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "./auth/auth.service";
-import { catchError, filter, of, switchMap, take, tap } from "rxjs";
+import { catchError, filter, Observable, of, switchMap, take, tap } from "rxjs";
 import { environment } from "../../environments/environment";
 
 export class BaseService {
@@ -9,7 +9,7 @@ export class BaseService {
         private auth: AuthService, 
         private http: HttpClient) {}
 
-    private requestWithToken<T>(path: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET', body: any = null) {
+    private requestWithToken<T>(path: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET', body: any = null) : Observable<T>{
         const url = `${this.baseUrl}${path}`;
 
         return this.auth.$token.pipe(
@@ -36,13 +36,13 @@ export class BaseService {
         );
       }
 
-    get<T>(path: string, tokenRequired: boolean = false){
+    get<T = any>(path: string, tokenRequired: boolean = false){
         if (!tokenRequired) {
             return this.http.get<T>(`${this.baseUrl}${path}`);   
         }
         return this.requestWithToken<T>(path);        
     }
 
-    put(path: string, body: any) { return this.requestWithToken(path, 'PUT', body); }
-    post(path: string, body: any) { return this.requestWithToken(path, 'POST', body); }
+    put<T = any>(path: string, body: any) { return this.requestWithToken<T>(path, 'PUT', body); }
+    post<T = any>(path: string, body: any) { return this.requestWithToken<T>(path, 'POST', body); }
 }
