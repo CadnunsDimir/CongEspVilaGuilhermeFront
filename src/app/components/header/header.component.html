@@ -1,0 +1,8 @@
+<div class="header">
+    <button class="option-button no-custom" (click)="showOptions = !showOptions">
+        <fa-icon [icon]="faIcon"></fa-icon>
+    </button>
+    <div class="menu-options" [ngClass]="{show: showOptions }">
+        <ng-content></ng-content>
+    </div>
+</div>

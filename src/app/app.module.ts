@@ -19,6 +19,14 @@ import { DirectionsTableComponent } from './components/directions-table/directio
 import { LifeAndMinitryComponent } from './pages/life-and-minitry/life-and-minitry.component';
 import { LifeAndMinitryWeekComponent } from './components/life-and-minitry-week/life-and-minitry-week.component';
 import { DatePipe } from '@angular/common';
+import { PreachingScheduleComponent } from './pages/preaching-schedule/preaching-schedule.component';
+import { DayOfWeekPipe } from './pipe/day-of-week.pipe';
+import { EditFixedDaysButtonComponent } from './pages/preaching-schedule/components/edit-fixed-days-button/edit-fixed-days-button.component';
+import { CardsListModalComponent } from './pages/territory/components/cards-list-modal/cards-list-modal.component';
+import { FilterPipe } from './pipes/filter.pipe';
+import { CloseButtonComponent } from './components/close-button/close-button.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -34,7 +42,14 @@ import { DatePipe } from '@angular/common';
     TerritoryAllComponent,
     DirectionsTableComponent,
     LifeAndMinitryComponent,
-    LifeAndMinitryWeekComponent
+    LifeAndMinitryWeekComponent,
+    PreachingScheduleComponent,
+    DayOfWeekPipe,
+    EditFixedDaysButtonComponent,
+    CardsListModalComponent,
+    FilterPipe,
+    CloseButtonComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +57,8 @@ import { DatePipe } from '@angular/common';
     HttpClientModule,
     ReactiveFormsModule,
     LeafletModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers:[DatePipe],
   bootstrap: [AppComponent]

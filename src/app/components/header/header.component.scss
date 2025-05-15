@@ -1,0 +1,38 @@
+@import '../../design-system.scss';
+
+.header {
+    width: 100%;
+    top: 0;
+    height: 70px;
+    position: absolute;
+    background: #bbb;
+    left: 0;
+    box-shadow: $box-shadow;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.option-button{
+    border: none;
+    background: none;
+    width: 70px;
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    position: fixed;    
+    top: 81px;
+    background: white;
+    z-index: 1001;
+    box-shadow: $box-shadow;
+    padding: 20px;
+    transition: 0.5s;
+    right: -300px;
+    &.show{
+        height: auto;
+        width: auto;
+        right: 10px;
+        position: absolute;
+    }
+}

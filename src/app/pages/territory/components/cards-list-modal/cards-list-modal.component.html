@@ -1,0 +1,19 @@
+
+<div class="cards-list" [ngClass]="{show: _show}" >
+    <app-close-button (click)="closeModal()" />
+    <input type="number" placeholder="digite el número de la tarjeta" [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+    <ng-container *ngIf="cards$ | async as cards; else noCards">
+        <div class="grid">
+            <button 
+                class="button item"
+                *ngFor="let item of cards| filter: search" 
+                [ngClass]="{selected: (cardId$ |async) == item}" 
+                (click)="selectCard(item)">
+                {{item}}
+            </button>
+        </div>        
+    </ng-container>
+    <ng-template #noCards>
+        <p>No cards available.</p>
+    </ng-template>
+</div>

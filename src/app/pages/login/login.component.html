@@ -1,19 +1,19 @@
 <h2 class="center">Login</h2>
 
 <form [formGroup]="login" (ngSubmit)="onSubmit()">
-  <custom-input type="text"
+  <app-custom-input type="text"
          id="username"
          formControlName="username"
          placeholder="Digite seu usuario"
-         autocomplete="username" />
+         [autocomplete]="'username'" />
 
-  <custom-input type="password"
+  <app-custom-input type="password"
          id="password"
          formControlName="password"
          placeholder="Digite sua senha"
-         autocomplete="password"
+         [autocomplete]="'password'"
          />
 
-  <input type="submit" value="Acessar" [disabled]="!login.valid">
+  <input class="button" type="submit" value="Acessar" [disabled]="!login.valid">
   <a class="align-right" (click)="newPassword()">solicitar nova senha</a>
 </form>

@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, Injector, Input, OnChanges, OnInit, SimpleChanges,  forwardRef } from "@angular/core";
+import { AfterViewInit, Component, Injector, Input, OnInit, forwardRef } from "@angular/core";
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl } from "@angular/forms";
 
 @Component({
-  selector: 'custom-input',
+  selector: 'app-custom-input',
   template: `
   <input [type]="type"
          [id]="id"
@@ -67,7 +67,7 @@ export class CustomInputComponent implements OnInit, AfterViewInit, ControlValue
     if (ngControl && ngControl.control) {
       this.formControl = ngControl.control as FormControl;
     } else {
-      console.error("[custom-input] formControl not found");
+      console.error("[app-custom-input] formControl not found");
     }
   }
 
@@ -95,7 +95,7 @@ export class CustomInputComponent implements OnInit, AfterViewInit, ControlValue
     this.errorMessage = this.translateError(this.formControl?.errors);
   }
 
-  onChange = (value: any) => { console.log("[custom-input] default onChange") }
+  onChange = (value: any) => { console.log("[app-custom-input] default onChange") }
 
   ngOnInit(): void {
   }

@@ -33,6 +33,7 @@ export class LoginComponent {
       password: formData.password || ''
     }).subscribe(() => this.router.navigate([this.redirectUrl || "/"]));
   }
+  
   newPassword() {
 
   }

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { TerritoryService } from '../../services/territory/territory.service';
-import { Observable, delay, map, switchMap, take, tap } from 'rxjs';
+import { Observable, delay, filter, map, switchMap, take, tap } from 'rxjs';
 import { MapCoordinates, MapMarker, MarkerColor } from '../../components/map/map.component';
 import { marker } from 'leaflet';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { GeocodingService } from '../../services/geocoding/geocoding.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationsService } from '../../services/notifications/notifications.service';
-import { ShareService } from '../../services/share/share.service';
+import { ShareService, ShareServiceOptions } from '../../services/share/share.service';
+import { faEyeSlash, faPen, faPrint, faShare } from '@fortawesome/free-solid-svg-icons';
 
 interface DirectionMapMarker extends MapMarker {
   directionIndex: number
@@ -32,6 +33,10 @@ export class TerritoryComponent implements OnInit {
   disableEdit: boolean = false;
   showShareOptions = false;
   shareSelector = '#share-area';
+  faEditIcon = faPen;
+  faShareIcon = faShare;
+  faPrintIcon = faPrint;
+  faPrintSlashIcon = faEyeSlash;
 
   constructor(
     private router: Router,
@@ -122,12 +127,14 @@ export class TerritoryComponent implements OnInit {
 
   updateUsingAddress() {
     this.neighborhood$
-      .pipe(
-        take(1),
-        switchMap(neighborhood => this.geocoding.getCoordinates(this.directionToUpdate!!, neighborhood!)))
-      .subscribe(coordinates => {
-        this.updateCoordinates(coordinates);
-      });
+        .pipe(
+          take(1),
+          filter(neighborhood => !!neighborhood && !!this.directionToUpdate),
+          map(neighborhood=> [neighborhood, this.directionToUpdate as any]),
+          switchMap(([neighborhood, direction]) => this.geocoding.getCoordinates(direction, neighborhood)))
+        .subscribe(coordinates => {
+          this.updateCoordinates(coordinates);
+        });
   }
 
   share() {
@@ -152,35 +159,31 @@ export class TerritoryComponent implements OnInit {
     });
   }
 
-  generate(action: string){
+  generate(action: ShareServiceOptions){
     this.printAsCard = true;
     this.showShareOptions = false;
     this.cardId$.pipe(
       take(1),
       delay(1000),
-      switchMap(cardId=> (this.shareService as any)[action](this.shareSelector, `tarjeta_${cardId}`)))
+      switchMap(cardId=> this.shareService.save(action,this.shareSelector, `tarjeta_${cardId}`)))
     .subscribe(() => this.printAsCard = false);
   }
 
   generatePdf() {
-    this.generate('saveAsPdf');
+    this.generate('pdf');
   }
 
   generateImage() {
-    this.generate('saveAsJpg');
+    this.generate('img');
   }
 
   showCardListClick() {
     if (!this.disableEdit) {
       this.showCardList = !this.showCardList;
-      this.scrollToOption();
     }
   }
   
-  scrollToOption() {
-    var item = document.querySelector('.cards-list li.selected');
-    item?.scrollIntoView();
-  }
+  
 
   edit() {
     if (!this.disableEdit) {

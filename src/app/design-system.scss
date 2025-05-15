@@ -1,0 +1,28 @@
+$table-cell-border: 1px solid #ddd;
+$table-bg: #fff;
+$box-shadow: 0 0 10px rgba(0,0,0,0.05);
+$card-width: 15cm;
+$card-height: 9.5cm;
+$share-area-h: calc($card-height + $card-height + 2cm);
+
+@mixin ds-table{
+    border-collapse: collapse;
+    background: $table-bg;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+
+    th {
+      background: #f0f0f0;
+    }
+    
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    td, th{
+        border: $table-cell-border;
+    }
+
+    @media print {
+        box-shadow: none;
+    }
+}

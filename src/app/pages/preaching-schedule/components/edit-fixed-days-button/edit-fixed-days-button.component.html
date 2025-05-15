@@ -1,0 +1,41 @@
+<button type="button" class="btn btn-primary" (click)="openModal()">
+    Editar Dias Fijos
+</button>
+<div class="overlay" *ngIf="showModal" (click)="closeModal()"></div>
+<dialog class="modal-dialog" *ngIf="showModal" [ngStyle]="{'display': showModal ? 'block' : 'none'}">
+    <form method="dialog" class="modal modal-open">
+        <h3 class="font-bold text-lg">Editar Dias Fijos</h3>
+        <button type="button" class="modal-close" (click)="closeModal()">X</button>
+        <div class="modal-body">            
+
+            <label for="dayOfWeek">Dia</label>
+            <select id="dayOfWeek" [(ngModel)]="fixedDay.dayOfWeek" name="dayOfWeek" required>
+                <option [ngValue]="1">Lunes</option>
+                <option [ngValue]="2">Martes</option>
+                <option [ngValue]="3">Miércoles</option>
+                <option [ngValue]="4">Jueves</option>
+                <option [ngValue]="5">Viernes</option>
+                <option [ngValue]="6">Sábado</option>
+                <option [ngValue]="0">Domingo</option>
+            </select>            
+
+            <label for="hour">Horario:</label>
+            <input type="time" id="hour" [(ngModel)]="fixedDay.hour" name="hour" required>
+
+            <label for="fieldOverseer">Dirigente:</label>
+            <input type="text" id="fieldOverseer" [(ngModel)]="fixedDay.fieldOverseer" name="fieldOverseer" required>
+
+            <fieldset>
+                <label for="place">Local:</label>
+                <input type="text" id="place" [(ngModel)]="fixedDay.place.name" name="place" required>
+
+                <label for="address">Direccion:</label>
+                <input type="text" id="address" [(ngModel)]="fixedDay.place.adress" name="address" required>
+            </fieldset>            
+
+            <div class="modal-action">
+                <button type="button" [disabled]="!valid" class="btn btn-primary" (click)="saveChanges()">Grabar</button>
+            </div>
+        </div>
+    </form>
+</dialog>

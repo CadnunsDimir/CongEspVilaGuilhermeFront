@@ -1,25 +1,28 @@
-<div class="buttons">
-  <label *ngIf="cardId$" class="print-as-card--label">
+
+<app-header>
+  <!-- <label *ngIf="cardId$" class="print-as-card--label">
     <input type="checkbox" [(ngModel)]="printAsCard" [ngModelOptions]="{standalone: true}">
     ver como impressão
-  </label>
+  </label> -->
+  <button class="option-button"  *ngIf="cardId$" (click)="printAsCard = !printAsCard">
+    <fa-icon [icon]="faPrintIcon" *ngIf="!printAsCard"></fa-icon>
+    <fa-icon [icon]="faPrintSlashIcon" *ngIf="printAsCard"></fa-icon>
+  </button>
   <button *ngIf="directionToUpdate" (click)="updateUsingAddress()">buscar</button>
-  <button *ngIf="!disableEdit && cardId$" class="edit-button" (click)="edit()"></button>
-  <button *ngIf="cardId$" class="share-button" (click)="showShareOptions = !showShareOptions"></button>
-  <ul *ngIf="showShareOptions" class="share-options">
+  <button class="option-button" *ngIf="!disableEdit && cardId$" (click)="edit()">
+    <fa-icon [icon]="faEditIcon"></fa-icon>
+  </button>
+  <button *ngIf="cardId$" class="option-button" (click)="showShareOptions = !showShareOptions">
+    <fa-icon [icon]="faShareIcon"></fa-icon>
+  </button>
+  <ul *ngIf="showShareOptions">
     <li role="button" (click)="share()">gerar link</li>
     <li role="button" (click)="generateImage()">gerar imagem</li>
     <li role="button" (click)="generatePdf()">gerar pdf</li>
   </ul>
-</div>
+</app-header>
 
-<ul [ngClass]="{show: showCardList}" *ngIf="cards$ | async as cards" class="cards-list">
-  <li *ngFor="let item of cards" [ngClass]="{selected: (cardId$ |async) == item}" role="button"
-    (click)="selectCard(item)">
-    {{item}}
-  </li>
-</ul>
-
+<app-cards-list-modal [cardId$]="cardId$" [cards$]="cards$" [showCardList]="showCardList" (select)="selectCard($event)"/>
 
 <div id="share-area" [ngClass]="{print: printAsCard}">
   <div [ngClass]="{'print-page': printAsCard}">

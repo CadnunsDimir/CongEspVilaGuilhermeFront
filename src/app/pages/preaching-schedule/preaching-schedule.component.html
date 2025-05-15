@@ -1,0 +1,22 @@
+<h1>Predicación - Española Vila Guilherme - {{ monthAndYear | titlecase }}</h1>
+<app-edit-fixed-days-button (save)="saveFixedDay($event)" [editFixedDay]="editFixedDay"></app-edit-fixed-days-button>
+<table class="table show-border" *ngIf="fixedDays$ | async as fixedDays">
+    <thead>
+        <tr>
+            <th scope="col">Dia</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Responsable</th>
+            <th scope="col">Local</th>
+            <th scope="col">Direccion</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let day of fixedDays" (click)="onEditFixedDay(day)">
+            <td>{{ day.dayOfWeek | dayOfWeek }}</td>
+            <td>{{ day.hour.substr(0, 5) }}</td>
+            <td>{{ day.fieldOverseer }}</td>
+            <td>{{ day.place.name }}</td>
+            <td>{{ day.place.adress }}</td>
+        </tr>
+    </tbody>
+</table>

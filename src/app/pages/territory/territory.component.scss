@@ -1,6 +1,6 @@
-$card-width: 15cm;
-$card-height: 9.5cm;
-$share-area-h: calc($card-height + $card-height + 2cm);
+@import './../../design-system.scss';
+
+
 
 app-map{
   width: 15cm;
@@ -43,38 +43,20 @@ app-map{
     width: calc($card-width + 40px);
     height: $share-area-h;
     padding: 20px;
+    background-color: #fff;
+    box-shadow: $box-shadow;
   }
 }
 
-.buttons{
-  position: fixed;
-  right: 16px;
-  top:0;
-  z-index: 1100;background-color: white;
+.option-button{
+  box-shadow: none;
+  background-color: transparent;
+  background-position: 0px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
   padding: 10px;
-  > *{
-    margin-left: 10px;
-  }
-}
-
-.edit-button{
-  background-image: url(/assets/edit_icon.png);
-  box-shadow: none;
-  background-color: transparent;
-  background-position: 0px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 40px;
-}
-
-.share-button{
-  background-image: url(/assets/share_icon.png);
-  box-shadow: none;
-  background-color: transparent;
-  background-position: 0px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  width: 40px;
+  border: none;
 }
 
 .share-options{
@@ -106,30 +88,10 @@ app-map{
   display: flex;
   justify-content: space-between;
   width: 100%;
+  max-width: 1230px;
 }
 
-ul.cards-list {
-  float: left;
-  position: fixed;
-  top: 100px;
-  left: -140px;
-  height: calc(100vh - 100px);
-  overflow-y:auto;
-  background-color: white;
-  z-index: 2000;
-  transition: 1s;
-  &.show{
-      left: 0;
-  }
-  li{
-      width: 100px;
-      padding: 10px;
-      text-align: center;
-      &.selected{
-        background-color: #ccc;
-      }
-  }
-}
+
 
 app-map{
   display: block;
@@ -139,9 +101,6 @@ app-map{
 @media screen and (max-width: 700px){
   button{
     position: static;
-  }
-  .card-data{
-    width: 100%;
   }
   .print-as-card--label{
     display: none;

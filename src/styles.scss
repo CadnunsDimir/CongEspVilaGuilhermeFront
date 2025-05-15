@@ -3,7 +3,7 @@
     font-size: 1.05em;
 }
 
-input[type=text], input[type=password]{
+input[type=text], input[type=password], input[type=number]{
     width: 100%;
     padding: 0 0.5rem 0.2rem 0.5rem;
     border: none;
@@ -26,7 +26,7 @@ body {
     text-align: center;
 }
 
-button, input[type=button], input[type=submit] {
+.button{
   width: 100%;
   background-color: white;
   height: 40px;
@@ -112,10 +112,15 @@ table{
     content: "";
     margin-left: 17px;
     margin-top: -13px;
-    background: inherit;
   }
 }
 
 h1{
   font-size: 2rem;
+}
+
+@media screen and (max-width: 700px){
+  body{
+    padding: 0;
+  }
 }

@@ -8,6 +8,8 @@ interface ShareLinkData {
   title: string, url: string
 }
 
+export type ShareServiceOptions = 'pdf' | 'img';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -67,7 +69,7 @@ export class ShareService {
     button.click();
   }
 
-  saveAsPdf(cssSelector: string, fileName: string) {
+  private saveAsPdf(cssSelector: string, fileName: string) {
     return this.printScreen(cssSelector).pipe(
       switchMap(data=> {
         var subject = new Subject();
@@ -105,7 +107,7 @@ export class ShareService {
     })));
   }
 
-  saveAsJpg(selector: string, fileName: string): Observable<any> {
+  private saveAsJpg(selector: string, fileName: string): Observable<any> {
     return this.printScreen(selector).pipe(
       tap(data=> {
         var a = document.createElement('a');
@@ -114,5 +116,12 @@ export class ShareService {
         a.click();
       }),
       delay(2000));
+  }
+
+  save(type: ShareServiceOptions, selector: string, fileName: string){
+    return {
+      pdf: this.saveAsPdf,
+      img: this.saveAsJpg
+    }[type](selector, fileName);
   }
 }

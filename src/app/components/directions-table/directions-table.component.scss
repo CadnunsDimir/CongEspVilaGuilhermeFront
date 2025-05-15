@@ -1,9 +1,15 @@
+@import './../../design-system.scss';
+
 :host{
     display: flex;
     gap: 10px;
 }
 
 .direction-list {
+    @include ds-table;
+    width: 100%;
+    margin-top: 20px;
+
     .selected {
       color: red;
       background-color: #cacaca;
@@ -14,7 +20,7 @@
         color:white;
       }
     }
-
+    
     .show-options{
         padding: 0px 5px;
         font-size: 14px;
@@ -40,12 +46,16 @@
         margin: 0;
         position: static;
         overflow: visible;
+        box-shadow: none;
         li,tr{
           font-size: 0.73rem !important;
           padding:1.5px;
           .on-map{
             display: none;
           }
+        }
+         thead{
+          display: none;
         }
         tr{
             td{
@@ -63,12 +73,12 @@
     .direction-list{
       float: left;
       position: absolute;
-      top: 160px;
-      left: 780px;
-      right: 30px;
+      top: 180px;
+      left: 770px;
       max-height: calc(100vh - 180px);
       overflow: auto;
       display: flow;
+      width: auto;
     }
   }
 
@@ -86,6 +96,10 @@
         width: 90%;
         top: 410px;
         left: 30px;
+      }
+
+      thead{
+        display: none;
       }
 
       li, tr{

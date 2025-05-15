@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { filter, map, tap } from 'rxjs';
 import { AuthService } from '../../services/auth/auth.service';
 import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
@@ -13,6 +13,7 @@ export class MenuComponent {
 
   isLogged$ = this.auth.$notAuthenticated.pipe(map(x => !x));
   url: string = '';
+  @HostBinding('class.show')
   showMenu = false;
   menuItens: MenuOption[] = [
     { label: 'Página inicial', route: '/home' },

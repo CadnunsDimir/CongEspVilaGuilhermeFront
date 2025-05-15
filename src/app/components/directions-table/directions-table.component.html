@@ -1,9 +1,17 @@
   <table class="direction-list show-border" 
     [ngClass]="{'print-mode': printAsCard}"
     *ngIf="territoryCard$ | async as card">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Endereço</th>
+        </tr>
+    </thead>
     <ng-container *ngFor="let direction of card.directions; let i = index;">
         <tr *ngIf="printAsCard ? i <= (maxItensPerTable -1) : true"
-            [ngClass]="{selected: directionToUpdate == direction}" (click)="onClickRow(direction)">
+            [ngClass]="{selected: directionToUpdate == direction}" 
+            (click)="onClickRow(direction)" 
+            (keydown)="onClickRow(direction)">
             <td [ngStyle]="{'background-color': direction.color}">
                 {{i+1}}
             </td>
@@ -24,10 +32,11 @@
 
   <table class="direction-list show-border" 
     [ngClass]="{'print-mode': printAsCard}"
-    *ngIf="territoryCard$ | async as card">
-    <ng-container *ngFor="let direction of card.directions; let i = index;">
+    *ngIf="printAsCard">
+    <ng-container *ngFor="let direction of (territoryCard$ | async).directions; let i = index;">
         <tr *ngIf="printAsCard ? i > (maxItensPerTable -1) : false"
-            [ngClass]="{selected: directionToUpdate == direction}" (click)="selected.emit(direction)">
+            [ngClass]="{selected: directionToUpdate == direction}" 
+            (click)="selected.emit(direction)">
             <td [ngStyle]="{'background-color': direction.color}">
                 {{i+1}}
             </td>
