@@ -26,6 +26,7 @@ export class TerritoryComponent implements OnInit {
   directionToUpdate?: Direction;
   cards$?: Observable<number[] | undefined>;
   territoryCard$ = this.territory.territoryCard$.pipe(
+    tap(x=> this.showCardList = !x),
     map(x => this.mapCardWithMarks(x)));
   cardId$ = this.territoryCard$.pipe(map(x => x.cardId));
   neighborhood$ = this.territoryCard$.pipe(map(x => x.neighborhood));

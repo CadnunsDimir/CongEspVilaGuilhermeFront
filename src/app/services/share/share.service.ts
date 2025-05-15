@@ -108,9 +108,10 @@ export class ShareService {
   }
 
   private saveAsJpg(selector: string, fileName: string): Observable<any> {
+
     return this.printScreen(selector).pipe(
       tap(data=> {
-        var a = document.createElement('a');
+        let a = document.createElement('a');
         a.href = data.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         a.download = `${fileName}.jpg`;
         a.click();
@@ -120,8 +121,8 @@ export class ShareService {
 
   save(type: ShareServiceOptions, selector: string, fileName: string){
     return {
-      pdf: this.saveAsPdf,
-      img: this.saveAsJpg
-    }[type](selector, fileName);
+      pdf: ()=> this.saveAsPdf(selector, fileName),
+      img: ()=> this.saveAsJpg(selector, fileName)
+    }[type]();
   }
 }
