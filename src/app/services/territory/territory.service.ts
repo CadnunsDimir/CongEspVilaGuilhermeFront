@@ -141,16 +141,13 @@ export class TerritoryService extends BaseService{
     let newCardId = 0;
     return this.post<TerritoryCard>(this.basePath, card).pipe(
       tap(() => {
-        this._cards$.next([...(this._cards$.value as any), card.cardId]);
+        const cards = [...(this._cards$.value as any), card.cardId];
+        this._cards$.next(cards);
+        localStorage.setItem(this.cardsSessionKey, JSON.stringify(cards));
         this.selectCard(card.cardId!);
         this.notifyCardUpdateOK(newCardId);
       }),
     );
-  }
-
-  reloadCardList() {
-    this._cards$.next([]);
-    return this.cards$;
   }
 
   updateCard(card: TerritoryCard){
