@@ -1,7 +1,7 @@
 <ng-container *ngIf="isLogged$ | async">
-  <button [ngClass]="{show: !showMenu}" class="menu-button" (click)="showMenu = !showMenu">
+  <button [ngClass]="{show: !showMenu}" class="menu-button" (click)="showMenu = true">
   </button>
-  <nav [ngClass]="{show: showMenu}">
+  <nav [ngClass]="{'show': showMenu}" >
     <app-close-button (click)="showMenu = false" />
 
     <ul (click)="showMenu = false">

@@ -6,8 +6,7 @@
   left: 0;
   width: 300px;
   z-index: 2000;
-  background: #fff;  
-  transition: 1s;
+  background: #fff;
 }
 
 .menu-button {
@@ -21,66 +20,74 @@
   height: 70px;
   padding: 0;
   margin: 0;
-  top:0;
-  left:0;
-  position:absolute;
+  top: 0;
+  left: 0;
+  position: absolute;
   border: none;
-  display: none;
-  &.show{
-    display: block;
+}
+
+nav {
+  display: block;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: -400px;
+  width: 300px;
+  transition: 0.5s;
+
+  &.show {
+    left: 0;
+  }
+
+  ul {
+    margin-top: 58px;
+    max-width: 500px;
+    height: 100vh;
+    border-top: $table-cell-border;
+
+    li.selected {
+      background-color: #aaa8a8;
+    }
+
+    li {
+      > * {
+        padding: 10px;
+        display: block;
+        color: black;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        text-align: left;
+
+        &:hover {
+          background-color: #bbb;
+        }
+      }
+      > button{
+        width: 100%;
+      }
+    }
+
   }
 }
 
-nav{
-    display:block;
-    background-color: white;
-    position: fixed;
-    top: 0;
-    left: -300px;
-    transition: 1s;
-    &.show {
-      left: 0;
-    }
-    ul{
-        margin-top: 58px;
-        max-width: 500px;
-        height: 100vh;
-        border-top: $table-cell-border;
-        li.selected{
-          background-color: #aaa8a8;
-        }
-        li > * {
-            padding: 10px;
-            display: block;
-            color: black;
-            width: 100%;
-            background: none;
-            border: none;
-            font-size: 1rem;
-            text-align: left;
-            &:hover{
-                background-color: #bbb;
-            }
-        }
-    }
-}
-
-.modal-overlay{
+.modal-overlay {
   position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
   left: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: -1;
-  &.hide{
+
+  &.hide {
     transition: display 0.5s;
     display: none;
   }
 }
 
-@media print{
-  :host{
+@media print {
+  :host {
     display: none;
   }
 }
