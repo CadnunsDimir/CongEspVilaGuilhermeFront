@@ -10,10 +10,8 @@ import { MenuOption } from '../../models/menu.models';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-
   isLogged$ = this.auth.$notAuthenticated.pipe(map(x => !x));
   url: string = '';
-  @HostBinding('class.show')
   showMenu = false;
   menuItens: MenuOption[] = [
     { label: 'Página inicial', route: '/home' },

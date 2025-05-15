@@ -1,3 +1,5 @@
+@import './../../design-system.scss';
+
 :host {
   position: fixed;
   top: 0;
@@ -23,21 +25,39 @@
   left:0;
   position:absolute;
   border: none;
+  display: none;
+  &.show{
+    display: block;
+  }
 }
 
 nav{
     display:block;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: -300px;
+    transition: 1s;
+    &.show {
+      left: 0;
+    }
     ul{
+        margin-top: 58px;
         max-width: 500px;
         height: 100vh;
-        background: #ccc;
+        border-top: $table-cell-border;
         li.selected{
           background-color: #aaa8a8;
         }
-        li a {
+        li > * {
             padding: 10px;
             display: block;
             color: black;
+            width: 100%;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            text-align: left;
             &:hover{
                 background-color: #bbb;
             }
@@ -45,7 +65,19 @@ nav{
     }
 }
 
-
+.modal-overlay{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: -1;
+  &.hide{
+    transition: display 0.5s;
+    display: none;
+  }
+}
 
 @media print{
   :host{

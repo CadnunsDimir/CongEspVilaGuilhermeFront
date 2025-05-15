@@ -1,13 +1,19 @@
-<nav *ngIf="isLogged$ | async">
-  <button [ngClass]="{show: showMenu}" class="menu-button" (click)="showMenu = !showMenu">
+<ng-container *ngIf="isLogged$ | async">
+  <button [ngClass]="{show: !showMenu}" class="menu-button" (click)="showMenu = !showMenu">
   </button>
-  <ul *ngIf="showMenu" (click)="showMenu = false">
-    @for (item of menuItens; track item.label) {
+  <nav [ngClass]="{show: showMenu}">
+    <app-close-button (click)="showMenu = false" />
+
+    <ul (click)="showMenu = false">
+      @for (item of menuItens; track item.label) {
       <li [ngClass]="{selected: isSelected(item)}">
-        <a [routerLink]="[item.route]" >{{ item.label }}</a>
+        <a [routerLink]="[item.route]">{{ item.label }}</a>
       </li>
-    }
-    <li><a role="button" (click)="logout()">Logout</a></li>
-    <li><a role="button" aria-label="fechar menu">X</a></li>
-  </ul>
-</nav>
+      }
+      <li><button (click)="logout()">Logout</button></li>
+    </ul>
+  </nav>
+
+  <div class="modal-overlay" [ngClass]="{hide: !showMenu}" (click)="showMenu = false" (mouseenter)="showMenu = false">
+  </div>
+</ng-container>
