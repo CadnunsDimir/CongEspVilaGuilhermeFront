@@ -9,9 +9,8 @@
     <p class="edit-hint">Você pode clicar e segurar para mudar a ordem</p>
 
     <app-close-button (click)="cancel()" />
-    <button class="save-button" (click)="save()" [disabled]="saving">salvar</button>
-
-    <button class="new-button" (click)="addNewDirecction()">➕ adicionar novo</button>
+    <button class="button save-button" (click)="save()" [disabled]="saving">salvar</button>
+    <button class="button new-button" (click)="addNewDirecction()">➕ adicionar novo</button>
     <table class="show-border">
         <tr>
             <th>#</th>
