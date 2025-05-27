@@ -97,14 +97,10 @@ export class ShareService {
   }
 
   private printScreen(selector: string) {
-
     return of(selector).pipe(
-      // tap(()=> {
-      //   document.body.style.backgroundColor = 'red';
-      // }),
-      // delay(500),
       switchMap(selector=> {
         const html = document.querySelector(selector) as HTMLElement;
+        html.style.boxShadow = 'none';
         const width = html.offsetWidth;
         const height = html.offsetHeight;
         return from(html2canvas(html)).pipe(map(canvas=> ({
