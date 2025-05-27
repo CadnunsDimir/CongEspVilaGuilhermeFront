@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, filter, interval, map, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, interval, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { environment } from '../../../environments/environment';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -185,5 +185,17 @@ export class TerritoryService extends BaseService{
   lastCardId() {
     const cards = this._cards$.getValue() || [];
     return cards[cards.length-1];
+  }
+
+  deleteCard(cardId: number | undefined) : Observable<boolean> {
+    return this.delete(`${this.basePath}${cardId}`)
+      .pipe(
+        map(response => response.status !== 422),
+        tap(data=> {
+          console.log("territoryService.deleteCard", data);
+          this.fullMap.clear();
+          this._cards$.next([]);
+        }),
+        catchError(()=> of(false)));        
   }
 }

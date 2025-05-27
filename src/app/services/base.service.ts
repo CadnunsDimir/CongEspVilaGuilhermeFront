@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { AuthService } from "./auth/auth.service";
 import { catchError, filter, Observable, of, switchMap, take, tap } from "rxjs";
 import { environment } from "../../environments/environment";
+import { StatusCode } from "../models/api.enum";
 
 export class BaseService {
     private baseUrl = `${environment.api}/api/`;
@@ -21,17 +22,17 @@ export class BaseService {
             }
           })),
           take(1),
-          catchError(error => {
-            console.error(error);        
-            if (error.status == 401) {
+          catchError(httpRequestError => {
+            const entityErrors = [StatusCode.BadRequest, StatusCode.UnprocessedEntity];
+            if (httpRequestError.status == StatusCode.Unauthorized) {
               this.auth.requestUserLogin();
             }
-            if(error.status === 400) {
-              return of(error);
+
+            if(entityErrors.includes(httpRequestError.error.status)) {
+              return of(httpRequestError.error);
             }
             return of('error');
           }),
-          tap(console.log),
           filter(x=> x != 'error')
         );
       }
@@ -45,4 +46,5 @@ export class BaseService {
 
     put<T = any>(path: string, body: any) { return this.requestWithToken<T>(path, 'PUT', body); }
     post<T = any>(path: string, body: any) { return this.requestWithToken<T>(path, 'POST', body); }
+    delete<T = any>(path: string, body: any = null) { return this.requestWithToken<T>(path, 'DELETE', body); }
 }

@@ -1,4 +1,4 @@
-<h1>📋 {{isNewCard ? 'Criar' : 'Editar'}} Território</h1>
+<h1>📋 {{isNewCard ? 'Crear' : 'Editar'}} Território</h1>
 <form [formGroup]="territoryCardForm">
     <p>
         Localidad: <input class="inline" type="text" formControlName="neighborhood" />
@@ -6,16 +6,22 @@
         Total de Direcciones: {{card.directions.length}}
     </p>
 
-    <p class="edit-hint">Você pode clicar e segurar para mudar a ordem</p>
+    <p class="edit-hint">
+        Tu puedes clicar y segurar para cambiar el orden.
+        <br />
+        También puedes apagar una tareja, si la misma está sin ninguna dirección.
+    </p>
 
     <app-close-button (click)="cancel()" />
-    <button class="save-button" (click)="save()" [disabled]="saving">salvar</button>
+    <button class="button save-button" (click)="save()" [disabled]="saving">salvar</button>
 
-    <button class="new-button" (click)="addNewDirecction()">➕ adicionar novo</button>
+    <button *ngIf="!isNewCard" class="button delete-card-button" (click)="deleteCard()" [disabled]="!canDeleteCard">borrar tarjeta</button>
+
+    <button class="button new-button" (click)="addNewDirecction()">➕ añadir dirección</button>
     <table class="show-border">
         <tr>
             <th>#</th>
-            <th>Rua</th>
+            <th>Calle</th>
             <th>Numero</th>
             <th>complemento</th>
             <th></th>
@@ -30,7 +36,7 @@
                 <td ediateble><input type="text" formControlName="houseNumber"></td>
                 <td ediateble><input type="text" formControlName="complementaryInfo"></td>
                 <td class="actions">
-                    <a class="remove" (click)="removeDirection(i)" title="remover" aria-label="remover">X</a>
+                    <a class="remove" (click)="removeDirection(i)" title="borrar" aria-label="borrar">X</a>
                 </td>
             </tr>
             }

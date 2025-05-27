@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
-import { Form, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { TerritoryService } from '../../services/territory/territory.service';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { scrollBottom } from '../../html-funcions.utils';
+import { NotificationsService } from '../../services/notifications/notifications.service';
 
 @Component({
   selector: 'app-territory-edit',
   templateUrl: './territory-edit.component.html',
   styleUrl: './territory-edit.component.scss'
 })
-export class TerritoryEditComponent implements OnInit {
+export class TerritoryEditComponent implements OnInit {  
   draggingCard?: number;
   card: TerritoryCard = JSON.parse(sessionStorage.getItem("card")!);
   territoryCardForm!: FormGroup;
@@ -21,7 +22,9 @@ export class TerritoryEditComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private territory: TerritoryService) { }
+    private territory: TerritoryService,
+    private notification: NotificationsService
+  ) { }
 
   ngOnInit(): void {
     if(!this.card) {
@@ -51,6 +54,10 @@ export class TerritoryEditComponent implements OnInit {
 
   get directionsControls(): FormArray<FormGroup> {
     return this.territoryCardForm.get('directions') as FormArray;
+  }
+
+  get canDeleteCard() : boolean{
+    return this.directionsControls.length == 0;
   }
 
   addNewDirecction() {
@@ -90,6 +97,7 @@ export class TerritoryEditComponent implements OnInit {
   drag(draggingCard: number) {
     this.draggingCard = draggingCard;
   }
+
   drop(newPositionCard: number) {
     this.moveDirection(this.draggingCard!, newPositionCard);
     this.draggingCard = undefined;
@@ -98,9 +106,11 @@ export class TerritoryEditComponent implements OnInit {
   cancel() {
     this.backToTerritory();
   }
+
   backToTerritory() {
     this.router.navigate(['territory']);
   }
+  
   dragover($event: DragEvent) {
     $event.preventDefault();
   }
@@ -113,8 +123,21 @@ export class TerritoryEditComponent implements OnInit {
           .subscribe(() => this.backToTerritory());
       } else {
         this.territory.updateCard(this.territoryCardForm.value);
-        ;
+        this.backToTerritory();
       }
     }
+  }
+
+  deleteCard() {
+    this.territory.deleteCard(this.card.cardId).subscribe(deleted=> {
+      if (!deleted) {
+        return this.notification.send({
+          message: "No fue posible borrar la tarjeta seleccionada! Intente mover o borrar las direcciones, salvar y después borrar la tarjeta.",
+          type: 'error',
+          timeout: 6000
+        });
+      }
+      this.backToTerritory();
+    });
   }
 }
