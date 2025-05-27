@@ -21,18 +21,23 @@ export class PreachingScheduleComponent implements OnInit {
       
     }
     
-    ngOnInit(): void {
+    ngOnInit(): void {      
+      const { month, year } = this.getMonthAndYear();      
+      this.monthAndYear = `${ month }/${ year }`;
+    }
+
+    getMonthAndYear(): { month: any; year: any; } {
       const date = new Date();
-      
+        
       if (date.getDate() > 20) {
         date.setMonth(date.getMonth() + 1);
         date.setDate(1);      
       }
-      
+        
+      const month = date.toLocaleString('es-ES', { month: 'long'});
       const year = date.getFullYear();
-      const month = new Date().toLocaleString('es-ES', { month: 'long'});
       
-      this.monthAndYear = `${month}/${year}`;
+      return { month, year }
     }
     
     onEditFixedDay(fixedDay: PreachingScheduleDay) {

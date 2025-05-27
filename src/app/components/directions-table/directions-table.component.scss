@@ -6,8 +6,7 @@
 }
 
 .direction-list {
-    @include ds-table;
-    width: 100%;
+    @include ds-table;    
     margin-top: 20px;
 
     .selected {

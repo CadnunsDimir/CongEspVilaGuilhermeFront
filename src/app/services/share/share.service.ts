@@ -97,14 +97,22 @@ export class ShareService {
   }
 
   private printScreen(selector: string) {
-    const html = document.querySelector(selector) as HTMLElement;
-    const width = html.offsetWidth;
-    const height = html.offsetHeight;
-    return from(html2canvas(document.querySelector(selector)!!)).pipe(map(canvas=> ({
-      canvas,
-      width,
-      height
-    })));
+
+    return of(selector).pipe(
+      // tap(()=> {
+      //   document.body.style.backgroundColor = 'red';
+      // }),
+      // delay(500),
+      switchMap(selector=> {
+        const html = document.querySelector(selector) as HTMLElement;
+        const width = html.offsetWidth;
+        const height = html.offsetHeight;
+        return from(html2canvas(html)).pipe(map(canvas=> ({
+          canvas,
+          width,
+          height
+        })));
+      }));
   }
 
   private saveAsJpg(selector: string, fileName: string): Observable<any> {

@@ -1,9 +1,5 @@
 
 <app-header>
-  <!-- <label *ngIf="cardId$" class="print-as-card--label">
-    <input type="checkbox" [(ngModel)]="printAsCard" [ngModelOptions]="{standalone: true}">
-    ver como impressão
-  </label> -->
   <button class="option-button"  *ngIf="cardId$" (click)="printAsCard = !printAsCard">
     <fa-icon [icon]="faPrintIcon" *ngIf="!printAsCard"></fa-icon>
     <fa-icon [icon]="faPrintSlashIcon" *ngIf="printAsCard"></fa-icon>

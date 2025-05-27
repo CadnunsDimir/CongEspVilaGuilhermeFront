@@ -3,7 +3,7 @@ import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { TerritoryService } from '../../services/territory/territory.service';
 import { Router } from '@angular/router';
-import { scrollBottom } from '../../html-funcions.utils';
+import { scrollBottom } from '../../utils/html-funcions.utils';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class TerritoryEditComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private territory: TerritoryService,
-    private notification: NotificationsService
+    private readonly notification: NotificationsService
   ) { }
 
   ngOnInit(): void {

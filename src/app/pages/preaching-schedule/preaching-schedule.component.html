@@ -1,5 +1,5 @@
 <h1>Predicación - Española Vila Guilherme - {{ monthAndYear | titlecase }}</h1>
-<app-edit-fixed-days-button (save)="saveFixedDay($event)" [editFixedDay]="editFixedDay"></app-edit-fixed-days-button>
+<app-edit-fixed-days-button class="hide-when-print" (save)="saveFixedDay($event)" [editFixedDay]="editFixedDay"></app-edit-fixed-days-button>
 <table class="table show-border" *ngIf="fixedDays$ | async as fixedDays">
     <thead>
         <tr>

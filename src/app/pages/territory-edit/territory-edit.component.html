@@ -17,7 +17,7 @@
 
     <button *ngIf="!isNewCard" class="button delete-card-button" (click)="deleteCard()" [disabled]="!canDeleteCard">borrar tarjeta</button>
 
-    <button class="button new-button" (click)="addNewDirecction()">➕ añadir dirección</button>
+    <button class="button new-button" aria-label="añadir dirección" (click)="addNewDirecction()">➕</button>
     <table class="show-border">
         <tr>
             <th>#</th>

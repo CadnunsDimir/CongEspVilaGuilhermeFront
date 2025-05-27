@@ -6,7 +6,6 @@
 
 table{
     @include ds-table;
-    width: 100%;
     font-size: 0.7rem;
 
     tr{
@@ -58,7 +57,8 @@ table{
     }
 }
 .new-button{
-    width: 200px;
+    width: auto;
+    padding: 0 20px;
     float: right;
 }
 
