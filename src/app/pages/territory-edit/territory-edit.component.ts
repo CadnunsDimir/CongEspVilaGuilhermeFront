@@ -25,6 +25,11 @@ export class TerritoryEditComponent implements OnInit {
   originCard: number | undefined;
   destinationCard: number | undefined;
 
+  get formInvalid() {
+    const values = this.territoryCardForm.value;
+    return values.neighborhood?.length < 3;
+  }
+
   get movingDirectionsBetweenCardsIsValid() {
     const anyDirectionSelected = this.directionsControls.controls.some(x=>x.controls['selected'].value);
     return anyDirectionSelected && this.originCard && this.destinationCard;

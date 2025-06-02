@@ -13,13 +13,25 @@
     </p>
 
     <app-close-button (click)="cancel()" />
-    <button *ngIf="!movingDirectionsBetweenCards" class="button save-button" (click)="save()" [disabled]="saving">salvar</button>
 
-    <button *ngIf="!isNewCard && !movingDirectionsBetweenCards" class="button delete-card-button" (click)="deleteCard()" [disabled]="!canDeleteCard">borrar tarjeta</button>
+    <button *ngIf="!movingDirectionsBetweenCards" class="button save-button" (click)="save()" [disabled]="formInvalid">salvar</button>
 
-    <button *ngIf="!movingDirectionsBetweenCards" class="button new-button" aria-label="añadir dirección" (click)="addNewDirecction()">➕</button>
+    <button 
+        *ngIf="!isNewCard && !movingDirectionsBetweenCards" 
+        class="button delete-card-button" 
+        (click)="deleteCard()" 
+        [disabled]="!canDeleteCard">borrar tarjeta</button>
+
+    <button 
+        *ngIf="!movingDirectionsBetweenCards" 
+        class="button new-button" 
+        aria-label="añadir dirección" 
+        (click)="addNewDirecction()">➕</button>
     
-    <button *ngIf="!movingDirectionsBetweenCards && directionsControls.controls.length > 0" class="button minimal" (click)="movingDirectionsBetweenCards = true">mover para otra tarjeta</button>
+    <button 
+        *ngIf="!movingDirectionsBetweenCards && directionsControls.controls.length > 0" 
+        class="button minimal" 
+        (click)="movingDirectionsBetweenCards = true">mover para otra tarjeta</button>
     
     <app-cards-selector 
         [originCard]="card?.cardId"

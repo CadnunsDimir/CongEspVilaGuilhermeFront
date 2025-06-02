@@ -96,10 +96,7 @@ export class TerritoryService{
     return this._territoryCard$.pipe(delay(500));   
   }
 
-  updateDirection(cardId: number, direction: Direction) {
-    const url = `${this.basePath}${cardId}/direction`;
-    return this.api.put(url, direction);
-  }  
+   
 
   updateCoordinatesOnCardInMemory(direction: Direction) {
     var card = this._territoryCard$.getValue()!;
@@ -137,14 +134,13 @@ export class TerritoryService{
 
   createCard(card: TerritoryCard) {
     this.checkCardData(card);
-    let newCardId = 0;
     return this.api.post<TerritoryCard>(this.basePath, card).pipe(
       tap(() => {
         const cards = [...(this._cards$.value as any), card.cardId];
         this._cards$.next(cards);
         localStorage.setItem(this.cardsSessionKey, JSON.stringify(cards));
         this.selectCard(card.cardId!);
-        this.notifyCardUpdateOK(newCardId);
+        this.notifyCardUpdateOK(card.cardId!);
       }),
     );
   }
