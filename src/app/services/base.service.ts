@@ -1,17 +1,22 @@
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "./auth/auth.service";
-import { catchError, filter, Observable, of, switchMap, take, tap } from "rxjs";
+import { catchError, filter, finalize, Observable, of, switchMap, take } from "rxjs";
 import { environment } from "../../environments/environment";
 import { StatusCode } from "../models/api.enum";
+import { LoaderService } from "./loader/loader.service";
 
 export class BaseService {
     private baseUrl = `${environment.api}/api/`;
     constructor(
         private auth: AuthService, 
-        private http: HttpClient) {}
+        private http: HttpClient,
+        private readonly loaderService: LoaderService
+      ) {}
 
     private requestWithToken<T>(path: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET', body: any = null) : Observable<T>{
         const url = `${this.baseUrl}${path}`;
+
+        this.loaderService.show();
 
         return this.auth.$token.pipe(
           take(1),
@@ -33,13 +38,17 @@ export class BaseService {
             }
             return of('error');
           }),
-          filter(x=> x != 'error')
+          filter(x=> x != 'error'),
+          finalize(()=> this.loaderService.hide())
         );
       }
 
     get<T = any>(path: string, tokenRequired: boolean = false){
+        this.loaderService.show();
+
         if (!tokenRequired) {
-            return this.http.get<T>(`${this.baseUrl}${path}`);   
+            return this.http.get<T>(`${this.baseUrl}${path}`).pipe(
+              finalize(()=> this.loaderService.hide()));
         }
         return this.requestWithToken<T>(path);        
     }

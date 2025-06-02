@@ -3,6 +3,7 @@ import { BaseService } from "../base.service";
 import { HttpClient } from "@angular/common/http";
 import { AuthService } from "../auth/auth.service";
 import { Direction } from "../../models/territory-card.model";
+import { LoaderService } from "../loader/loader.service";
 
 export interface MoveDirections{
   originCardId: number,
@@ -15,11 +16,12 @@ export interface MoveDirections{
 })
 export class DirectionService extends BaseService{
     private readonly moveDireccionsApi = "territory/move";
-    
+
     constructor(
-        private readonly _auth: AuthService, 
-        private readonly _http: HttpClient) {
-          super(_auth, _http)
+        readonly _auth: AuthService, 
+        readonly _http: HttpClient,
+        readonly _loader: LoaderService) {
+          super(_auth, _http, _loader)
     }
 
     moveBetweenCards(payload: MoveDirections){

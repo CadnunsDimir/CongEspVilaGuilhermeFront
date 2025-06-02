@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, pipe, tap } from 'rxjs';
 import { FullMap, TerritoryMapMarker } from '../../models/full-map.model';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +25,10 @@ export class FullMapService extends BaseService {
   _$ = new BehaviorSubject<FullMap>(this.tableData);
   constructor(
     auth: AuthService, 
-    http: HttpClient) {
-      super(auth, http)
+    http: HttpClient,
+    loader: LoaderService
+  ) {
+      super(auth, http, loader)
   }
 
   get data$() {

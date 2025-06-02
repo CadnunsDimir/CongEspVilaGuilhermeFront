@@ -3,6 +3,7 @@ import { BaseService } from "../base.service";
 import { AuthService } from "../auth/auth.service";
 import { HttpClient } from "@angular/common/http";
 import { LifeAndMinistryWeek } from "../../models/life-and-ministry.model";
+import { LoaderService } from "../loader/loader.service";
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,10 @@ export class LifeAndMinistryService extends BaseService {
 
     constructor(
         private readonly _auth: AuthService, 
-        private readonly _http: HttpClient) {
-          super(_auth, _http)
+        private readonly _http: HttpClient,
+        private readonly _loader: LoaderService,
+    ) {
+          super(_auth, _http, _loader);
     }
 
     getWeek(initialDate: string) {

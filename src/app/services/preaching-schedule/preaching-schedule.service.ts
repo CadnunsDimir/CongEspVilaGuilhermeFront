@@ -8,25 +8,23 @@ import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PreachingScheduleService extends BaseService {
+export class PreachingScheduleService{
 
   $reload = new BehaviorSubject(null)
 
   constructor(
-    private readonly _auth: AuthService,
-    private readonly _http: HttpClient) {
-    super(_auth, _http);
+    private readonly http: BaseService){
   }
 
   get data$() : Observable<PreachingSchedule> {
     return this.$reload.pipe(
-      switchMap(() => this.get<PreachingSchedule>('preachingschedule/', true))
+      switchMap(() => this.http.get<PreachingSchedule>('preachingschedule/', true))
     );
   }
 
   updateFixedDay(fixedDay: PreachingScheduleDay) {
     fixedDay.hour = `${fixedDay.hour}:00`;
-    return this.post('preachingschedule/fixed-day', fixedDay).pipe(
+    return this.http.post('preachingschedule/fixed-day', fixedDay).pipe(
       tap(() => this.$reload.next(null))
     );
   }

@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 import { NotificationsService } from '../notifications/notifications.service';
 import { BaseService } from '../base.service';
 import { FullMapService } from '../full-map/full-map.service';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,10 +46,11 @@ export class TerritoryService extends BaseService{
 
   constructor(
     private readonly _auth: AuthService, 
-    private readonly _http: HttpClient,
+    private readonly _http: HttpClient,    
+    private readonly _loader: LoaderService,
     private readonly fullMap: FullMapService,
-    private readonly notify: NotificationsService) {
-      super(_auth, _http)
+    private readonly notify: NotificationsService) {      
+      super(_auth, _http, _loader);
   }  
 
   get cards$() {

@@ -15,8 +15,6 @@ export class LoginComponent {
   });
   redirectUrl: any;
 
-
-
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
