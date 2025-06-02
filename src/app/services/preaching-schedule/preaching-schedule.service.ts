@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BaseService } from '../base.service';
-import { AuthService } from '../auth/auth.service';
+import { CongApiBaseService } from '../cong-api-base.service';
 import { PreachingSchedule, PreachingScheduleDay } from '../../models/preaching-schedule.model';
 import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 
@@ -13,7 +11,7 @@ export class PreachingScheduleService{
   $reload = new BehaviorSubject(null)
 
   constructor(
-    private readonly http: BaseService){
+    private readonly http: CongApiBaseService){
   }
 
   get data$() : Observable<PreachingSchedule> {

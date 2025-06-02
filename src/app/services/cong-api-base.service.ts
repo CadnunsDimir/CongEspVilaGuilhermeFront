@@ -4,12 +4,18 @@ import { catchError, filter, finalize, Observable, of, switchMap, take } from "r
 import { environment } from "../../environments/environment";
 import { StatusCode } from "../models/api.enum";
 import { LoaderService } from "./loader/loader.service";
+import { Injectable } from "@angular/core";
 
-export class BaseService {
-    private baseUrl = `${environment.api}/api/`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CongApiBaseService {
+    private readonly baseUrl = `${environment.api}/api/`;
+
     constructor(
-        private auth: AuthService, 
-        private http: HttpClient,
+        private readonly auth: AuthService, 
+        private readonly http: HttpClient,
         private readonly loaderService: LoaderService
       ) {}
 

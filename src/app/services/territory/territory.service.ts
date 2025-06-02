@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, delay, filter, interval, map, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, delay, filter, interval, map, Observable, of, tap } from 'rxjs';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
-import { environment } from '../../../environments/environment';
 import { NotificationsService } from '../notifications/notifications.service';
-import { BaseService } from '../base.service';
+import { CongApiBaseService } from '../cong-api-base.service';
 import { FullMapService } from '../full-map/full-map.service';
-import { LoaderService } from '../loader/loader.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TerritoryService extends BaseService{
+export class TerritoryService{
   private basePath = `territory/`;
   private cardsSessionKey = "cards";
   private tableName = 'CardTable';
-  private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem(this.cardsSessionKey) || '[]') || undefined);
+  private _cards$ = new BehaviorSubject<number[] | undefined>(JSON.parse(localStorage.getItem(this.cardsSessionKey) || '[]') ?? undefined);
   private _territoryCard$ = new BehaviorSubject<TerritoryCard | undefined>((() => {
-    const cardId = localStorage["lastCardSelected"] || -1;
+    const cardId = localStorage["lastCardSelected"] ?? -1;
     const dbTable = JSON.parse(localStorage[this.tableName] || "{}");
     return dbTable[cardId];
   })());
@@ -45,18 +41,15 @@ export class TerritoryService extends BaseService{
   needUpdateOnDb = false;
 
   constructor(
-    private readonly _auth: AuthService, 
-    private readonly _http: HttpClient,    
-    private readonly _loader: LoaderService,
+    private readonly api: CongApiBaseService,
     private readonly fullMap: FullMapService,
-    private readonly notify: NotificationsService) {      
-      super(_auth, _http, _loader);
+    private readonly notify: NotificationsService) {
   }  
 
   get cards$() {
     const cards = this._cards$.getValue();
-    if ( cards == undefined || cards.length == 0) {
-      this.get(this.basePath, true)
+    if (cards == undefined || cards.length == 0) {
+      this.api.get(this.basePath, true)
         .subscribe((list) => {
           localStorage.setItem(this.cardsSessionKey, JSON.stringify(list))
           this._cards$.next(list as number[]);
@@ -85,7 +78,7 @@ export class TerritoryService extends BaseService{
 
   selectCard(cardId: number) {
     var previousLoadedCard = this._territoryCard$.getValue()!;
-    var $request = this.get<TerritoryCard>(`${this.basePath}${cardId}`, true)
+    var $request = this.api.get<TerritoryCard>(`${this.basePath}${cardId}`, true)
                     .pipe(
                       tap((card) => {
                         this.saveOnLocalStorage(card);                        
@@ -105,7 +98,7 @@ export class TerritoryService extends BaseService{
 
   updateDirection(cardId: number, direction: Direction) {
     const url = `${this.basePath}${cardId}/direction`;
-    return this.put(url, direction);
+    return this.api.put(url, direction);
   }  
 
   updateCoordinatesOnCardInMemory(direction: Direction) {
@@ -123,7 +116,7 @@ export class TerritoryService extends BaseService{
   }
 
   private updateCardOnDb(card: TerritoryCard){
-    return this.put(this.basePath, card);
+    return this.api.put(this.basePath, card);
   }
 
   notifyCardUpdateOK(cardId: number): void {
@@ -145,7 +138,7 @@ export class TerritoryService extends BaseService{
   createCard(card: TerritoryCard) {
     this.checkCardData(card);
     let newCardId = 0;
-    return this.post<TerritoryCard>(this.basePath, card).pipe(
+    return this.api.post<TerritoryCard>(this.basePath, card).pipe(
       tap(() => {
         const cards = [...(this._cards$.value as any), card.cardId];
         this._cards$.next(cards);
@@ -171,13 +164,13 @@ export class TerritoryService extends BaseService{
   }
 
   getShareableCardId(cardId: number) {
-    return this.get<any>(`${this.basePath}${cardId}/share`, true)
+    return this.api.get<any>(`${this.basePath}${cardId}/share`, true)
       .pipe(map(x=> x.temporaryId));
   }
 
   getCardPublicEndPoint(temporaryId: string){
     console.log(`${this.basePath}${temporaryId}/public`);
-    this.get<TerritoryCard>(`${this.basePath}${temporaryId}/public`).subscribe(card=> {
+    this.api.get<TerritoryCard>(`${this.basePath}${temporaryId}/public`).subscribe(card=> {
       this.saveOnLocalStorage(card);                        
       this._territoryCard$.next(card);
     });
@@ -194,7 +187,7 @@ export class TerritoryService extends BaseService{
   }
 
   deleteCard(cardId: number | undefined) : Observable<boolean> {
-    return this.delete(`${this.basePath}${cardId}`)
+    return this.api.delete(`${this.basePath}${cardId}`)
       .pipe(
         map(response => response.status !== 422),
         tap(data=> {

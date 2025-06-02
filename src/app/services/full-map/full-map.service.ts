@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from '../base.service';
-import { AuthService } from '../auth/auth.service';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, pipe, tap } from 'rxjs';
-import { FullMap, TerritoryMapMarker } from '../../models/full-map.model';
-import { LoaderService } from '../loader/loader.service';
+import { CongApiBaseService } from '../cong-api-base.service';
+import { BehaviorSubject, tap } from 'rxjs';
+import { FullMap } from '../../models/full-map.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FullMapService extends BaseService {
+export class FullMapService {
   
 
   private tableName = 'FullMapService';
@@ -24,17 +21,14 @@ export class FullMapService extends BaseService {
 
   _$ = new BehaviorSubject<FullMap>(this.tableData);
   constructor(
-    auth: AuthService, 
-    http: HttpClient,
-    loader: LoaderService
+    private readonly api: CongApiBaseService
   ) {
-      super(auth, http, loader)
   }
 
   get data$() {
     const currentValue = this._$.getValue() as any;
     if (!currentValue || currentValue.length || !currentValue.mapMarkers) {
-      this.get('territory/full_map', true)
+      this.api.get('territory/full_map', true)
         .pipe(tap(x=> this.tableData = x))
         .subscribe(data=> this._$.next(data));
     }
