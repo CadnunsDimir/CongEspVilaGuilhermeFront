@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, filter, interval, map, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, delay, filter, interval, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { environment } from '../../../environments/environment';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -21,6 +21,9 @@ export class TerritoryService extends BaseService{
     const dbTable = JSON.parse(localStorage[this.tableName] || "{}");
     return dbTable[cardId];
   })());
+
+  private readonly _territoryCardEditing$ = new BehaviorSubject<TerritoryCard | undefined>(undefined);
+  public territoryCardEditing$ = this._territoryCardEditing$.asObservable();
 
   // check data every 10 secs and save on Db
   private updateInterval = interval(30000).pipe(
@@ -75,7 +78,7 @@ export class TerritoryService extends BaseService{
 
   setCardToEdition(){
     const card = this._territoryCard$.value;
-    sessionStorage.setItem("card", JSON.stringify(card));
+    this._territoryCardEditing$.next(card);
   }
 
   selectCard(cardId: number) {
@@ -94,7 +97,8 @@ export class TerritoryService extends BaseService{
     }else{
       $request.subscribe() 
     }
-    this.needUpdateOnDb = false;    
+    this.needUpdateOnDb = false;
+    return this._territoryCard$.pipe(delay(500));   
   }
 
   updateDirection(cardId: number, direction: Direction) {

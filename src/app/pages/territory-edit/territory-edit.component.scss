@@ -8,10 +8,13 @@ table{
     @include ds-table;
     font-size: 0.7rem;
 
-    tr{
-        cursor: grab;
-        cursor: -moz-grab;
-        cursor: -webkit-grab;
+    tr{        
+        &[draggable=true]{
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+        }
+
         &.dragging {
             background-color: rgb(198, 198, 198);
             cursor: grabbing;

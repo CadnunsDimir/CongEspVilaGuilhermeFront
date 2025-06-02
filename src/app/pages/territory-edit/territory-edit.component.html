@@ -2,8 +2,8 @@
 <form [formGroup]="territoryCardForm">
     <p>
         Localidad: <input class="inline" type="text" formControlName="neighborhood" />
-        Tarjeta Nº {{card.cardId}}<br>
-        Total de Direcciones: {{card.directions.length}}
+        Tarjeta Nº {{card?.cardId}}<br>
+        Total de Direcciones: {{card?.directions?.length}}
     </p>
 
     <p class="edit-hint">
@@ -13,14 +13,27 @@
     </p>
 
     <app-close-button (click)="cancel()" />
-    <button class="button save-button" (click)="save()" [disabled]="saving">salvar</button>
+    <button *ngIf="!movingDirectionsBetweenCards" class="button save-button" (click)="save()" [disabled]="saving">salvar</button>
 
-    <button *ngIf="!isNewCard" class="button delete-card-button" (click)="deleteCard()" [disabled]="!canDeleteCard">borrar tarjeta</button>
+    <button *ngIf="!isNewCard && !movingDirectionsBetweenCards" class="button delete-card-button" (click)="deleteCard()" [disabled]="!canDeleteCard">borrar tarjeta</button>
 
-    <button class="button new-button" aria-label="añadir dirección" (click)="addNewDirecction()">➕</button>
+    <button *ngIf="!movingDirectionsBetweenCards" class="button new-button" aria-label="añadir dirección" (click)="addNewDirecction()">➕</button>
+    
+    <button *ngIf="!movingDirectionsBetweenCards && directionsControls.controls.length > 0" class="button minimal" (click)="movingDirectionsBetweenCards = true">mover para otra tarjeta</button>
+    
+    <app-cards-selector 
+        [originCard]="card?.cardId"
+        [(showControls)]="movingDirectionsBetweenCards" 
+        (changeCards)="cardSelectorChange($event)"></app-cards-selector>
+    
+    <button *ngIf="movingDirectionsBetweenCards" 
+        [disabled]="!movingDirectionsBetweenCardsIsValid"
+        class="button" (click)="executeMoveDirectionsBetweenCards()">mover</button>
+
     <table class="show-border">
         <tr>
-            <th>#</th>
+            <th *ngIf="!movingDirectionsBetweenCards">#</th>
+            <th *ngIf="movingDirectionsBetweenCards">[x]</th>
             <th>Calle</th>
             <th>Numero</th>
             <th>complemento</th>
@@ -30,13 +43,18 @@
             @for (item of directionsControls.controls; let i = $index; track i) {
             <tr [ngClass]="{'changing-position': i == itemChangingPosition, 'dragging': i == draggingCard}"
                 [formGroup]="item" (dragstart)="drag(i)" (drop)="drop(i)" (dragover)="dragover($event)"
-                draggable="true">
-                <td>{{i+1}}</td>
-                <td ediateble><input type="text" formControlName="streetName"></td>
-                <td ediateble><input type="text" formControlName="houseNumber"></td>
-                <td ediateble><input type="text" formControlName="complementaryInfo"></td>
+                [draggable]="!movingDirectionsBetweenCards">
+                <td *ngIf="!movingDirectionsBetweenCards">{{i+1}}</td>
+                <td *ngIf="movingDirectionsBetweenCards">
+                    <input type="checkbox" formControlName="selected">
+                </td>
+                <td><input type="text" formControlName="streetName"></td>
+                <td editable><input type="text" formControlName="houseNumber"></td>
+                <td editable><input type="text" formControlName="complementaryInfo"></td>
                 <td class="actions">
-                    <a class="remove" (click)="removeDirection(i)" title="borrar" aria-label="borrar">X</a>
+                    <a class="remove" 
+                        *ngIf="!movingDirectionsBetweenCards"
+                        (click)="removeDirection(i)" title="borrar" aria-label="borrar">X</a>
                 </td>
             </tr>
             }

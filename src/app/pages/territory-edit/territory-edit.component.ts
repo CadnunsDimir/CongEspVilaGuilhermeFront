@@ -5,6 +5,9 @@ import { TerritoryService } from '../../services/territory/territory.service';
 import { Router } from '@angular/router';
 import { scrollBottom } from '../../utils/html-funcions.utils';
 import { NotificationsService } from '../../services/notifications/notifications.service';
+import { CardsSelectorChangeEvent } from './components/cards-selector/cards-selector.component';
+import { DirectionService, MoveDirections } from '../../services/territory/directions.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-territory-edit',
@@ -13,37 +16,53 @@ import { NotificationsService } from '../../services/notifications/notifications
 })
 export class TerritoryEditComponent implements OnInit {  
   draggingCard?: number;
-  card: TerritoryCard = JSON.parse(sessionStorage.getItem("card")!);
+  card?: TerritoryCard = undefined;
   territoryCardForm!: FormGroup;
   saving = false;
   itemChangingPosition: number | undefined;
   isNewCard = false;
+  movingDirectionsBetweenCards = false;
+  originCard: number | undefined;
+  destinationCard: number | undefined;
+
+  get movingDirectionsBetweenCardsIsValid() {
+    const anyDirectionSelected = this.directionsControls.controls.some(x=>x.controls['selected'].value);
+    return anyDirectionSelected && this.originCard && this.destinationCard;
+  }
 
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private territory: TerritoryService,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly territory: TerritoryService,
+    private readonly directionsService: DirectionService,
     private readonly notification: NotificationsService
   ) { }
 
   ngOnInit(): void {
-    if(!this.card) {
-      this.isNewCard = true;
-      this.card = {
-        cardId: this.territory.newCardId(),
-        directions: [],
-        neighborhood: ''
-      };
-    }    
-    this.territoryCardForm = this.fb.group({
-      cardId: [this.card.cardId],
-      neighborhood: [this.card.neighborhood],
-      directions: this.fb.array(this.card.directions.map(x => this.buildDirectionFormControls(x)))
-    });
+    this.territory.territoryCardEditing$.subscribe(card=>{
+      this.card = card;
+      if(!card) {
+        this.isNewCard = true;
+        this.card = {
+          cardId: this.territory.newCardId(),
+          directions: [],
+          neighborhood: ''
+        };
+      }
+
+      const directions = this.card?.directions || [];
+
+      this.territoryCardForm = this.fb.group({
+        cardId: [this.card?.cardId],
+        neighborhood: [this.card?.neighborhood],
+        directions: this.fb.array(directions.map(x => this.buildDirectionFormControls(x)))
+      });
+    });    
   }
 
   buildDirectionFormControls(direction: Direction) {
     return this.fb.group({
+      selected: [false],
       streetName: [direction.streetName],
       houseNumber: [direction.houseNumber],
       complementaryInfo: [direction.complementaryInfo],
@@ -95,12 +114,16 @@ export class TerritoryEditComponent implements OnInit {
   }
 
   drag(draggingCard: number) {
-    this.draggingCard = draggingCard;
+    if (!this.movingDirectionsBetweenCards) {      
+      this.draggingCard = draggingCard;
+    }
   }
 
   drop(newPositionCard: number) {
-    this.moveDirection(this.draggingCard!, newPositionCard);
-    this.draggingCard = undefined;
+    if (!this.movingDirectionsBetweenCards) {
+      this.moveDirection(this.draggingCard!, newPositionCard);
+      this.draggingCard = undefined;
+    }
   }
 
   cancel() {
@@ -129,7 +152,7 @@ export class TerritoryEditComponent implements OnInit {
   }
 
   deleteCard() {
-    this.territory.deleteCard(this.card.cardId).subscribe(deleted=> {
+    this.territory.deleteCard(this.card?.cardId).subscribe(deleted=> {
       if (!deleted) {
         return this.notification.send({
           message: "No fue posible borrar la tarjeta seleccionada! Intente mover o borrar las direcciones, salvar y después borrar la tarjeta.",
@@ -139,5 +162,37 @@ export class TerritoryEditComponent implements OnInit {
       }
       this.backToTerritory();
     });
+  }
+
+  cardSelectorChange($event: CardsSelectorChangeEvent) {
+    this.originCard = $event.originCard;
+    this.destinationCard = $event.destinationCard;
+
+    if(this.originCard != this.card?.cardId)
+      this.changeEditingCard(this.originCard);    
+  }
+
+  changeEditingCard(cardId: number) {
+    this.territory.selectCard(cardId)
+      .pipe(take(1))
+      .subscribe(()=> this.territory.setCardToEdition());
+  }
+
+  executeMoveDirectionsBetweenCards(){
+    const data: MoveDirections = {
+      originCardId: this.originCard!,
+      destinationCardId: this.destinationCard!,
+      directions: this.getSelectedDirections()
+    };
+
+    this.directionsService.moveBetweenCards(data)
+      .subscribe(()=> {        
+        this.movingDirectionsBetweenCards = false;
+        this.changeEditingCard(data.destinationCardId);
+      });
+  }
+
+  getSelectedDirections(): Direction[] {
+    return this.directionsControls.value.filter(x=>x.selected);
   }
 }

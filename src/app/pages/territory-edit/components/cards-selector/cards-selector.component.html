@@ -1,0 +1,25 @@
+
+<div class="input-bar" *ngIf="showControls()">
+    <p>Seleccione las tarjetas: </p>
+    <select 
+        class="drop-down-list"
+        [(ngModel)]="_originCard" 
+        [ngModelOptions]="{standalone: true}"
+        (change)="changeValues()">
+        @for (card of filteredCards(destinationCard); track $index) {
+            <option [ngValue]="card">{{ card }}</option>
+        }
+    </select>
+
+    <select 
+        class="drop-down-list"
+        [(ngModel)]="destinationCard" 
+        [ngModelOptions]="{standalone: true}"
+        (change)="changeValues()">
+        @for (card of filteredCards(originCard); track $index) {
+            <option [ngValue]="card">{{ card }}</option>
+        }
+    </select>
+
+    <button class="button minimal" (click)="showControls.set(false)">X</button>
+</div>

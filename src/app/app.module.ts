@@ -27,6 +27,7 @@ import { CardsListModalComponent } from './pages/territory/components/cards-list
 import { FilterPipe } from './pipes/filter.pipe';
 import { CloseButtonComponent } from './components/close-button/close-button.component';
 import { HeaderComponent } from './components/header/header.component';
+import { CardsSelectorComponent } from './pages/territory-edit/components/cards-selector/cards-selector.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { HeaderComponent } from './components/header/header.component';
     CardsListModalComponent,
     FilterPipe,
     CloseButtonComponent,
-    HeaderComponent
+    HeaderComponent,
+    CardsSelectorComponent
   ],
   imports: [
     BrowserModule,
