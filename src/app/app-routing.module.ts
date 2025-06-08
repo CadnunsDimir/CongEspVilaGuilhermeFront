@@ -8,6 +8,8 @@ import { TerritoryEditComponent } from './pages/territory-edit/territory-edit.co
 import { TerritoryAllComponent } from './pages/territory-all/territory-all.component';
 import { LifeAndMinitryComponent } from './pages/life-and-minitry/life-and-minitry.component';
 import { PreachingScheduleComponent } from './pages/preaching-schedule/preaching-schedule.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,6 +19,8 @@ const routes: Routes = [
   { path: 'territory/edit', component: TerritoryEditComponent, canActivate: [authenticationGuard()] },
   { path: 'territory/all', component: TerritoryAllComponent, canActivate: [authenticationGuard()] },
   { path: 'login', component: LoginComponent },
+  { path: 'login/forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password/:resetId', component: ResetPasswordComponent },
   { path: 'life-and-ministry', component: LifeAndMinitryComponent },
   { path: 'preaching-schedule', component: PreachingScheduleComponent },
 ];

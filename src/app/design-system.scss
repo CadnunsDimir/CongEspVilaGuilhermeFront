@@ -27,3 +27,8 @@ $share-area-h: calc($card-height + $card-height + 2cm);
         box-shadow: none;
     }
 }
+
+.centralized-form{
+  max-width: 400px;
+  margin: 0 auto;
+}

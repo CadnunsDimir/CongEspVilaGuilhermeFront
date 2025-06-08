@@ -33,6 +33,6 @@ export class LoginComponent {
   }
   
   newPassword() {
-
+    this.router.navigate(['login/forgot-password']);
   }
 }

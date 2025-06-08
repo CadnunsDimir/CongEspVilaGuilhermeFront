@@ -29,6 +29,8 @@ import { CloseButtonComponent } from './components/close-button/close-button.com
 import { HeaderComponent } from './components/header/header.component';
 import { CardsSelectorComponent } from './pages/territory-edit/components/cards-selector/cards-selector.component';
 import { LoaderOverlayComponent } from './components/loader-overlay/loader-overlay.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { LoaderOverlayComponent } from './components/loader-overlay/loader-overl
     CloseButtonComponent,
     HeaderComponent,
     CardsSelectorComponent,
-    LoaderOverlayComponent
+    LoaderOverlayComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
