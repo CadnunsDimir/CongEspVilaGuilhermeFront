@@ -24,10 +24,13 @@ export class TerritoryAllComponent {
     filter(x=> x.length >0));
   poligon = mapBounds;
 
-  constructor(private fullMap: FullMapService,
-    private territory: TerritoryService,
-    private router: Router
-  ){}
+  constructor(
+    private readonly fullMap: FullMapService,
+    private readonly territory: TerritoryService,
+    private readonly router: Router
+  ){
+    this.fullMap.update();
+  }
 
   loadMarks(markers: TerritoryMapMarker[]) {
     return markers.map(x=> ({
