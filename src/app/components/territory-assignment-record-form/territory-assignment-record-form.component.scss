@@ -1,0 +1,28 @@
+.form-dialog{
+    display: none;
+    min-width: 100px;
+    border: 1px solid grey;
+    border-radius: 7px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 100px;
+    z-index: 2000;
+
+    &.show{
+        display: block;
+    }
+    .header-title{
+        margin-top: 0px;
+    }
+    .footer{
+        display: flex;
+        column-gap: 10px;
+        flex-direction: row;
+        justify-content: flex-end;
+        .button{
+            width: auto;
+            padding-inline: 20px;
+        }
+    }
+}

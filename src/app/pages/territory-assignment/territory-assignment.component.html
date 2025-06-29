@@ -1,0 +1,51 @@
+<h1>Registro de Designação de Território</h1>
+<div class="infos">
+    <p>Ano de Serviço {{ serviceYear$ | async }}</p>
+    <button class="button hide-on-print" (click)="showForm()">+</button>
+    <div class="page-nav" *ngIf="totalPages$ | async as totalPages">
+        <button class="button" *ngIf="currentPage > 1" (click)="previousPage()"><</button>
+        página {{ currentPage }}/{{ totalPages }}
+        <button class="button" *ngIf="currentPage < totalPages" (click)="nextPage()">></button>
+    </div>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2" scope="col">Terr. no.</th>
+                <th rowspan="2" scope="col">Ultima Dt. Compl.</th>
+                <th colspan="2" *ngFor="let numero of numbers" scope="colgroup">Design. A</th>
+            </tr>
+            <tr>
+                @for (item of numbers; track item) {
+                    <th scope="col">Dt. Designação</th>
+                    <th scope="col">Dt. Completou</th>
+                }
+            </tr>
+        </thead>
+        <tbody *ngIf="cards$ | async as cards">
+            @for(card of cards; track card) {
+                <tr>
+                    <td rowspan="2">{{ card.number }}</td>
+                    <td rowspan="2">{{ card.lastDate | date: 'dd/MM/yyyy' }}</td>
+                    <td colspan="2" 
+                        *ngFor="let record of card.records" 
+                        (click)="clickRecord(record, card.number)">
+                        {{ record.assignedTo }}
+                    </td>
+                </tr>
+                <tr>
+                    @for (record of card.records; track record.recordId) {
+                        <td
+                             (click)="clickRecord(record, card.number)"
+                        >{{ record.assignedDate | date: 'dd/MM/yyyy' }}</td>
+                        <td
+                             (click)="clickRecord(record, card.number)"
+                        >{{ record.completedDate | date: 'dd/MM/yyyy' }}</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

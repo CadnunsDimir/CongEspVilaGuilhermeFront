@@ -1,0 +1,61 @@
+@import './../../design-system.scss';
+
+.infos{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    >*{
+        padding: 0;
+        margin: 0;
+        align-items: center;
+        align-content: center;
+    }
+}
+
+.button{
+    width: auto !important;
+    padding: 10px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-nav{
+    display: flex;
+    column-gap: 10px;
+}
+
+.table-container{
+    width: 100%;
+    overflow-y: auto;
+}
+
+table {
+    @include ds-table;
+    font-size: 12pt;
+    tbody{
+        tr{
+            td{
+                height: 25px;
+                padding: 10px;
+                text-align: center;
+            }
+        }
+    }
+}
+
+h1{
+    text-align: center;
+}
+
+@media print{
+    .hide-on-print{
+        display: none;
+    }
+
+
+    .table-container{
+        overflow-y: initial;
+    }
+}

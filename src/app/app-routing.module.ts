@@ -10,6 +10,7 @@ import { LifeAndMinitryComponent } from './pages/life-and-minitry/life-and-minit
 import { PreachingScheduleComponent } from './pages/preaching-schedule/preaching-schedule.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { TerritoryAssignmentComponent } from './pages/territory-assignment/territory-assignment.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'territory/public/:sharedCardId', component: TerritoryComponent },
   { path: 'territory/edit', component: TerritoryEditComponent, canActivate: [authenticationGuard()] },
   { path: 'territory/all', component: TerritoryAllComponent, canActivate: [authenticationGuard()] },
+  { path: 'territory/assignment', component: TerritoryAssignmentComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:resetId', component: ResetPasswordComponent },

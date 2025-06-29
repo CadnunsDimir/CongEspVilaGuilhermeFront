@@ -1,0 +1,30 @@
+<dialog class="form-dialog" [ngClass]="{'show': showForm$ | async}" *ngIf="cards$ | async as fullCardList">
+    <app-close-button (click)="closeForm()" />
+    <h2 class="header-title">{{ action }} registro</h2>
+    <form [formGroup]="form">
+        <label for="card">Cartão nº</label>
+        <select id="card" formControlName="territoryNumber">
+            @for (item of fullCardList; track item){
+                <option [ngValue]="item">{{item}}</option>
+            }
+        </select>
+        <input 
+            type="text" 
+            name="name" 
+            id="name" 
+            formControlName="assignedTo"
+            placeholder="designado a" >
+            
+        <label for="begin-date">
+            data inicio
+            <input type="date" name="begin-date" id="begin-date" formControlName="assignedDate">
+        </label>
+        <label for="end-date">
+            data fim
+            <input type="date" name="end-date" id="end-date" formControlName="completedDate">
+        </label>
+        <div class="footer">
+            <button class="button" (click)="save()" [disabled]="!form.valid">salvar</button>
+        </div>
+    </form>
+</dialog>

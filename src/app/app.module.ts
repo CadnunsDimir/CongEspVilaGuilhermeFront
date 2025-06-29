@@ -31,6 +31,8 @@ import { CardsSelectorComponent } from './pages/territory-edit/components/cards-
 import { LoaderOverlayComponent } from './components/loader-overlay/loader-overlay.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { TerritoryAssignmentComponent } from './pages/territory-assignment/territory-assignment.component';
+import { TerritoryAssignmentRecordFormComponent } from './components/territory-assignment-record-form/territory-assignment-record-form.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
     CardsSelectorComponent,
     LoaderOverlayComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    TerritoryAssignmentComponent,
+    TerritoryAssignmentRecordFormComponent
   ],
   imports: [
     BrowserModule,
