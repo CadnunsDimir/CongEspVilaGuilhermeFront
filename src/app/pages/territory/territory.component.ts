@@ -8,7 +8,8 @@ import { GeocodingService } from '../../services/geocoding/geocoding.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 import { ShareService, ShareServiceOptions } from '../../services/share/share.service';
-import { faEyeSlash, faPen, faPlus, faPrint, faShare } from '@fortawesome/free-solid-svg-icons';
+import { faCalendar, faEyeSlash, faPen, faPlus, faPrint, faShare } from '@fortawesome/free-solid-svg-icons';
+import { TerritoryAssignmentRecordFormService } from '../../services/territory/territory-assignment-record-form.service';
 
 interface DirectionMapMarker extends MapMarker {
   directionIndex: number
@@ -19,7 +20,8 @@ interface DirectionMapMarker extends MapMarker {
   templateUrl: './territory.component.html',
   styleUrl: './territory.component.scss'
 })
-export class TerritoryComponent implements OnInit {  
+export class TerritoryComponent implements OnInit {
+    
   markersColors = this.randomColors();
   printAsCard = false;
   showCardList = false;
@@ -39,6 +41,7 @@ export class TerritoryComponent implements OnInit {
   faPrintIcon = faPrint;
   faPrintSlashIcon = faEyeSlash;
   faNewCard = faPlus;
+  faAssignmentRecord = faCalendar;
 
   constructor(
     private router: Router,
@@ -46,7 +49,8 @@ export class TerritoryComponent implements OnInit {
     private territory: TerritoryService,
     private geocoding: GeocodingService,
     private notify: NotificationsService,
-    private shareService: ShareService
+    private shareService: ShareService,
+    private assignmentRecordForm: TerritoryAssignmentRecordFormService
   ) { }
 
   ngOnInit() {
@@ -205,5 +209,11 @@ export class TerritoryComponent implements OnInit {
     }
     const colorIndex = this.markersColors.length + index - 1;
     return this.markersColors[colorIndex % this.markersColors.length];
+  }
+
+  addAssignmentRecord() {
+    this.cardId$.pipe(take(1)).subscribe(territoryNumber=>
+      this.assignmentRecordForm
+        .openFormWithTerritoryNumber(territoryNumber as number));
   }
 }

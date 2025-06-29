@@ -1,6 +1,6 @@
 <dialog class="form-dialog" [ngClass]="{'show': showForm$ | async}" *ngIf="cards$ | async as fullCardList">
     <app-close-button (click)="closeForm()" />
-    <h2 class="header-title">{{ action }} registro</h2>
+    <h2 class="header-title">{{ action }} registro de designação de território</h2>
     <form [formGroup]="form">
         <label for="card">Cartão nº</label>
         <select id="card" formControlName="territoryNumber">
@@ -28,3 +28,5 @@
         </div>
     </form>
 </dialog>
+
+<div class="overlay" *ngIf="showForm$ | async"></div>
