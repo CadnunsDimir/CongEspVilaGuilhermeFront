@@ -33,6 +33,7 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { TerritoryAssignmentComponent } from './pages/territory-assignment/territory-assignment.component';
 import { TerritoryAssignmentRecordFormComponent } from './components/territory-assignment-record-form/territory-assignment-record-form.component';
+import { MeetingAssignmentsComponent } from './pages/meeting-assignments/meeting-assignments.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { TerritoryAssignmentRecordFormComponent } from './components/territory-a
     ForgotPasswordComponent,
     ResetPasswordComponent,
     TerritoryAssignmentComponent,
-    TerritoryAssignmentRecordFormComponent
+    TerritoryAssignmentRecordFormComponent,
+    MeetingAssignmentsComponent
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, take } from 'rxjs';
 import { NewTerritoryAssignmentRecord, TerritoryAssignmentPatchRecord, TerritoryAssignmentSheet } from '../../models/territory-assigment.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class TerritoryAssignmentService {
   constructor(private readonly http: HttpClient) { }
   
   public refreshSheet(){
-    this.http.get<TerritoryAssignmentSheet>("http://localhost:8085/api/territory/assignment")
+    this.http.get<TerritoryAssignmentSheet>(environment.api2 + "/territory/assignment")
     .pipe(take(1))
     .subscribe(sheets=> this._sheet$.next(sheets));
   }
@@ -22,10 +23,10 @@ export class TerritoryAssignmentService {
   }
 
   public createRecord(record: NewTerritoryAssignmentRecord){
-    return this.http.post("http://localhost:8085/api/territory/assignment/record", record);
+    return this.http.post(environment.api2 + "/territory/assignment/record", record);
   }
 
   patchRecord(record: TerritoryAssignmentPatchRecord) {
-    return this.http.patch("http://localhost:8085/api/territory/assignment/record", record);
+    return this.http.patch(environment.api2 + "/territory/assignment/record", record);
   }
 }

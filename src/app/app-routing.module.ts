@@ -11,6 +11,7 @@ import { PreachingScheduleComponent } from './pages/preaching-schedule/preaching
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { TerritoryAssignmentComponent } from './pages/territory-assignment/territory-assignment.component';
+import { MeetingAssignmentsComponent } from './pages/meeting-assignments/meeting-assignments.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'login/forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:resetId', component: ResetPasswordComponent },
-  { path: 'life-and-ministry', component: LifeAndMinitryComponent },
+  { path: 'meetings/life-and-ministry', component: LifeAndMinitryComponent },
+  { path: 'meetings/assignments', component: MeetingAssignmentsComponent },
   { path: 'preaching-schedule', component: PreachingScheduleComponent },
 ];
 

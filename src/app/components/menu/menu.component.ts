@@ -18,7 +18,8 @@ export class MenuComponent {
     { label: 'Territórios', route: '/territory' },
     { label: 'Território da Congregação', route: '/territory/all' },
     { label: 'Registro de Designação de Território', route: '/territory/assignment' },
-    { label: 'Vida y Ministerio Cristiano', route: '/life-and-ministry'},
+    { label: 'Vida y Ministerio Cristiano', route: '/meetings/life-and-ministry'},
+    { label: 'Assignaciones Mecánicas + Limpieza', route: '/meetings/assignments'},
     { label: 'Predicacion - Programacion Mensual', route: '/preaching-schedule'}
   ];
   

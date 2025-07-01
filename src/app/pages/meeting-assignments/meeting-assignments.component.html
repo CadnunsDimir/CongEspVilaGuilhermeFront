@@ -1,0 +1,15 @@
+<h1 class="blue-header">Acomodadores y Audio/Video - {{ month | date: 'MMM/yyyy' }}</h1>
+
+<table class="table show-border">
+    <thead>
+        <tr>
+            <th scope="col" *ngFor="let cell of header">{{ cell }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let days of meetings">
+            <td>{{ days.date | dayOfWeek | lowercase | slice:0:3 }}, {{ days.date | date: 'dd/MM' }}</td>
+            <td *ngFor="let brother of days.brothers">{{ brother | slice:0:limitNames }}{{brother.length > limitNames? '.': ''}}</td>
+        </tr>
+    </tbody>
+</table>

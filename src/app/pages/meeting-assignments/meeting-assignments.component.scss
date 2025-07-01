@@ -1,0 +1,45 @@
+@import './../../design-system.scss';
+
+.blue-header {
+    text-align: center;
+    padding: 10px;
+    background-color: #002060;
+    color: white;
+    font-weight: bold;
+    font-size: 17px;
+    font-family: Verdana, sans-serif !important;
+    margin-bottom: 25px;
+}
+
+.table {
+    @include ds-table;
+    width: 100%;
+    text-align: center;
+    font-family: Calibri, sans-serif !important;
+
+    th {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    td {
+        font-size: 14px;
+        padding: 5px;
+    }
+}
+
+@media print {
+    .blue-header {
+        font-size: 17pt;
+    }
+
+    .table {
+        th {
+            font-size: 12pt;
+        }
+
+        td {
+            font-size: 14pt;
+        }
+    }
+}
