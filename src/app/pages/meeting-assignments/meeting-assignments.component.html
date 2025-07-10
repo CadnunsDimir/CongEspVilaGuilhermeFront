@@ -7,9 +7,30 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let days of meetings">
-            <td>{{ days.date | dayOfWeek | lowercase | slice:0:3 }}, {{ days.date | date: 'dd/MM' }}</td>
-            <td *ngFor="let brother of days.brothers">{{ brother | slice:0:limitNames }}{{brother.length > limitNames? '.': ''}}</td>
+        <tr *ngFor="let day of meetings">
+            <td>{{ day.date | dayOfWeek | lowercase | slice:0:3 }}, {{ day.date | date: 'dd/MM' }}</td>
+            <td *ngFor="let brother of day.brothers">{{ abreviate(brother, day.brothers.indexOf(brother)) }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 class="blue-header no-margin-bottom">Limpieza</h2>
+
+<table class="table show-border">
+    <thead>
+        <tr>
+            <th scope="col">Grupo</th>
+            <th scope="col">Responsable</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Asignación</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let day of cleaningList">
+            <td>{{ day.groupNumber }}</td>
+            <td>{{ day.groupOverseer }}</td>
+            <td>{{ day.date | dayOfWeek | lowercase | slice:0:3 }}, {{ day.date | date: 'dd/MM' }}</td>
+            <td>{{ day.assingmentInfo }}</td>
         </tr>
     </tbody>
 </table>
