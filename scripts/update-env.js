@@ -3,8 +3,8 @@ const targetPath = './src/environments/environment.ts';
 
 const envConfigFile = `
 export const environment = {
-  api: '${process.env.API_URL}'
-  api2: '${process.env.API2_URL}
+  api: '${process.env.API_URL}',
+  api2: '${process.env.API2_URL}'
 };
 `;
 
