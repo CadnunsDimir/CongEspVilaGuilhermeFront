@@ -1,0 +1,26 @@
+<dialog *ngIf="show" class="dialog">
+    <h2>Atualizar Discurso</h2>
+    <form [formGroup]="form" class="form">
+        <label for="date">Fecha</label>
+        <input type="date" name="date" id="date" formControlName="date">
+        <label for="speaker">Orador</label>
+        <input type="text" name="speaker" id="speaker" formControlName="speaker">
+        <p>Numero y Tema</p>
+        <div class="row">
+            <input class="small-colunm" type="number" name="outlineNumber" id="outlineNumber" formControlName="outlineNumber">
+            <input type="text" name="publicTalkTheme" id="publicTalkTheme" formControlName="publicTalkTheme">
+        </div>
+        <label class="checkbox-label">
+            Arreglo local?
+            <input type="checkbox" name="isLocal" id="isLocal" formControlName="isLocal">
+        </label>
+        <label for="congregation">Congregación</label>
+        <input type="text" name="congregation" id="congregation" formControlName="congregation">
+        <div class="footer">
+            <button class="button" (click)="show = false" >cancelar</button>
+            <input class="button" type="submit" value="guardar" (click)="save()">
+        </div>
+    </form>
+</dialog>
+
+<div class="overlay" *ngIf="show" (click)="show = false"></div>

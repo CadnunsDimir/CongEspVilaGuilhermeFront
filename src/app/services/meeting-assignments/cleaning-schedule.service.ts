@@ -9,7 +9,6 @@ import { CleaningAssingment } from '../../models/cleaning-assingnment.model';
 })
 export class CleaningScheduleService {
   constructor(private readonly http: HttpClient) { }
-  
 
   public get(){
         return this.http.get<CleaningAssingment[]>(environment.api2 + "/meetings/cleaning")

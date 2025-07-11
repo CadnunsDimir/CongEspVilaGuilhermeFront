@@ -1,19 +1,5 @@
 @import './../../design-system.scss';
 
-.blue-header {
-    text-align: center;
-    padding: 10px;
-    background-color: #002060;
-    color: white;
-    font-weight: bold;
-    font-size: 17px;
-    font-family: Verdana, sans-serif !important;
-    margin-bottom: 25px;
-    &.no-margin-bottom{
-        margin-bottom: 0;
-    }
-}
-
 .table {
     @include ds-table;
     width: 100%;

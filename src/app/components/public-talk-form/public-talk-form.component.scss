@@ -1,0 +1,41 @@
+@import './../../design-system.scss';
+
+.dialog {
+    display: block;
+    position: fixed;
+    top: 100px;
+    width: 500px;
+    z-index: 2002;
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+
+        p,
+        input {
+            margin: 0;
+        }
+
+        .row {
+            display: flex;
+            column-gap: 10px;
+
+            .small-colunm {
+                flex: 25%;
+            }
+        }
+
+        .footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            column-gap: 15px;
+        }
+    }
+}
+
+.overlay {
+    @include overlay;
+}

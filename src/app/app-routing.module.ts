@@ -12,6 +12,7 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { TerritoryAssignmentComponent } from './pages/territory-assignment/territory-assignment.component';
 import { MeetingAssignmentsComponent } from './pages/meeting-assignments/meeting-assignments.component';
+import { WeekendMeetingComponent } from './pages/weekend-meeting/weekend-meeting.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'reset-password/:resetId', component: ResetPasswordComponent },
   { path: 'meetings/life-and-ministry', component: LifeAndMinitryComponent },
   { path: 'meetings/assignments', component: MeetingAssignmentsComponent },
+  { path: 'meetings/weekends', component: WeekendMeetingComponent },
   { path: 'preaching-schedule', component: PreachingScheduleComponent },
 ];
 
