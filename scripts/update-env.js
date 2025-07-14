@@ -1,7 +1,7 @@
 const fs = require('fs');
 const targetPath = './src/environments/environment.ts';
 
-console.log('API2_URL.length='+(`${process.env.API2_URL}`.length));
+console.log(Object.keys(process.env));
 
 const envConfigFile = `
 export const environment = {
