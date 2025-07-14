@@ -36,6 +36,7 @@ import { TerritoryAssignmentRecordFormComponent } from './components/territory-a
 import { MeetingAssignmentsComponent } from './pages/meeting-assignments/meeting-assignments.component';
 import { WeekendMeetingComponent } from './pages/weekend-meeting/weekend-meeting.component';
 import { PublicTalkFormComponent } from './components/public-talk-form/public-talk-form.component';
+import { EditInlineComponent } from './components/edit-inline/edit-inline.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { PublicTalkFormComponent } from './components/public-talk-form/public-ta
     TerritoryAssignmentRecordFormComponent,
     MeetingAssignmentsComponent,
     WeekendMeetingComponent,
-    PublicTalkFormComponent
+    PublicTalkFormComponent,
+    EditInlineComponent
   ],
   imports: [
     BrowserModule,

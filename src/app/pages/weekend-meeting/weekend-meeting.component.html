@@ -5,19 +5,38 @@
             Discurso Público / Estudio de la Revista "La Atalaya" - {{ month.month | date: 'MMMM/yyyy' }}</h1>
 
         <ul class="weekend-meeting-list">
-            <li class="weekend-meeting-day" *ngFor="let week of month.weeks" (click)="updatePublicTalk(week)">
+            <li class="weekend-meeting-day" *ngFor="let week of month.weeks" >
                 <p class="date bold">{{ week.date | dayOfWeek }}, {{week.date | date: "dd' de 'MMMM" }}</p>
                 <div class="infos">
-                    <p class="full bold">Tema: {{ (week.publicTalkTheme ? week.outlineNumber +". "+ week.publicTalkTheme
+                    <p class="full bold" (click)="updatePublicTalk(week)">Tema: {{ (week.publicTalkTheme ? week.outlineNumber +". "+ week.publicTalkTheme
                         :
                         '') }}</p>
-                    <p class="half"><span class="bold">Discursante:</span> {{ week.speaker }}</p>
-                    <p class="half"><span class="bold">Congregación:</span> {{ week.speakerCongregation }}</p>
+                    <p class="half" (click)="updatePublicTalk(week)"><span class="bold">Discursante:</span> {{ week.speaker }}</p>
+                    <p class="half" (click)="updatePublicTalk(week)"><span class="bold">Congregación:</span> {{ week.speakerCongregation }}</p>
                     <p class="full"><span class="bold">Oración Inicial:</span> {{ week.president }}</p>
-                    <p class="half"><span class="bold">Presidente:</span> {{ week.president }}</p>
-                    <p class="half bold">Conductor: {{ week.watchtowerStudyConductor }}</p>
+
+                    <app-edit-inline  
+                        class="half"
+                        type="president"
+                        (finishEditing)="updateMeeting('president', $event, week)">
+                        <p><span class="bold">Presidente:</span> {{ week.president }}</p>
+                    </app-edit-inline>
+
+                    <app-edit-inline 
+                        class="half"
+                        type="president"
+                        (finishEditing)="updateMeeting('watchtowerStudyConductor', $event, week)">
+                        <p class="bold">Conductor: {{ week.watchtowerStudyConductor }}</p>
+                    </app-edit-inline>
+
                     <p class="half"><span class="bold">Oracion Final:</span> {{ week.speaker }}</p>
-                    <p class="half"><span class="bold">Lector:</span> {{ week.watchtowerStudyReader }}</p>
+
+                    <app-edit-inline 
+                        class="half"
+                        type="reader"
+                        (finishEditing)="updateMeeting('watchtowerStudyReader', $event, week)">
+                        <p><span class="bold">Lector:</span> {{ week.watchtowerStudyReader }}</p>
+                    </app-edit-inline>
                 </div>
             </li>
         </ul>

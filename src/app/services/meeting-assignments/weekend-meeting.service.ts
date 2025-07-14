@@ -1,29 +1,24 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, take } from 'rxjs';
-import { WeekendMeeting } from '../../models/weekend.model';
+import { BehaviorSubject, filter, map, take, tap } from 'rxjs';
+import { AllowedBrothersOnWeekend, PublicTalk, WeekendMeeting, WeekendMeetingMonth } from '../../models/weekend.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-
-export interface WeekendMeetingMonth {
-  month: string,
-  weeks: WeekendMeeting[]
-}
-
-export interface PublicTalk {
-  date: string,
-  speaker: string,
-  publicTalkTheme: string,
-  outlineNumber: number,
-  isLocal: boolean,
-  congregation: string
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeekendMeetingService {
+  
   private readonly subject = new BehaviorSubject<WeekendMeetingMonth[]>([]);
   weeks$ =  this.subject.asObservable();
+
+  private readonly brothers = new BehaviorSubject<AllowedBrothersOnWeekend | null>(null);
+  allowedAsPresident$ = this.brothers.asObservable().pipe(
+    filter(x=> !!x && !!x.asPresident.length),
+    map(x=> x?.asPresident as string[]));
+  allowedAsReader$ = this.brothers.asObservable().pipe(
+    filter(x=> !!x && !!x.asReader.length),
+    map(x=> x?.asReader as string[]));
 
   constructor(private readonly http: HttpClient) {}
 
@@ -57,6 +52,22 @@ export class WeekendMeetingService {
   updatePublicTalk(publicTalk: PublicTalk) {
     return this.http
       .post<WeekendMeeting[]>(environment.api2 + "/meetings/weekends/public-talk", publicTalk)
+      .pipe(take(1));
+  }
+
+  loadBrothers() {
+    if (!this.brothers.value) {
+      return this.http.get<AllowedBrothersOnWeekend>(environment.api2 + "/meetings/weekends/brothers")
+        .pipe(
+          take(1),
+          tap(x=> this.brothers.next(x)));
+    }
+    return this.brothers.asObservable();
+  }
+
+  updateAssingments(meeting: any) {
+    return this.http
+      .put(environment.api2 + "/meetings/weekends/assignments", meeting)
       .pipe(take(1));
   }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { PublicTalk } from '../../services/meeting-assignments/weekend-meeting.service';
+import { PublicTalk } from '../../models/weekend.model';
 
 export interface PublicTalkFormData{
   show: boolean,

@@ -1,10 +1,9 @@
-import { PublicTalk } from './../../services/meeting-assignments/weekend-meeting.service';
 import { Component, LOCALE_ID, OnInit } from '@angular/core';
 import { WeekendMeetingService } from '../../services/meeting-assignments/weekend-meeting.service';
 import es from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 import { PublicTalkFormData } from '../../components/public-talk-form/public-talk-form.component';
-import { WeekendMeeting } from '../../models/weekend.model';
+import { PublicTalk, WeekendMeeting } from '../../models/weekend.model';
     
 registerLocaleData(es);
 
@@ -15,6 +14,7 @@ registerLocaleData(es);
   providers: [{ provide: LOCALE_ID, useValue: 'es' }]
 })
 export class WeekendMeetingComponent implements OnInit{
+
     
   weeks$ = this.service.weeks$;
   formData: PublicTalkFormData = {
@@ -60,5 +60,11 @@ export class WeekendMeetingComponent implements OnInit{
         };
         this.service.refresh();
       });
+  }
+
+  updateMeeting(field: string, newValue: string, meeting: any) {
+    meeting[field] = newValue;
+    this.service.updateAssingments(meeting)
+      .subscribe(() => this.service.refresh());
   }
 }

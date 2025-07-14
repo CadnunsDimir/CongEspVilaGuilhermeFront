@@ -1,0 +1,11 @@
+<div (click)="editing = true">
+    <ng-content *ngIf="!editing"></ng-content>
+</div>
+
+<div *ngIf="editing" class="form">
+    <select [(ngModel)]="selectedBrother" (change)="endEditing()">
+        <option value="">(vazio)</option>
+        <option *ngFor="let brother of brothers" [value]="brother">{{ brother }}</option>
+    </select>
+    <button class="button" (click)="editing = false">x</button>
+</div>

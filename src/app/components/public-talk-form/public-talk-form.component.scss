@@ -3,10 +3,16 @@
 .dialog {
     display: block;
     position: fixed;
-    top: 100px;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
     width: 500px;
     z-index: 2002;
-
+    border: none;
+    border-radius: 7px;
+    .modal-title{
+        margin-top: 0;
+    }
     .form {
         display: flex;
         flex-direction: column;
