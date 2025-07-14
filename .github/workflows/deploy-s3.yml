@@ -24,6 +24,7 @@ jobs:
       - name: Update Env
         env:
           API_URL: ${{ secrets.API_URL }}
+          API_V2_URL: ${{ secrets.API_V2_URL }}
         run: npm run update-env
 
       - name: Build Angular app        
