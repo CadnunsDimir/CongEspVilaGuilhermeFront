@@ -30,3 +30,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## CHANGELOG:
 - 14/07/2025 - Add Territory Assignment Backend suppport
 
+run action
+
