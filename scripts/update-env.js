@@ -1,7 +1,7 @@
 const fs = require('fs');
 const targetPath = './src/environments/environment.ts';
 
-console.log(Object.keys(process.env));
+console.log(Object.keys(process.env).filter(x=>x.includes("API")));
 
 const envConfigFile = `
 export const environment = {
