@@ -6,7 +6,7 @@ console.log(Object.keys(process.env).filter(x=>x.includes("API")));
 const envConfigFile = `
 export const environment = {
   api: '${process.env.API_URL}',
-  api2: '${process.env.API2_URL}'
+  api2: '${process.env.API_V2_URL}'
 };
 `;
 
