@@ -3,9 +3,9 @@
     <p>Ano de Serviço {{ serviceYear$ | async }}</p>
     <button class="button hide-on-print" (click)="showForm()">+</button>
     <div class="page-nav" *ngIf="totalPages$ | async as totalPages">
-        <button class="button" *ngIf="currentPage > 1" (click)="previousPage()"><</button>
+        <button class="button hide-on-print" *ngIf="currentPage > 1" (click)="previousPage()"><</button>
         página {{ currentPage }}/{{ totalPages }}
-        <button class="button" *ngIf="currentPage < totalPages" (click)="nextPage()">></button>
+        <button class="button hide-on-print" *ngIf="currentPage < totalPages" (click)="nextPage()">></button>
     </div>
 </div>
 
@@ -28,11 +28,14 @@
             @for(card of cards; track card) {
                 <tr>
                     <td rowspan="2">{{ card.number }}</td>
-                    <td rowspan="2" (click)="lastDateClick(card)">
-                        <span *ngIf="!card.editLastDate">{{ card.lastDate | date: 'dd/MM/yyyy' }}</span>
-                        <div *ngIf="card.editLastDate">
+                    <td rowspan="2">
+                        <div *ngIf="!card.editLastDate" class="last-date">
+                            <span>{{ card.lastDate | date: 'dd/MM/yyyy' }}</span>
+                            <button class="button hide-on-print" *ngIf="!card.lastDate" (click)="lastDateClick(card)">adicionar</button>
+                        </div>
+                        <div *ngIf="card.editLastDate" class="last-date">
                             <input type="date" [(ngModel)]="card.lastDate" (change)="submitLastDateEdit(card)">
-                            <a (click)="card.editLastDate = false">x</a>
+                            <button class="button" (click)="card.editLastDate = false">x</button>
                         </div>
                     </td>
                     <td colspan="2" 
