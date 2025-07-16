@@ -93,7 +93,7 @@ export class TerritoryAssignmentComponent implements OnInit{
 
   lastDateClick(card: TerritoryAssignmentSheetCard) {
     if (!card.lastDate) {
-      card.editLastDate = !card.editLastDate
+      card.editLastDate = true;
     }
   }
   

@@ -30,7 +30,10 @@
                     <td rowspan="2">{{ card.number }}</td>
                     <td rowspan="2" (click)="lastDateClick(card)">
                         <span *ngIf="!card.editLastDate">{{ card.lastDate | date: 'dd/MM/yyyy' }}</span>
-                        <input *ngIf="card.editLastDate" type="date" [(ngModel)]="card.lastDate" (change)="submitLastDateEdit(card)">
+                        <div *ngIf="card.editLastDate">
+                            <input type="date" [(ngModel)]="card.lastDate" (change)="submitLastDateEdit(card)">
+                            <a (click)="card.editLastDate = false">x</a>
+                        </div>
                     </td>
                     <td colspan="2" 
                         *ngFor="let record of card.records" 
