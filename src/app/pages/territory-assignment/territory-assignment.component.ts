@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TerritoryAssignmentService } from '../../services/territory/territory-assignment.service';
 import { map } from 'rxjs';
-import { TerritoryAssignmentSheet, TerritoryAssignmentSheetCard } from '../../models/territory-assigment.model';
+import { TerritoryAssignmentRecord, TerritoryAssignmentSheet, TerritoryAssignmentSheetCard } from '../../models/territory-assigment.model';
 import { TerritoryService } from '../../services/territory/territory.service';
 import { TerritoryAssignmentRecordFormService } from '../../services/territory/territory-assignment-record-form.service';
 
@@ -10,7 +10,7 @@ import { TerritoryAssignmentRecordFormService } from '../../services/territory/t
   templateUrl: './territory-assignment.component.html',
   styleUrl: './territory-assignment.component.scss'
 })
-export class TerritoryAssignmentComponent implements OnInit{  
+export class TerritoryAssignmentComponent implements OnInit{
   cards$ = this.assingment.sheet$.pipe(map(x=> this.mapCards(x)));
   serviceYear$ = this.assingment.sheet$.pipe(map(x=> x?.serviceYear));
   totalPages$ = this.assingment.sheet$.pipe(map(x=> x?.totalPages));
@@ -40,12 +40,32 @@ export class TerritoryAssignmentComponent implements OnInit{
   mapCards(sheets: TerritoryAssignmentSheet | null): TerritoryAssignmentSheetCard[] {
     return this.fullCardList.map(x=> {
       const savedCard = sheets?.numbers.find(n=> n.number === x);
+      const lastDate = this.getLastDatebyPage(savedCard?.records || [], sheets?.itensPerPage ?? 4, this.currentPage, sheets?.lastCompletedDate[x]);
       return {
         number: x,
-        lastDate: savedCard?.lastDate,
+        lastDate,
         records: this.paginate(savedCard?.records || [], sheets?.itensPerPage ?? 4, this.currentPage)
       }
     });
+  }
+  
+  getLastDatebyPage(record: TerritoryAssignmentRecord[], itensPerPage: number, currentPage: number, defaultValue: string | undefined) {
+    if (currentPage > 1) {
+      const lastPage = this.paginate(record, itensPerPage, currentPage - 1)
+        .filter(x=> x.completedDate);
+      if (lastPage.length) {
+        return lastPage[lastPage.length - 1].completedDate;
+      }
+
+      if (record.length) {
+        const lastRecord = record[record.length - 1];
+        if (lastRecord.completedDate) {
+          return lastRecord.completedDate;
+        }
+      }
+    }
+
+    return defaultValue;
   }
 
   paginate(records: any[], itensPerPage: number, currentPage: number): any[] {
@@ -71,6 +91,19 @@ export class TerritoryAssignmentComponent implements OnInit{
     this.assingment.recallNext();
   }
 
+  lastDateClick(card: TerritoryAssignmentSheetCard) {
+    if (!card.lastDate) {
+      card.editLastDate = !card.editLastDate
+    }
+  }
+  
+  submitLastDateEdit(card: TerritoryAssignmentSheetCard) {
+    this.assingment.updateLastCompleted(card).subscribe(()=>{
+      this.assingment.refreshSheet();
+    });
+  }
+
+
   clickRecord(record: any, territoryNumber: number) {
     if(record.recordId){
       this.form.edit({
@@ -81,4 +114,5 @@ export class TerritoryAssignmentComponent implements OnInit{
       this.form.openFormWithTerritoryNumber(territoryNumber);
     }
   }
+
 }
