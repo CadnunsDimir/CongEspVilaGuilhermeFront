@@ -1,0 +1,12 @@
+services:
+  front:
+    build: .
+    container_name: cong-esp-vila-guilherme-front
+    restart: always
+    networks:
+      - cong-esp-vila-guilherme-network
+    ports:
+      - 8080:80
+networks:
+  cong-esp-vila-guilherme-network:
+    external: true
