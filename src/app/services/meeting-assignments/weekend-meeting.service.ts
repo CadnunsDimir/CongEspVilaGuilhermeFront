@@ -57,12 +57,17 @@ export class WeekendMeetingService {
 
   loadBrothers() {
     if (!this.brothers.value) {
-      return this.http.get<AllowedBrothersOnWeekend>(environment.api2 + "/meetings/weekends/brothers")
+      this.http.get<AllowedBrothersOnWeekend>(environment.api2 + "/meetings/weekends/brothers")
         .pipe(
           take(1),
-          tap(x=> this.brothers.next(x)));
+          tap(x=> this.brothers.next(x)))
+        .subscribe();
     }
-    return this.brothers.asObservable();
+    
+    return this.brothers
+      .asObservable()
+      .pipe(
+        filter(x=> !x));
   }
 
   updateAssingments(meeting: any) {
