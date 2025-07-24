@@ -12,6 +12,6 @@
 </aside>
 
 <div *ngIf="markers$ | async as markers">
-    <app-map [markers]="markers" [scale]="0.5" [poligon]="poligon"/>
+    <app-map [markers]="markers" [scale]="0.5" [poligon]="(poligon$ | async) || defaultMap"/>
 </div>
 

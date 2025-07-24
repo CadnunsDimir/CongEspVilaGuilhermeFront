@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, take } from 'rxjs';
 import { NewTerritoryAssignmentRecord, TerritoryAssignmentPatchRecord, TerritoryAssignmentSheet, TerritoryAssignmentSheetCard } from '../../models/territory-assigment.model';
-import { environment } from '../../../environments/environment';
+import { Api2Service } from '../api2.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +15,15 @@ export class TerritoryAssignmentService {
       assignedDate: card.lastDate as any,
       assignedTo: 'LAST_COMPLETED_DATE_SERVICE_YEAR'
     };
+    
     return this.createRecord(record);
   }
   private readonly _sheet$ = new BehaviorSubject<TerritoryAssignmentSheet | null>(null);
   public readonly sheet$ = this._sheet$.asObservable();
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly api: Api2Service) { }
   
   public refreshSheet(){
-    this.http.get<TerritoryAssignmentSheet>(environment.api2 + "/territory/assignment")
+    this.api.get<TerritoryAssignmentSheet>("/territory/assignment")
     .pipe(take(1))
     .subscribe(sheets=> this._sheet$.next(sheets));
   }
@@ -33,10 +33,10 @@ export class TerritoryAssignmentService {
   }
 
   public createRecord(record: NewTerritoryAssignmentRecord){
-    return this.http.post(environment.api2 + "/territory/assignment/record", record);
+    return this.api.post("/territory/assignment/record", record, false);
   }
 
   patchRecord(record: TerritoryAssignmentPatchRecord) {
-    return this.http.patch(environment.api2 + "/territory/assignment/record", record);
+    return this.api.patch("/territory/assignment/record", record);
   }
 }

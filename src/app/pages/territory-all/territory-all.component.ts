@@ -22,7 +22,8 @@ export class TerritoryAllComponent {
   checkCards$ = this.fullMap.data$.pipe(
     map(x=>x.checkCoordinatesOnCards),
     filter(x=> x.length >0));
-  poligon = mapBounds;
+  poligon$ = this.fullMap.getCongregationBoundaries();
+  defaultMap = mapBounds;
 
   constructor(
     private readonly fullMap: FullMapService,
