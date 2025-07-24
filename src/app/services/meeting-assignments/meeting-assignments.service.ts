@@ -1,17 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { take } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Api2Service } from '../api2.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeetingAssignmentsService {
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly api: Api2Service) { }
 
   public get(){
-      return this.http.get<string[][]>(environment.api2 + "/meetings/assignment")
+      return this.api.get<string[][]>("/meetings/assignment")
         .pipe(take(1));
   }
 }

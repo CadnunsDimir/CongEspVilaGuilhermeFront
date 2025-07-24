@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, filter, map, take, tap } from 'rxjs';
 import { AllowedBrothersOnWeekend, PublicTalk, WeekendMeeting, WeekendMeetingMonth } from '../../models/weekend.model';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { Api2Service } from '../api2.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +19,11 @@ export class WeekendMeetingService {
     filter(x=> !!x && !!x.asReader.length),
     map(x=> x?.asReader as string[]));
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly api: Api2Service) {}
 
   refresh(){
     this.subject.next([]);
-    this.http.get<WeekendMeeting[]>(environment.api2 + "/meetings/weekends")
+    this.api.get<WeekendMeeting[]>("/meetings/weekends")
       .pipe(
         take(1),
         map(x=> this.groupByMonth(x)))
@@ -50,14 +49,13 @@ export class WeekendMeetingService {
   }
 
   updatePublicTalk(publicTalk: PublicTalk) {
-    return this.http
-      .post<WeekendMeeting[]>(environment.api2 + "/meetings/weekends/public-talk", publicTalk)
-      .pipe(take(1));
+    return this.api
+      .post<WeekendMeeting[]>("/meetings/weekends/public-talk", publicTalk);
   }
 
   loadBrothers() {
     if (!this.brothers.value) {
-      this.http.get<AllowedBrothersOnWeekend>(environment.api2 + "/meetings/weekends/brothers")
+      this.api.get<AllowedBrothersOnWeekend>("/meetings/weekends/brothers")
         .pipe(
           take(1),
           tap(x=> this.brothers.next(x)))
@@ -71,8 +69,8 @@ export class WeekendMeetingService {
   }
 
   updateAssingments(meeting: any) {
-    return this.http
-      .put(environment.api2 + "/meetings/weekends/assignments", meeting)
+    return this.api
+      .put("/meetings/weekends/assignments", meeting)
       .pipe(take(1));
   }
 }

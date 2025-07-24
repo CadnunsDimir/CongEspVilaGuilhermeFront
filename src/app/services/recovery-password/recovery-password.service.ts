@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { catchError, EMPTY, Observable, take } from 'rxjs';
-import { CongApiBaseService } from '../cong-api-base.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ApiError } from '../../models/error.model';
+import { Api1Service } from '../api1service';
 
 export interface ResetPasswordBody {
   newPassword:	string;
@@ -14,7 +14,7 @@ export interface ResetPasswordBody {
   providedIn: 'root'
 })
 export class RecoveryPasswordService {
-  constructor(private readonly api: CongApiBaseService, 
+  constructor(private readonly api: Api1Service, 
     private readonly notifications: NotificationsService) {
   }
 

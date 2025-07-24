@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, delay, filter, interval, map, Observable, of, tap } from 'rxjs';
 import { Direction, TerritoryCard } from '../../models/territory-card.model';
 import { NotificationsService } from '../notifications/notifications.service';
-import { CongApiBaseService } from '../cong-api-base.service';
 import { FullMapService } from '../full-map/full-map.service';
+import { Api1Service } from '../api1service';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +41,7 @@ export class TerritoryService{
   needUpdateOnDb = false;
 
   constructor(
-    private readonly api: CongApiBaseService,
+    private readonly api: Api1Service,
     private readonly fullMap: FullMapService,
     private readonly notify: NotificationsService) {
   }  
@@ -113,7 +113,7 @@ export class TerritoryService{
   }
 
   private updateCardOnDb(card: TerritoryCard){
-    return this.api.put(this.basePath, card);
+    return this.api.put(this.basePath, card, true);
   }
 
   notifyCardUpdateOK(cardId: number): void {

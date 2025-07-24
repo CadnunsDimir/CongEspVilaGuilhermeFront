@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { CongApiBaseService } from "../cong-api-base.service";
 import { Direction } from "../../models/territory-card.model";
+import { Api1Service } from "../api1service";
 
 export interface MoveDirections{
   originCardId: number,
@@ -15,7 +15,7 @@ export class DirectionService{
     private readonly moveDireccionsApi = "territory/move";
 
     constructor(
-        private readonly api: CongApiBaseService) {
+        private readonly api: Api1Service) {
     }
 
     moveBetweenCards(payload: MoveDirections){
