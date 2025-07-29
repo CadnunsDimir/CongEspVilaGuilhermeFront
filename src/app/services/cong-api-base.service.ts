@@ -63,7 +63,7 @@ export abstract class CongApiBaseService {
             }).pipe(
                 finalize(()=> this.loaderService.hide()));
         }
-        return this.requestWithToken<T>(path);        
+        return this.requestWithToken<T>(path, method, body);        
     }
 
     get<T = any>(path: string, tokenRequired: boolean = false) { return this.request<T>(path, 'GET', null, tokenRequired) }
