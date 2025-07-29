@@ -7,7 +7,7 @@ import { scrollBottom } from '../../utils/html-funcions.utils';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 import { CardsSelectorChangeEvent } from './components/cards-selector/cards-selector.component';
 import { DirectionService, MoveDirections } from '../../services/territory/directions.service';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-territory-edit',
@@ -146,13 +146,15 @@ export class TerritoryEditComponent implements OnInit {
   save() {
     if (!this.saving) {
       this.saving = true;
+      var action$: Observable<any>;
+
       if (this.isNewCard) {
-        this.territory.createCard(this.territoryCardForm.value)
-          .subscribe(() => this.backToTerritory());
+        action$ = this.territory.createCard(this.territoryCardForm.value);
       } else {
-        this.territory.updateCard(this.territoryCardForm.value);
-        this.backToTerritory();
+        action$ = this.territory.updateCard(this.territoryCardForm.value);
       }
+
+      action$.subscribe(() => this.backToTerritory());
     }
   }
 

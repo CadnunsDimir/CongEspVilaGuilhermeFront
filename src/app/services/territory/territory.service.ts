@@ -21,25 +21,7 @@ export class TerritoryService{
 
   private readonly _territoryCardEditing$ = new BehaviorSubject<TerritoryCard | undefined>(undefined);
   public territoryCardEditing$ = this._territoryCardEditing$.asObservable();
-
-  // check data every 10 secs and save on Db
-  private updateInterval = interval(30000).pipe(
-    tap(() => console.log('needUpdateOnDb: ', this.needUpdateOnDb)),
-    filter(()=> !!this._cards$.getValue() && this.needUpdateOnDb),
-    map(()=> this._territoryCard$.getValue() as TerritoryCard)
-  ).subscribe(card=> {
-    this.updateCardOnDb(card)
-      .subscribe(()=> this.notifyCardUpdateOK(card.cardId!));
-    this.fullMap.clear();
-    this.needUpdateOnDb = false;
-    this.notify.send({
-      type: 'info',
-      message: `atualizando cartão ${card.cardId}...`
-    });
-  });
-
-  needUpdateOnDb = false;
-
+  
   constructor(
     private readonly api: Api1Service,
     private readonly fullMap: FullMapService,
@@ -77,23 +59,16 @@ export class TerritoryService{
   }
 
   selectCard(cardId: number) {
-    var previousLoadedCard = this._territoryCard$.getValue()!;
-    var $request = this.api.get<TerritoryCard>(`${this.basePath}${cardId}`, true)
-                    .pipe(
-                      tap((card) => {
-                        this.saveOnLocalStorage(card);                        
-                        this._territoryCard$.next(card);
-                      }));
-    if(this.needUpdateOnDb && previousLoadedCard){
-      this.updateCardOnDb(previousLoadedCard).subscribe(() => {
-        this.notifyCardUpdateOK(previousLoadedCard.cardId!); 
-        $request.subscribe();
-      });
-    }else{
-      $request.subscribe() 
-    }
-    this.needUpdateOnDb = false;
-    return this._territoryCard$.pipe(delay(500));   
+    this.api.get<TerritoryCard>(`${this.basePath}${cardId}`, true)
+            .pipe(
+              tap((card) => {
+                this.saveOnLocalStorage(card);                        
+                this._territoryCard$.next(card);
+              }))
+            .subscribe();
+
+    return this._territoryCard$.asObservable()
+      .pipe(delay(500));
   }
 
    
@@ -147,9 +122,18 @@ export class TerritoryService{
 
   updateCard(card: TerritoryCard){
     this.checkCardData(card);
-    this.needUpdateOnDb = true;
+    this.fullMap.clear();
+    this.notify.send({
+      type: 'info',
+      message: `atualizando cartão ${card.cardId}...`
+    });
     this.saveOnLocalStorage(card);
     this._territoryCard$.next(card);
+
+    return this.updateCardOnDb(card)
+      .pipe(tap(()=>{
+         this.notifyCardUpdateOK(card.cardId!);
+      }));
   }
 
   saveOnLocalStorage(card: TerritoryCard) {    
