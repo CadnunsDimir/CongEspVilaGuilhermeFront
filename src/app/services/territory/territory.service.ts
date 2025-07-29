@@ -84,11 +84,7 @@ export class TerritoryService{
         x.lat = direction.lat;
         x.long = direction.long;
       });
-    this.updateCard(card);
-  }
-
-  private updateCardOnDb(card: TerritoryCard){
-    return this.api.put(this.basePath, card, true);
+    this.updateCard(card).subscribe();
   }
 
   notifyCardUpdateOK(cardId: number): void {
@@ -121,19 +117,20 @@ export class TerritoryService{
   }
 
   updateCard(card: TerritoryCard){
-    this.checkCardData(card);
+        this.checkCardData(card);
     this.fullMap.clear();
     this.notify.send({
       type: 'info',
       message: `atualizando cartão ${card.cardId}...`
     });
-    this.saveOnLocalStorage(card);
-    this._territoryCard$.next(card);
-
-    return this.updateCardOnDb(card)
-      .pipe(tap(()=>{
-         this.notifyCardUpdateOK(card.cardId!);
-      }));
+    
+    return this.api.put(this.basePath, card, true)
+      .pipe(
+        tap(()=>{
+          this.saveOnLocalStorage(card);
+          this._territoryCard$.next(card);
+          this.notifyCardUpdateOK(card.cardId!);
+        }));
   }
 
   saveOnLocalStorage(card: TerritoryCard) {    

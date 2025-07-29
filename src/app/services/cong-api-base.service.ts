@@ -54,10 +54,10 @@ export abstract class CongApiBaseService {
       }
 
     private request<T = any>(path: string, method: HttpVerb = 'GET', body: any = {}, tokenRequired: boolean = false)  : Observable<T>{
-        this.loaderService.show();
-        const url = `${this._baseUrl}${path}`;
-
-        if (!tokenRequired) {
+      const url = `${this._baseUrl}${path}`;
+      
+      if (!tokenRequired) {
+          this.loaderService.show();
             return this.http.request<T>(method, url, {
               body
             }).pipe(

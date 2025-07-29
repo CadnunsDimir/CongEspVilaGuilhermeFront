@@ -22,8 +22,8 @@
         <tr *ngIf="showOptions == direction" >
             <td colspan="2">
                 <div class="show-options">
-                    <button (click)="selected.emit(direction); showOptions = undefined">atualizar ubicacion tarjeta {{i+1}}</button>
-                    <button (click)="showOptions = undefined">fechar</button>
+                    <button class="button" (click)="selected.emit(direction); showOptions = undefined">atualizar ubicacion tarjeta {{i+1}}</button>
+                    <button class="button" (click)="showOptions = undefined">fechar</button>
                 </div>                
             </td>
         </tr>
