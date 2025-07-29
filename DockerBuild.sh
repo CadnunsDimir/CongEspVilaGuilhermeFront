@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t cong-esp-vila-guilherme-api .
+docker compose up -d --build
