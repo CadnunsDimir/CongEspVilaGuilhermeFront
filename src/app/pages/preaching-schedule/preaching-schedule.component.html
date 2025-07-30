@@ -20,3 +20,24 @@
         </tr>
     </tbody>
 </table>
+
+<table class="table show-border" *ngIf="specialDays$ | async as dates">
+    <thead>
+        <tr>
+            <th scope="col">Dia</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Responsable</th>
+            <th scope="col">Local</th>
+            <th scope="col">Direccion</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let day of dates" (click)="onEditSpecialDate(day)">
+            <td>{{ day.date | date }}</td>
+            <td>{{ day.hour.substr(0, 5) }}</td>
+            <td>{{ day.fieldOverseer }}</td>
+            <td>{{ day.place.name }}</td>
+            <td>{{ day.place.adress }}</td>
+        </tr>
+    </tbody>
+</table>
