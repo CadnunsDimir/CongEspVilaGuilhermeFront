@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 import { TerritoryService } from '../../services/territory/territory.service';
-import { filter, map, take } from 'rxjs';
+import { filter, map, take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +12,7 @@ export class HomeComponent {
   
   $notifications = this.notifications.$all;
   $notFoundCards = this.territory.cards$.pipe(
+    tap(()=> console.log("carregando cards na Home")),
     take(1), 
     map(list=> this.mapNotFoundMaps(list || [])),
     filter(list=> list.length > 0));
