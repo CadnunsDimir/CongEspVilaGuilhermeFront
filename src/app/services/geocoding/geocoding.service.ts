@@ -11,7 +11,7 @@ export interface GeoCode{ lat: number, long: number , full_adress: string }
 })
 export class GeocodingService {
 
-  private url = "http://nominatim.openstreetmap.org/search";
+  private url = "https://nominatim.openstreetmap.org/search";
 
   constructor(private http: HttpClient, private notify: NotificationsService) {
 
@@ -20,10 +20,14 @@ export class GeocodingService {
   getCoordinates(direction: Direction, neighborhood: string): Observable<GeoCode> {
     const params = {
       q: `${direction.houseNumber} ${direction.streetName}, São Paulo`,
-      format: 'json'
+      format: 'jsonv2'
     };
 
-    return this.http.get(this.url, { params }).pipe(
+    const headers = {
+      'User-Agent': navigator.userAgent
+    };
+
+    return this.http.get(this.url, { params, headers }).pipe(
       map((x: any)=>  x.filter((entry:any)=> entry.display_name.includes(neighborhood) || entry.display_name.includes('São Paulo'))),
       tap((x: any) => {
         if (x.length == 0) {
