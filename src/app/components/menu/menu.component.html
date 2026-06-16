@@ -6,7 +6,7 @@
 
     <ul (click)="showMenu = false">
       @for (item of menuItens; track item.label) {
-      <li [ngClass]="{selected: isSelected(item)}">
+      <li *ngIf="!item.adminOnly || (isAdmin$ | async)" [ngClass]="{selected: isSelected(item)}">
         <a [routerLink]="[item.route]">{{ item.label }}</a>
       </li>
       }

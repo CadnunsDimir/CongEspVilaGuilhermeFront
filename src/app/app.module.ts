@@ -37,6 +37,7 @@ import { MeetingAssignmentsComponent } from './pages/meeting-assignments/meeting
 import { WeekendMeetingComponent } from './pages/weekend-meeting/weekend-meeting.component';
 import { PublicTalkFormComponent } from './components/public-talk-form/public-talk-form.component';
 import { EditInlineComponent } from './components/edit-inline/edit-inline.component';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { EditInlineComponent } from './components/edit-inline/edit-inline.compon
     MeetingAssignmentsComponent,
     WeekendMeetingComponent,
     PublicTalkFormComponent,
-    EditInlineComponent
+    EditInlineComponent,
+    UserManagementComponent
   ],
   imports: [
     BrowserModule,

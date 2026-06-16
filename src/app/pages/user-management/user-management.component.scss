@@ -1,0 +1,56 @@
+@import './../../design-system.scss';
+
+.user-management-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: $box-shadow;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+input[type=email] {
+  width: 100%;
+  padding: 0 0.5rem 0.2rem 0.5rem;
+  border: none;
+  border-bottom: grey solid 1px;
+  box-sizing: border-box;
+  margin: 10px 0;
+  display: block;
+  outline: none;
+  background-color: transparent;
+}
+
+.role-select {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.unavailable-actions {
+  margin-top: 1rem;
+}
+
+.table-users{
+  tbody{
+    font-size: 10pt;
+    select, button{
+      height: 27px;
+    }
+  }
+}

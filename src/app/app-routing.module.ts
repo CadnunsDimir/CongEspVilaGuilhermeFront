@@ -13,6 +13,8 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { TerritoryAssignmentComponent } from './pages/territory-assignment/territory-assignment.component';
 import { MeetingAssignmentsComponent } from './pages/meeting-assignments/meeting-assignments.component';
 import { WeekendMeetingComponent } from './pages/weekend-meeting/weekend-meeting.component';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
+import { adminGuard } from './auth/admin.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -29,6 +31,7 @@ const routes: Routes = [
   { path: 'meetings/assignments', component: MeetingAssignmentsComponent },
   { path: 'meetings/weekends', component: WeekendMeetingComponent },
   { path: 'preaching-schedule', component: PreachingScheduleComponent },
+  { path: 'admin/users', component: UserManagementComponent, canActivate: [adminGuard()] },
 ];
 
 @NgModule({

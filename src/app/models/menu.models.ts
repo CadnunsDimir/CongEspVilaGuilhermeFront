@@ -1,4 +1,5 @@
 export interface MenuOption{
   label: string,
-  route: string
+  route: string,
+  adminOnly?: boolean
 }

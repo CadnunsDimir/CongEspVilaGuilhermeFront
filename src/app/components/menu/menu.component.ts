@@ -11,6 +11,7 @@ import { MenuOption } from '../../models/menu.models';
 })
 export class MenuComponent {
   isLogged$ = this.auth.$notAuthenticated.pipe(map(x => !x));
+  isAdmin$ = this.auth.$isAdmin;
   url: string = '';
   showMenu = false;
   menuItens: MenuOption[] = [
@@ -22,6 +23,7 @@ export class MenuComponent {
     { label: 'Reunion - Vida y Ministerio', route: '/meetings/life-and-ministry'},
     { label: 'Reunión - Fin de Semana', route: '/meetings/weekends'},
     { label: 'Reunion - Assign. Mecánicas + Limpieza', route: '/meetings/assignments'},
+    { label: 'Gestao de usuarios', route: '/admin/users', adminOnly: true },
   ];
   
   constructor(

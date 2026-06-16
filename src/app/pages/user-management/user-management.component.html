@@ -1,0 +1,84 @@
+<h1>Gestão de usuários</h1>
+
+<section class="user-management-grid">
+  <!-- Cadastro -->
+  <form class="panel" [formGroup]="userForm" (ngSubmit)="saveUser()">
+    <h2>Adicionar usuário</h2>
+
+    <label>
+      Email
+      <input type="email" formControlName="email" autocomplete="email">
+    </label>
+
+    <label>
+      Usuário
+      <input type="text" formControlName="username" autocomplete="username">
+    </label>
+
+    <label>
+      Senha inicial
+      <input type="password" formControlName="password" autocomplete="new-password">
+    </label>
+
+    <button class="button" type="submit" [disabled]="userForm.invalid || savingUser">
+      {{ savingUser ? 'Salvando...' : 'Salvar usuário' }}
+    </button>
+  </form>
+
+  <!-- Gerenciamento -->
+  <div class="panel">
+    <h2>Permissões</h2>
+
+    <table class="table table-users">
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>E-mail</th>
+          <th colspan="2">Perfis</th>
+          <th style="width: 140px;">Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let user of users$ | async">
+          <td>{{ user.userName }}</td>
+
+          <td>{{ user.email }}</td>
+
+          <td>{{ user.roles.join(",") }}</td>
+
+          <td>
+            <select
+              class="drop-down-list role-select"
+              #role>
+              @for (item of roleOptions; track item) {
+                <option [value]="item">{{ item }}</option>
+              }
+            </select>
+          </td>
+
+          <td>
+            <button
+              type="button"
+              class="button"
+              (click)="updateRole(user.userName, role.value)">
+              Salvar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel unavailable-actions">
+  <h2>Aguardando endpoints</h2>
+
+  <button class="button" type="button" disabled>
+    Alterar senha
+  </button>
+
+  <button class="button" type="button" disabled>
+    Remover usuário
+  </button>
+</section>

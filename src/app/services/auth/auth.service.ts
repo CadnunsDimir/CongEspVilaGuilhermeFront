@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, finalize, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, finalize, map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { NotificationsService } from '../notifications/notifications.service';
 import { LoaderService } from '../loader/loader.service';
@@ -8,6 +8,10 @@ import { LoaderService } from '../loader/loader.service';
 export interface LoginModel {
   login: string,
   password:string
+}
+
+interface TokenPayload {
+  [key: string]: unknown;
 }
 
 @Injectable({
@@ -21,6 +25,7 @@ export class AuthService {
   private _$notAuthenticated = new BehaviorSubject<boolean>(false);
   public get $token() { return this._$token.asObservable(); };
   public get $notAuthenticated() { return this._$notAuthenticated.asObservable(); };
+  public get $isAdmin() { return this._$token.pipe(map(() => this.isAdmin())); };
  
   constructor(
     private readonly http: HttpClient, 
@@ -32,6 +37,7 @@ export class AuthService {
 
   requestUserLogin() {
     this.storage.removeItem(this.tokenSessionKey);
+    this._$token.next('');
     this._$notAuthenticated.next(true);
   }
 
@@ -58,5 +64,32 @@ export class AuthService {
 
   hasAccess(): boolean {
     return !!this._$token.getValue();
+  }
+
+  isAdmin(): boolean {
+    return this.getRole().toLowerCase() == 'admin';
+  }
+
+  getRole(): string {
+    const payload = this.decodeTokenPayload();
+    const role = payload?.['role'];
+    return typeof role == 'string' ? role : '';
+  }
+
+  private decodeTokenPayload(): TokenPayload | undefined {
+    const token = this._$token.getValue();
+    const payload = token.split('.')[1];
+
+    if (!payload) {
+      return undefined;
+    }
+
+    try {
+      const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedPayload = atob(normalizedPayload);
+      return JSON.parse(decodedPayload) as TokenPayload;
+    } catch {
+      return undefined;
+    }
   }
 }
