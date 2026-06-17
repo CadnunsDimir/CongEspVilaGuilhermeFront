@@ -67,13 +67,13 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.getRole().toLowerCase() == 'admin';
+    return this.getRole().includes('Admin');
   }
 
-  getRole(): string {
+  getRole(): string[] {
     const payload = this.decodeTokenPayload();
-    const role = payload?.['role'];
-    return typeof role == 'string' ? role : '';
+    const role = payload?.['role'] as [];
+    return role || [];
   }
 
   private decodeTokenPayload(): TokenPayload | undefined {
