@@ -10,7 +10,7 @@ import { UserPayload, UserService } from '../../services/users/user.service';
   styleUrl: './user-management.component.scss'
 })
 export class UserManagementComponent {
-  readonly roleOptions = ['', 'Admin', 'TerritoryServant'];
+  readonly roleOptions = ['', 'Reader', 'Admin', 'TerritoryServant'];
   savingUser = false;
   savingRole = false;
   users$ = this.userService.users$;
