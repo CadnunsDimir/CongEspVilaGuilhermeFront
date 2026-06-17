@@ -81,14 +81,19 @@ export class AuthService {
     const payload = token.split('.')[1];
 
     if (!payload) {
+      console.log("payload não encontrado");
       return undefined;
     }
 
     try {
       const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
       const decodedPayload = atob(normalizedPayload);
-      return JSON.parse(decodedPayload) as TokenPayload;
-    } catch {
+      var parsedPayload = JSON.parse(decodedPayload) as TokenPayload;
+      console.log("payload parseado");
+      console.log(parsedPayload);
+      return parsedPayload;
+    } catch (ex: any){
+      console.error("erro payload", ex);
       return undefined;
     }
   }
