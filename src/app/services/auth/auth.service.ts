@@ -89,8 +89,6 @@ export class AuthService {
       const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
       const decodedPayload = atob(normalizedPayload);
       var parsedPayload = JSON.parse(decodedPayload) as TokenPayload;
-      console.log("payload parseado");
-      console.log(parsedPayload);
       return parsedPayload;
     } catch (ex: any){
       console.error("erro payload", ex);
