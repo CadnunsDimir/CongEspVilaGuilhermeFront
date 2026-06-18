@@ -19,7 +19,7 @@
       <div class="checkbox-list">
         <label *ngFor="let role of roleOptions" [class.new-role]="isNewRole(role)" [class.existing-role]="originalRoles.includes(role)">
           <input type="checkbox" [formControlName]="role" [disabled]="originalRoles.includes(role)">
-          <span>{{ role }}</span>
+          <span>{{ getRoleLabel(role) }}</span>
         </label>
       </div>
     </fieldset>

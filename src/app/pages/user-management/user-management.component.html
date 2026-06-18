@@ -21,7 +21,7 @@
         <tr *ngFor="let user of users$ | async">
           <td>{{ user.userName }}</td>
           <td>{{ user.email }}</td>
-          <td>{{ user.roles.join(",") }}</td>
+          <td>{{ getRoleDisplay(user.roles) }}</td>
           <td></td>
           <td>
             <button

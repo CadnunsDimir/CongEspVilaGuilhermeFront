@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin, Observable, of } from 'rxjs';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 import { UserListItem, UserService } from '../../services/users/user.service';
+import { ROLE_OPTIONS, ROLE_LABEL_MAP } from '../../utils/roles.constant';
 
 @Component({
   selector: 'app-user-edit-modal',
@@ -14,7 +15,9 @@ export class UserEditModalComponent implements OnChanges {
   @Output() saved = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();
 
-  readonly roleOptions = ['Reader', 'Admin', 'TerritoryServant'];
+  readonly roleOptions = ROLE_OPTIONS;
+  readonly roleLabelMap = ROLE_LABEL_MAP;
+
   editForm: FormGroup;
   saving = false;
   originalRoles: string[] = [];
@@ -66,6 +69,10 @@ export class UserEditModalComponent implements OnChanges {
 
   isNewRole(role: string) {
     return this.addedRoles.includes(role);
+  }
+
+  getRoleLabel(role: string) {
+    return this.roleLabelMap[role] ?? role;
   }
 
   close() {
