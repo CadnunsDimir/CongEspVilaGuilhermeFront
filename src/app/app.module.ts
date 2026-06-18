@@ -38,6 +38,7 @@ import { WeekendMeetingComponent } from './pages/weekend-meeting/weekend-meeting
 import { PublicTalkFormComponent } from './components/public-talk-form/public-talk-form.component';
 import { EditInlineComponent } from './components/edit-inline/edit-inline.component';
 import { UserAddModalComponent } from './components/user-add-modal/user-add-modal.component';
+import { UserEditModalComponent } from './components/user-edit-modal/user-edit-modal.component';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 
 @NgModule({
@@ -73,7 +74,8 @@ import { UserManagementComponent } from './pages/user-management/user-management
     PublicTalkFormComponent,
     EditInlineComponent,
     UserManagementComponent,
-    UserAddModalComponent
+    UserAddModalComponent,
+    UserEditModalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { finalize } from 'rxjs';
-import { NotificationsService } from '../../services/notifications/notifications.service';
-import { UserService } from '../../services/users/user.service';
+import { UserListItem, UserService } from '../../services/users/user.service';
 
 @Component({
   selector: 'app-user-management',
@@ -9,27 +7,21 @@ import { UserService } from '../../services/users/user.service';
   styleUrl: './user-management.component.scss'
 })
 export class UserManagementComponent {
-  readonly roleOptions = ['', 'Reader', 'Admin', 'TerritoryServant'];
-  savingRole = false;
   users$ = this.userService.users$;
+  editUser?: UserListItem;
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly notifications: NotificationsService
-  ) { }
+  constructor(private readonly userService: UserService) { }
 
-  updateRole(username: string, role: string) {
+  openEditModal(user: UserListItem) {
+    this.editUser = user;
+  }
 
-    this.savingRole = true;
+  onModalSaved() {
+    this.editUser = undefined;
+    this.userService.updateUserList();
+  }
 
-    this.userService.updateRole(username, role)
-      .pipe(finalize(() => this.savingRole = false))
-      .subscribe(() => {
-        this.userService.updateUserList();
-        this.notifications.send({
-          type: 'success',
-          message: `Permissao ${role} aplicada para ${username}.`
-        });
-      });
+  onModalClosed() {
+    this.editUser = undefined;
   }
 }

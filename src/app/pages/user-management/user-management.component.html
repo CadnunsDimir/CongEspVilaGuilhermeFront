@@ -1,6 +1,7 @@
 <h1>Gestão de usuários</h1>
 
 <app-user-add-modal></app-user-add-modal>
+<app-user-edit-modal [user]="editUser" (saved)="onModalSaved()" (closed)="onModalClosed()"></app-user-edit-modal>
 
 <section class="user-management-grid">
   <div class="panel">
@@ -21,19 +22,13 @@
           <td>{{ user.userName }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.roles.join(",") }}</td>
-          <td>
-            <select
-              class="drop-down-list role-select"
-              #role>
-              <option *ngFor="let item of roleOptions" [value]="item">{{ item }}</option>
-            </select>
-          </td>
+          <td></td>
           <td>
             <button
               type="button"
               class="button"
-              (click)="updateRole(user.userName, role.value)">
-              Salvar
+              (click)="openEditModal(user)">
+              Editar
             </button>
           </td>
         </tr>

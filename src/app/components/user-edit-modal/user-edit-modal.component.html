@@ -1,0 +1,32 @@
+<div class="modal-overlay" *ngIf="user" (click)="close()"></div>
+<div class="user-edit-modal" *ngIf="user" role="dialog" aria-modal="true" aria-labelledby="editUserTitle" (click)="$event.stopPropagation()">
+  <form class="panel" [formGroup]="editForm" (ngSubmit)="save()">
+    <button type="button" class="modal-close" aria-label="Fechar" (click)="close()">×</button>
+    <h2 id="editUserTitle">Editar usuário</h2>
+
+    <label>
+      Nome usuário
+      <input type="text" formControlName="username" readonly>
+    </label>
+
+    <label>
+      Email
+      <input type="email" formControlName="email" readonly>
+    </label>
+
+    <fieldset formGroupName="roles">
+      <legend>Permissões</legend>
+      <div class="checkbox-list">
+        <label *ngFor="let role of roleOptions" [class.new-role]="isNewRole(role)" [class.existing-role]="originalRoles.includes(role)">
+          <input type="checkbox" [formControlName]="role" [disabled]="originalRoles.includes(role)">
+          <span>{{ role }}</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" class="button" [disabled]="!hasChanges || saving">Salvar</button>
+      <button type="button" class="button" disabled>Excluir usuário</button>
+    </div>
+  </form>
+</div>
